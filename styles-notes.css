@@ -48,7 +48,7 @@
 .campus-notes-page .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 .campus-notes-page .ribbon-tool:focus-visible,.campus-notes-page .ribbon-select:focus-visible,.campus-notes-page .table-cell:focus-visible,.campus-notes-page .color-choice:focus-visible,.campus-notes-page .tag-menu-item:focus-visible{outline:2px solid #7565c7;outline-offset:1px}
 .campus-notes-page .ribbon-tool[aria-pressed="true"]{background:#e8e4f7;border-color:#cfc7ed;color:#4e3f9f}
-.campus-notes-page .table-picker{width:250px;display:none;max-height:360px;overflow:auto}
+.campus-notes-page .table-picker{width:250px;max-height:360px;overflow:auto}
 .campus-notes-page .table-grid{grid-template-columns:repeat(10,20px);max-height:230px;overflow:auto}
 .campus-notes-page .table-picker .table-cell{padding:0}
 .campus-notes-page .symbol-menu{max-width:285px;max-height:230px;overflow:auto}
@@ -62,3 +62,5 @@
 @media(max-width:900px){.campus-notes-page .ribbon-select{min-width:70px}.campus-notes-page .style-select{min-width:90px}}
 
 .campus-notes-page .editor-ribbon [data-action="table"]{min-width:64px;font-weight:700}.campus-notes-page .editor-ribbon .ribbon-group:has([data-action="table"]){min-width:88px}
+
+.campus-notes-page .table-picker{position:fixed!important;z-index:99999!important;background:#fff!important;display:block!important;visibility:visible!important;opacity:1!important;pointer-events:auto!important}

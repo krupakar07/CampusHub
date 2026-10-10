@@ -335,16 +335,19 @@
       if (type==='tags') return buildTagMenu();
       return `<button type="button" class="ribbon-tool" data-action="${action}" title="${escapeHtml(label)}" aria-pressed="false"><span class="big">${icon}</span><span>${escapeHtml(label)}</span></button>`;
     }).join('')}</div>`).join('');
-    // Table uses a dedicated click handler on the actual button. This prevents the
-    // ribbon's generic click/outside-menu handler from swallowing the interaction.
+    // Table is handled directly on the button. Do not route it through the
+    // ribbon's delegated pointer/click handlers; those handlers also close menus.
     const tableButton = ribbon.querySelector('button[data-action="table"]');
     if (tableButton) {
-      tableButton.addEventListener('click', (e) => {
+      const open = (e) => {
         e.preventDefault();
         e.stopPropagation();
+        if (e.stopImmediatePropagation) e.stopImmediatePropagation();
         captureSelection();
         openTablePicker(tableButton);
-      });
+      };
+      tableButton.addEventListener('pointerdown', open);
+      tableButton.addEventListener('click', open);
     }
     refreshToolbarState();
   }
@@ -419,7 +422,6 @@
     if(action==='pagebreak') return insertHtml('<div class="page-break" style="page-break-after:always;border-top:1px dashed #bbb;margin:24px 0"></div>');
     if(action==='date') return insertHtml(`<span>${new Intl.DateTimeFormat('en-GB',{dateStyle:'medium'}).format(new Date())}</span>&nbsp;`);
     if(action==='datetime') return insertHtml(`<span>${new Intl.DateTimeFormat('en-GB',{dateStyle:'medium',timeStyle:'short'}).format(new Date())}</span>&nbsp;`);
-    if(action==='table') return openTablePicker(document.querySelector('[data-action="table"]'));
     if(action==='picture') return $('notesImageInput')?.click();
     if(action==='file') return $('notesFileInput')?.click();
     if(action==='audio') return $('notesAudioInput')?.click();
@@ -518,16 +520,6 @@
     // Preserve the editor range before any ribbon control takes focus. For formatting
     // buttons, execute on pointer/mousedown so the browser cannot destroy the selection.
     app?.addEventListener('pointerdown',e=>{
-      const tableControl=e.target.closest('.editor-ribbon button[data-action="table"]');
-      if(tableControl){
-        e.preventDefault();
-        e.stopPropagation();
-        captureSelection();
-        openTablePicker(tableControl);
-        tableControl.dataset.handledPointer='1';
-        setTimeout(()=>delete tableControl.dataset.handledPointer,250);
-        return;
-      }
       const control=e.target.closest('.editor-ribbon button[data-action]');
       if(!control) return;
       captureSelection();
@@ -553,10 +545,6 @@
       const color=e.target.closest('[data-color-action]');
       if(color){const action=color.dataset.colorAction,value=color.dataset.color;closeMenus();focusEditor();exec(action==='foreColor'?'foreColor':'hiliteColor',value==='transparent'?'transparent':value);return;}
       const tag=e.target.closest('[data-tag-id]');if(tag){handleTagMenu(tag.dataset.tagId);return;}
-      // Pointer-down handlers already opened/handled these controls. Return before
-      // the outside-click menu closer can immediately hide the newly opened menu.
-      const handledTool=e.target.closest('.editor-ribbon button[data-action]');
-      if(handledTool && handledTool.dataset.handledPointer==='1') return;
       const dropdown=e.target.closest('[data-dropdown]');
       if(dropdown){const action=dropdown.dataset.dropdown,menu=document.querySelector(`[data-menu="${action}"]`),wasOpen=menu&&!menu.hidden;closeMenus();if(menu&&!wasOpen)positionMenu(menu,dropdown,action==='tags'?260:210);return;}
       if(!e.target.closest('.ribbon-color-menu,.ribbon-tag-menu,.table-picker,.symbol-menu'))closeMenus();
