@@ -403,6 +403,46 @@
     };
   }
 
+  // Insert HTML at the saved editor selection. This is shared by Insert tools
+  // (including tables) and must remain present after the table-dialog refactor.
+  function insertHtml(html) {
+    const editor = $('editor'); if (!editor) return false;
+    if (!savedRange || !isRangeInsideEditor(savedRange)) captureSelection();
+    if (!savedRange || !isRangeInsideEditor(savedRange)) {
+      editor.focus({preventScroll:true});
+      const range=document.createRange();
+      range.selectNodeContents(editor);
+      range.collapse(false);
+      const sel=window.getSelection();
+      sel.removeAllRanges(); sel.addRange(range);
+      savedRange=range.cloneRange();
+    }
+    try {
+      const sel=window.getSelection();
+      sel.removeAllRanges();
+      sel.addRange(savedRange.cloneRange());
+      editor.focus({preventScroll:true});
+      sel.removeAllRanges();
+      sel.addRange(savedRange.cloneRange());
+      let ok=document.execCommand('insertHTML', false, html);
+      if (!ok) {
+        const range=sel.getRangeAt(0);
+        const temp=document.createElement('div');
+        temp.innerHTML=html;
+        const frag=document.createDocumentFragment();
+        while(temp.firstChild) frag.appendChild(temp.firstChild);
+        range.deleteContents();
+        range.insertNode(frag);
+        range.collapse(false);
+        sel.removeAllRanges(); sel.addRange(range);
+      }
+      captureSelection();
+      scheduleSave(); updateWordCount();
+      requestAnimationFrame(()=>refreshToolbarState(false));
+      return true;
+    } catch (_) { return false; }
+  }
+
   function insertTable(rows, cols) {
     rows=Math.max(1,rows||3); cols=Math.max(1,cols||3);
     let html='<table><tbody>';
