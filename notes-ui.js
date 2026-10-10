@@ -226,16 +226,36 @@
   function exec(command, value = null) {
     const editor = $('editor'); if (!editor) return false;
 
-    // The critical part: do NOT focus the editor before restoring the saved
-    // selection. Focusing contenteditable can collapse the selection in Chrome.
-    // We restore the exact Range first, then execute the command immediately.
+    // Toolbar buttons steal focus from contenteditable. Keyboard shortcuts do not,
+    // which is why shortcuts can work while ribbon toggles appear dead. Keep the
+    // exact selection, return focus to the editor, restore the selection again,
+    // then execute the command while the editing host is actually focused.
     if (!savedRange || !isRangeInsideEditor(savedRange)) captureSelection();
-    const sel = window.getSelection();
-    if (!sel || !savedRange || !isRangeInsideEditor(savedRange)) return false;
+    if (!savedRange || !isRangeInsideEditor(savedRange)) return false;
 
     try {
+      const sel = window.getSelection();
       sel.removeAllRanges();
       sel.addRange(savedRange.cloneRange());
+
+      // Strike-through is inconsistent across Chromium/WebKit: execCommand can
+      // report success while leaving an existing <strike> selection unchanged.
+      // Use the deterministic DOM toggle for a real text selection.
+      if (command === 'strikeThrough' && !sel.isCollapsed) {
+        const ok = fallbackInlineToggle(command);
+        captureSelection();
+        scheduleSave();
+        updateWordCount();
+        requestAnimationFrame(() => refreshToolbarState(false));
+        return ok;
+      }
+
+      // Focus the editing host only after the range has been saved. Some browsers
+      // collapse selection on focus, so restore it one more time immediately after.
+      editor.focus({preventScroll:true});
+      sel.removeAllRanges();
+      sel.addRange(savedRange.cloneRange());
+
       document.execCommand('styleWithCSS', false, false);
       let ok = document.execCommand(command, false, value);
       if (!ok) ok = fallbackInlineToggle(command);
