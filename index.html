@@ -1,71 +1,91 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><meta name="theme-color" content="#ffffff"><title>Campus Notes — University Workspace</title><link rel="stylesheet" href="style.css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#f7f8fc">
+  <meta name="description" content="CampusHub — private university calendar, study planner and OneNote-style notes workspace.">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="styles-notes.css">
+  <title>CampusHub — University Workspace</title>
 </head>
 <body>
-<div class="app">
-<header class="topbar">
-  <div class="brand"><div class="brand-mark">C</div><div><strong>Campus Notes</strong><span>University workspace · Notes + Calendar</span></div></div>
-  <div class="top-actions"><button id="saveBtn" class="top-btn">Save</button><button id="printBtn" class="top-btn">Print</button><button id="fullscreenBtn" class="top-btn">Full screen</button></div>
-</header>
-<main class="workspace">
-<aside class="sidebar">
-  <div class="sidebar-title">My University</div>
-  <nav class="main-nav">
-    <button class="nav-item active" data-view="home">⌂ <span>Home</span></button>
-    <button class="nav-item" data-view="calendar">▦ <span>Calendar</span></button>
-    <button class="nav-item" data-view="notes">▤ <span>Notes</span></button>
-    <button class="nav-item" data-view="subjects">▣ <span>Subjects</span></button>
-    <button class="nav-item" data-view="tasks">☑ <span>Tasks</span></button>
-    <button class="nav-item" data-view="exams">◷ <span>Exams</span></button>
-  </nav>
-  <div class="sidebar-section">Subjects</div>
-  <div id="subjectList">
-    <button class="subject active" data-subject="Academic Research & Writing"><span class="dot purple"></span> Academic Research & Writing</button>
-    <button class="subject" data-subject="International Management"><span class="dot blue"></span> International Management</button>
-    <button class="subject" data-subject="Finance"><span class="dot green"></span> Finance</button>
-    <button class="subject" data-subject="German"><span class="dot orange"></span> German</button>
+  <section class="auth-shell" id="authScreen">
+    <div class="auth-card"><a class="brand auth-brand" href="#"><span class="brand-mark">C</span><span>campus<span class="brand-dot">.</span><small>PRIVATE UNIVERSITY CALENDARS</small></span></a><div class="auth-heading"><div class="eyebrow"><span class="eyebrow-line"></span> YOUR OWN CAMPUS SPACE</div><h1 id="authTitle">Welcome back</h1><p id="authSubtitle">Sign in to open your private calendar.</p></div><div class="auth-tabs"><button id="showSignIn" class="selected">Sign in</button><button id="showSignUp">Create account</button></div><div id="authSetupNotice" class="auth-notice hidden">Online sign-in needs a Supabase project. Add the project URL and publishable key to <code>supabase-config.js</code>, then run the included database setup script.</div><form id="signInForm" class="auth-form"><label>Email address<input id="signInEmail" type="email" autocomplete="username" required placeholder="you@example.com"></label><label>Password<input id="signInPassword" type="password" autocomplete="current-password" required minlength="8" placeholder="Your password"></label><button class="primary-button auth-submit" type="submit">Sign in <span>→</span></button></form><form id="signUpForm" class="auth-form hidden"><label>Your name<input id="signUpName" autocomplete="name" required maxlength="60" placeholder="Your name"></label><label>Email address <small>Used as your sign-in name</small><input id="signUpEmail" type="email" autocomplete="email" required placeholder="you@example.com"></label><label>Password<input id="signUpPassword" type="password" autocomplete="new-password" required minlength="8" placeholder="At least 8 characters"></label><label>Your university<select id="signUpUniversity"><option value="Hochschule Wismar">Hochschule Wismar</option><option value="Hochschule Worms">Hochschule Worms</option></select></label><button class="primary-button auth-submit" type="submit">Create private calendar <span>→</span></button></form><div class="auth-footnote"><span>🔒</span> Your calendar is private to your account.</div><div id="authMessage" class="auth-message" role="status"></div></div>
+  </section>
+  <div class="app-shell hidden" id="appShell">
+    <aside class="sidebar" id="sidebar">
+      <a class="brand" href="#" aria-label="Campus home"><span class="brand-mark">C</span><span>campus<span class="brand-dot">.</span><small id="brandUniversity">PRIVATE STUDENT CALENDAR</small></span></a>
+      <div class="side-label">WORKSPACE</div>
+      <nav class="main-nav" aria-label="Main navigation">
+        <button class="nav-item active" data-page="dashboard"><span class="nav-icon">▦</span>Overview</button>
+        <button class="nav-item" data-page="calendar"><span class="nav-icon">▣</span>Calendar</button>
+        <button class="nav-item" data-page="planner"><span class="nav-icon">✓</span>Study planner</button>
+        <button class="nav-item" data-page="notes"><span class="nav-icon">▤</span>Notes</button>
+      </nav>
+      <div class="side-label category-label">CATEGORIES <button class="tiny-plus" id="addCategory" aria-label="Add event">+</button></div>
+      <div class="category-list" id="categoryList"></div>
+      <div class="sidebar-bottom"><div class="semester-card"><div class="semester-top"><span class="semester-icon">✳</span><span class="semester-tag">PRIVATE</span></div><b id="semesterTitle">Your timetable</b><span id="semesterUniversity">University calendar</span><div class="semester-progress"><i></i></div><small>Synced to your account</small></div><div class="profile"><div class="avatar" id="profileAvatar">S</div><div class="profile-text"><b id="profileName">My studies</b><span id="profileUniversity">Personal calendar</span></div><button class="more" id="settingsButton" aria-label="Calendar settings" title="Calendar settings">⚙</button><button class="more" id="signOutButton" aria-label="Sign out" title="Sign out">↪</button></div></div>
+    </aside>
+    <main class="main-area">
+      <header class="topbar"><button class="mobile-menu" id="mobileMenu" aria-label="Open menu">☰</button><div class="breadcrumbs"><span>Workspace</span><span class="crumb-slash">/</span><b id="crumbCurrent">Overview</b></div><div class="top-actions"><span class="today-pill"><i></i> YOUR PERSONAL CAMPUS</span><button class="icon-button" id="todayButton" title="Go to today">◷</button><button class="primary-button top-add" id="topAdd"><span>＋</span> Add event</button></div></header>
+      <div class="content" id="dashboardPage">
+        <section class="welcome-row"><div><div class="eyebrow" id="todayEyebrow"><span class="eyebrow-line"></span> TODAY</div><h1><span id="timeGreeting">Good morning</span><span class="wave">✳</span></h1><p class="subheading">Here’s what’s happening with your studies.</p></div><button class="date-chip" id="dateChip"><span class="date-icon">▦</span><span><b>Your calendar</b><small id="semesterLabel">Private timetable</small></span><span class="chevron">⌄</span></button></section>
+        <section class="stats-grid" id="statsGrid"></section>
+        <section class="dashboard-grid">
+          <div class="panel schedule-panel"><div class="panel-heading"><div><h2>Today’s schedule <span class="heading-count" id="todayCount">0</span></h2><p>Your classes and events for today</p></div><button class="text-button" data-open-calendar>View calendar <span>↗</span></button></div><div id="todaySchedule" class="schedule-list"></div></div>
+          <div class="panel next-panel"><div class="panel-heading"><div><h2>Up next</h2><p>Your next class on campus</p></div><span class="live-dot"></span></div><div id="nextClass"></div><div class="next-footer"><span>✦ &nbsp;Stay on top of your semester</span><button id="upNextView">View calendar ↗</button></div></div>
+        </section>
+        <section class="bottom-grid"><div class="panel week-panel"><div class="panel-heading"><div><h2>This week</h2><p>Your schedule at a glance</p></div><button class="text-button" data-open-calendar>Full calendar <span>↗</span></button></div><div class="week-chart" id="weekChart"></div></div><div class="panel quick-panel"><div class="quick-decor decor-one"></div><div class="quick-decor decor-two"></div><div class="quick-content"><div class="quick-icon">✦</div><h2>Your semester,<br>all in one place.</h2><p>Keep classes, deadlines and everything in between organized.</p><button class="quick-button" id="quickAdd">＋ &nbsp; Add your first event</button></div></div></section>
+        <footer class="app-footer"><span><i class="offline-dot"></i> <span id="storageStatus">Synced privately to your account</span></span><span>Made for your studies <b>✳</b></span></footer>
+      </div>
+      <div class="content calendar-content hidden" id="calendarPage">
+        <section class="calendar-title-row"><div><div class="eyebrow"><span class="eyebrow-line"></span> YOUR PERSONAL TIMETABLE</div><h1>Calendar</h1><p class="subheading">Plan your semester, one day at a time.</p></div><div class="calendar-actions"><details class="tools-menu"><summary>⇩ &nbsp; Export / backup</summary><div class="tools-popover"><button id="exportIcs">Export calendar (.ics)</button><button id="downloadBackup">Download backup (.json)</button><button id="restoreBackup">Restore backup (.json)</button></div></details><input id="backupFileInput" type="file" accept=".json,application/json" hidden><button class="secondary-button" id="importCsvButton">⇧ &nbsp; Import timetable</button><input id="csvFileInput" type="file" accept=".csv,.ics,text/csv,text/calendar" hidden><button class="primary-button" id="calendarAdd">＋ &nbsp; Add event</button></div></section>
+        <section class="panel calendar-panel"><div class="calendar-toolbar"><div class="calendar-nav"><button id="prevPeriod" aria-label="Previous period">‹</button><button id="nextPeriod" aria-label="Next period">›</button><button class="today-control" id="calendarToday">Today</button><h2 id="periodLabel"></h2></div><div class="calendar-tools"><label class="calendar-search"><span>⌕</span><input id="calendarSearch" type="search" placeholder="Search classes" aria-label="Search classes"></label><select id="calendarFilter" class="calendar-filter" aria-label="Filter by event type"><option value="all">All types</option></select><div class="view-switch" role="tablist" aria-label="Calendar view"><button data-view="day">Day</button><button data-view="week" class="selected">Week</button><button data-view="month">Month</button></div></div></div><div id="calendarGrid" class="calendar-grid"></div><div id="calendarTravelAdvice"></div></section>
+        <div class="calendar-legend" id="calendarLegend"></div>
+      </div>
+      <div class="content planner-content hidden" id="plannerPage"><section class="calendar-title-row"><div><div class="eyebrow"><span class="eyebrow-line"></span> PLAN YOUR STUDY TIME</div><h1>Study planner</h1><p class="subheading">Assignments, exam preparation, and the weeks ahead.</p></div><button class="primary-button" id="plannerAddTask">＋ Add task</button></section><section class="planner-columns"><article class="panel planner-task-panel"><div class="panel-heading"><div><h2>Upcoming tasks</h2><p>Assignments and deadlines from your calendar</p></div></div><div id="plannerTasks"></div></article><article class="panel planner-overview-panel"><div class="panel-heading"><div><h2>Semester at a glance</h2><p>Your next 12 weeks</p></div></div><div id="semesterOverview"></div></article></section></div>
+      <div class="content campus-notes-page hidden" id="notesPage">
+        <div class="notes-workspace">
+          <aside class="notes-sidebar">
+            <div class="notes-sidebar-title">MY NOTES</div>
+            <div class="notes-subjects" id="notesSubjectList">
+              <button class="notes-subject active" data-subject="Academic Research & Writing"><span class="notes-dot purple"></span>Academic Research & Writing</button>
+              <button class="notes-subject" data-subject="International Management"><span class="notes-dot blue"></span>International Management</button>
+              <button class="notes-subject" data-subject="Finance"><span class="notes-dot green"></span>Finance</button>
+              <button class="notes-subject" data-subject="German"><span class="notes-dot orange"></span>German</button>
+            </div>
+            <button class="notes-add" id="notesAddSubject">＋ Add subject</button>
+            <div class="notes-section-label">PAGES</div>
+            <div id="notesPageList"><button class="notes-page-link active" data-note-page="Lecture Notes">📄 <span>Lecture Notes</span></button></div>
+            <button class="notes-add" id="notesNewPage">＋ New page</button>
+            <div class="notes-storage-card"><strong>CampusHub Notes</strong><p>Autosaves privately on this device for the signed-in account.</p></div>
+          </aside>
+          <section class="notes-editor-shell">
+            <div class="notes-page-header"><input id="noteTitle" value="Academic Research & Writing — Lecture Notes" aria-label="Page title"><span id="saveState">Saved locally</span></div>
+            <div class="onenote-editor" id="editorApp">
+              <div class="editor-tabs"><button type="button" data-tab="Home" class="selected">Home</button><button type="button" data-tab="Insert">Insert</button></div>
+              <div class="editor-ribbon" id="ribbon"></div>
+              <div class="editor-canvas-wrap"><div id="editor" class="editor-canvas" contenteditable="true" spellcheck="true"><h1>Academic Research &amp; Writing</h1><p>Start typing your lecture notes here. Select text and use the Home or Insert ribbon like OneNote.</p><p>Use <strong>Home → Dictate</strong> for speech-to-text, or <strong>Insert → Table</strong> to add a table.</p></div></div>
+              <div class="statusbar"><span id="wordCount">0 words</span><span>•</span><span>Local autosave on</span><span class="status-spacer"></span><button id="zoomOut">−</button><span id="zoomLabel">100%</span><button id="zoomIn">＋</button></div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </main>
   </div>
-  <button class="add-subject" id="addSubject">＋ Add subject</button>
-  <div class="sidebar-section">Pages</div>
-  <div id="pageList"><button class="page active" data-page="Lecture Notes">📄 <span>Lecture Notes</span></button></div>
-  <button class="add-page" id="newPage">＋ New page</button>
-  <div class="storage-card"><strong>Local workspace</strong><p>Notes, subjects, tasks and calendar events are stored locally in this browser. No server is required.</p></div>
-</aside>
-<section class="content-shell">
-  <div id="homeView" class="app-view">
-    <div class="dashboard-head"><div><div class="eyebrow">MY UNIVERSITY</div><h1>Good study day</h1><p id="todayText"></p></div><button class="primary-btn" id="dashboardAddEvent">＋ Add event</button></div>
-    <div class="dashboard-grid">
-      <div class="dashboard-card next-class"><div class="card-title">Next event</div><div id="nextEventCard" class="big-card-content"></div></div>
-      <div class="dashboard-card"><div class="card-title">Today</div><div id="todayEvents" class="event-mini-list"></div></div>
-      <div class="dashboard-card"><div class="card-title">Tasks</div><div id="taskSummary" class="task-summary"></div></div>
-    </div>
-    <div class="dashboard-section"><div class="section-head"><h2>Quick access</h2><button class="text-btn" data-view-target="calendar">Open calendar →</button></div><div class="quick-grid"><button data-view-target="notes">📝<strong>Lecture notes</strong><span>Open your OneNote-style editor</span></button><button data-view-target="calendar">📅<strong>Calendar</strong><span>Day, week and month planning</span></button><button data-view-target="tasks">☑<strong>Tasks</strong><span>Assignments and study work</span></button><button data-view-target="subjects">📚<strong>Subjects</strong><span>Organise your university material</span></button></div></div>
-  </div>
-
-  <div id="calendarView" class="app-view hidden">
-    <div class="calendar-head"><div><div class="eyebrow">UNIVERSITY CALENDAR</div><h1 id="calendarTitle"></h1></div><div class="calendar-controls"><button id="calPrev">‹</button><button id="calToday">Today</button><button id="calNext">›</button><select id="calMode"><option value="month">Month</option><option value="week">Week</option><option value="day">Day</option></select><button class="primary-btn" id="addEventBtn">＋ Add event</button></div></div>
-    <div id="calendarGrid" class="calendar-grid"></div>
-  </div>
-
-  <div id="notesView" class="app-view hidden editor-shell">
-    <div class="page-header"><input id="noteTitle" value="Academic Research & Writing — Lecture Notes" aria-label="Page title"><span id="saveState">Saved locally</span></div>
-    <div class="onenote-editor" id="editorApp">
-      <div class="editor-tabs"><button type="button" data-tab="Home" class="selected">Home</button><button type="button" data-tab="Insert">Insert</button></div>
-      <div class="editor-ribbon" id="ribbon"></div>
-      <div class="editor-canvas-wrap"><div id="editor" class="editor-canvas" contenteditable="true" spellcheck="true"><h1>Academic Research &amp; Writing</h1><p>Start typing your lecture notes here. Select text and use the Home or Insert ribbon just like a OneNote-style editor.</p><p>Try <strong>Home → Dictate</strong> for speech-to-text, or <strong>Insert → Table</strong> to add a table.</p></div></div>
-      <div class="statusbar"><span id="wordCount">0 words</span><span>•</span><span>Local autosave on</span><span class="status-spacer"></span><button id="zoomOut">−</button><span id="zoomLabel">100%</span><button id="zoomIn">＋</button></div>
-    </div>
-  </div>
-
-  <div id="subjectsView" class="app-view hidden simple-view"><div class="dashboard-head"><div><div class="eyebrow">ACADEMIC ORGANISATION</div><h1>Subjects</h1><p>Keep lecture notes, quick notes, assignments and important material organised.</p></div><button class="primary-btn" id="subjectsAdd">＋ Add subject</button></div><div id="subjectsCards" class="subject-cards"></div></div>
-  <div id="tasksView" class="app-view hidden simple-view"><div class="dashboard-head"><div><div class="eyebrow">WORK TO COMPLETE</div><h1>Tasks</h1><p>Assignments, reading, preparation and study tasks.</p></div><button class="primary-btn" id="addTaskBtn">＋ Add task</button></div><div id="tasksList" class="tasks-list"></div></div>
-  <div id="examsView" class="app-view hidden simple-view"><div class="dashboard-head"><div><div class="eyebrow">EXAM PLANNER</div><h1>Exams</h1><p>Keep exam dates visible beside your lecture calendar.</p></div><button class="primary-btn" id="addExamBtn">＋ Add exam</button></div><div id="examsList" class="tasks-list"></div></div>
-</section>
-</main>
-</div>
-<input id="imageInput" type="file" accept="image/*" hidden><input id="fileInput" type="file" hidden><input id="audioInput" type="file" accept="audio/*" hidden><input id="videoInput" type="file" accept="video/*" hidden>
-<div id="toast" class="toast"></div><div id="modalRoot"></div>
-<script src="app.js"></script>
-</body></html>
+  <div class="modal-backdrop hidden" id="detailsModal" role="presentation"><section class="event-modal details-modal" role="dialog" aria-modal="true" aria-labelledby="detailsTitle"><div class="modal-header"><div><div class="eyebrow"><span class="eyebrow-line"></span> EVENT DETAILS</div><h2 id="detailsTitle"></h2></div><div class="details-menu-wrap"><button class="details-menu-button" id="detailsMenuButton" aria-label="Event actions" aria-expanded="false">⋯</button><div class="details-menu hidden" id="detailsMenu"><button id="detailsEdit">Edit event</button><button id="detailsEditOccurrence" class="hidden">Edit this occurrence</button><button id="detailsDelete">Delete event</button><button id="detailsDeleteSeries" class="hidden">Delete entire series</button></div><button class="close-button" id="closeDetails" aria-label="Close">×</button></div></div><div id="detailsBody" class="details-body"></div></section></div>
+  <div class="modal-backdrop hidden" id="settingsModal" role="presentation"><section class="event-modal settings-modal" role="dialog" aria-modal="true" aria-labelledby="settingsTitle"><div class="modal-header"><div><div class="eyebrow"><span class="eyebrow-line"></span> PERSONAL PREFERENCES</div><h2 id="settingsTitle">Calendar settings</h2></div><button class="close-button" id="closeSettings" aria-label="Close">×</button></div><form id="settingsForm"><label class="field full-field">Your name<input id="settingsName" maxlength="60" required></label><label class="field full-field">Your university<select id="settingsUniversity"><option value="Hochschule Wismar">Hochschule Wismar</option><option value="Hochschule Worms">Hochschule Worms</option></select></label><label class="field full-field">Default calendar view<select id="settingsView"><option value="day">Day</option><option value="week">Week</option><option value="month">Month</option></select></label><label class="field full-field">Travel buffer between classes<select id="travelBuffer"><option value="0">Off</option><option value="5">5 minutes</option><option value="10">10 minutes</option><option value="15">15 minutes</option><option value="20">20 minutes</option></select></label><label class="field full-field">Class reminder<select id="reminderMinutes"><option value="0">Off</option><option value="5">5 minutes before</option><option value="10">10 minutes before</option><option value="15">15 minutes before</option><option value="30">30 minutes before</option></select></label><div class="settings-note">Browser reminders appear while this app is open. Allow notifications when your browser asks.</div><div class="modal-actions"><span class="form-spacer"></span><button type="button" class="cancel-button" id="cancelSettings">Cancel</button><button type="submit" class="primary-button save-button">Save settings <span>→</span></button></div></form></section></div>
+  <div class="modal-backdrop hidden" id="eventModal" role="presentation"><section class="event-modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><div class="modal-header"><div><div class="eyebrow"><span class="eyebrow-line"></span> PERSONAL TIMETABLE</div><h2 id="modalTitle">Add an event</h2></div><button class="close-button" id="closeModal" aria-label="Close">×</button></div><form id="eventForm"><input type="hidden" id="eventId"><label class="field full-field">Event title<input id="titleInput" required maxlength="90" placeholder="e.g. Academic Research & Writing"></label><div class="form-grid"><label class="field">Event type<select id="typeInput"></select></label><label class="field">Subject / module<input id="subjectInput" placeholder="e.g. MIM 201"></label><label class="field">Date<input id="dateInput" type="date" required></label><div class="time-fields"><label class="field">Starts<input id="startInput" type="time" required></label><label class="field">Ends<input id="endInput" type="time" required></label></div><label class="field">Room<input id="roomInput" placeholder="e.g. House 1 · Room 2.12"></label><label class="field">Professor<input id="professorInput" placeholder="e.g. Prof. Müller"></label><label class="field full-field">Repeat<select id="repeatInput"><option value="none">Does not repeat</option><option value="weekly">Every week</option><option value="biweekly">Every 2 weeks</option><option value="monthly">Every month</option></select></label><label class="field full-field">Notes <span class="optional">OPTIONAL</span><textarea id="notesInput" rows="3" placeholder="Add a note or reminder for yourself..."></textarea></label></div><div class="modal-actions"><button type="button" class="delete-button hidden" id="deleteEvent">Delete event</button><span class="form-spacer"></span><button type="button" class="cancel-button" id="cancelModal">Cancel</button><button type="submit" class="primary-button save-button">Save event <span>→</span></button></div></form></section></div>
+  <div class="modal-backdrop hidden" id="importModal" role="presentation"><section class="event-modal import-modal" role="dialog" aria-modal="true" aria-labelledby="importTitle"><div class="modal-header"><div><div class="eyebrow"><span class="eyebrow-line"></span> TIMETABLE IMPORT</div><h2 id="importTitle">Review your schedule</h2><p class="subheading" id="importFileName"></p></div><button class="close-button" id="closeImport" aria-label="Close">×</button></div><div id="importSummary" class="import-summary"></div><div class="import-controls"><span id="duplicateSummary"></span><label id="removeMissingWrap" class="missing-control hidden"><input id="removeMissingImport" type="checkbox"><span>Remove missing classes from this imported schedule</span></label></div><div id="importErrors" class="import-errors hidden"></div><div id="importPreview" class="import-preview"></div><div class="modal-actions"><button type="button" class="cancel-button" id="cancelImport">Cancel</button><span class="form-spacer"></span><button type="button" class="primary-button save-button" id="applyImport">Apply selected changes <span>→</span></button></div></section></div>
+  <input id="notesImageInput" type="file" accept="image/*" hidden>
+  <input id="notesFileInput" type="file" hidden>
+  <input id="notesAudioInput" type="file" accept="audio/*" hidden>
+  <input id="notesVideoInput" type="file" accept="video/*" hidden>
+  <div class="toast" id="toast" role="status"></div>
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
+  <script src="app.js"></script><script src="notes.js"></script>
+</body>
+</html>

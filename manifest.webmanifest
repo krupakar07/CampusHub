@@ -1,0 +1,11 @@
+{
+  "name": "Campus — Hochschule Wismar",
+  "short_name": "Campus",
+  "description": "Your personal Hochschule Wismar calendar and student planner.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f8f9fc",
+  "theme_color": "#f7f8fc",
+  "icons": [{"src":"icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]
+}
