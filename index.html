@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><meta name="theme-color" content="#ffffff"><title>Campus Notes — University Workspace</title><link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="app">
+<header class="topbar">
+  <div class="brand"><div class="brand-mark">C</div><div><strong>Campus Notes</strong><span>University workspace · Notes + Calendar</span></div></div>
+  <div class="top-actions"><button id="saveBtn" class="top-btn">Save</button><button id="printBtn" class="top-btn">Print</button><button id="fullscreenBtn" class="top-btn">Full screen</button></div>
+</header>
+<main class="workspace">
+<aside class="sidebar">
+  <div class="sidebar-title">My University</div>
+  <nav class="main-nav">
+    <button class="nav-item active" data-view="home">⌂ <span>Home</span></button>
+    <button class="nav-item" data-view="calendar">▦ <span>Calendar</span></button>
+    <button class="nav-item" data-view="notes">▤ <span>Notes</span></button>
+    <button class="nav-item" data-view="subjects">▣ <span>Subjects</span></button>
+    <button class="nav-item" data-view="tasks">☑ <span>Tasks</span></button>
+    <button class="nav-item" data-view="exams">◷ <span>Exams</span></button>
+  </nav>
+  <div class="sidebar-section">Subjects</div>
+  <div id="subjectList">
+    <button class="subject active" data-subject="Academic Research & Writing"><span class="dot purple"></span> Academic Research & Writing</button>
+    <button class="subject" data-subject="International Management"><span class="dot blue"></span> International Management</button>
+    <button class="subject" data-subject="Finance"><span class="dot green"></span> Finance</button>
+    <button class="subject" data-subject="German"><span class="dot orange"></span> German</button>
+  </div>
+  <button class="add-subject" id="addSubject">＋ Add subject</button>
+  <div class="sidebar-section">Pages</div>
+  <div id="pageList"><button class="page active" data-page="Lecture Notes">📄 <span>Lecture Notes</span></button></div>
+  <button class="add-page" id="newPage">＋ New page</button>
+  <div class="storage-card"><strong>Local workspace</strong><p>Notes, subjects, tasks and calendar events are stored locally in this browser. No server is required.</p></div>
+</aside>
+<section class="content-shell">
+  <div id="homeView" class="app-view">
+    <div class="dashboard-head"><div><div class="eyebrow">MY UNIVERSITY</div><h1>Good study day</h1><p id="todayText"></p></div><button class="primary-btn" id="dashboardAddEvent">＋ Add event</button></div>
+    <div class="dashboard-grid">
+      <div class="dashboard-card next-class"><div class="card-title">Next event</div><div id="nextEventCard" class="big-card-content"></div></div>
+      <div class="dashboard-card"><div class="card-title">Today</div><div id="todayEvents" class="event-mini-list"></div></div>
+      <div class="dashboard-card"><div class="card-title">Tasks</div><div id="taskSummary" class="task-summary"></div></div>
+    </div>
+    <div class="dashboard-section"><div class="section-head"><h2>Quick access</h2><button class="text-btn" data-view-target="calendar">Open calendar →</button></div><div class="quick-grid"><button data-view-target="notes">📝<strong>Lecture notes</strong><span>Open your OneNote-style editor</span></button><button data-view-target="calendar">📅<strong>Calendar</strong><span>Day, week and month planning</span></button><button data-view-target="tasks">☑<strong>Tasks</strong><span>Assignments and study work</span></button><button data-view-target="subjects">📚<strong>Subjects</strong><span>Organise your university material</span></button></div></div>
+  </div>
+
+  <div id="calendarView" class="app-view hidden">
+    <div class="calendar-head"><div><div class="eyebrow">UNIVERSITY CALENDAR</div><h1 id="calendarTitle"></h1></div><div class="calendar-controls"><button id="calPrev">‹</button><button id="calToday">Today</button><button id="calNext">›</button><select id="calMode"><option value="month">Month</option><option value="week">Week</option><option value="day">Day</option></select><button class="primary-btn" id="addEventBtn">＋ Add event</button></div></div>
+    <div id="calendarGrid" class="calendar-grid"></div>
+  </div>
+
+  <div id="notesView" class="app-view hidden editor-shell">
+    <div class="page-header"><input id="noteTitle" value="Academic Research & Writing — Lecture Notes" aria-label="Page title"><span id="saveState">Saved locally</span></div>
+    <div class="onenote-editor" id="editorApp">
+      <div class="editor-tabs"><button type="button" data-tab="Home" class="selected">Home</button><button type="button" data-tab="Insert">Insert</button></div>
+      <div class="editor-ribbon" id="ribbon"></div>
+      <div class="editor-canvas-wrap"><div id="editor" class="editor-canvas" contenteditable="true" spellcheck="true"><h1>Academic Research &amp; Writing</h1><p>Start typing your lecture notes here. Select text and use the Home or Insert ribbon just like a OneNote-style editor.</p><p>Try <strong>Home → Dictate</strong> for speech-to-text, or <strong>Insert → Table</strong> to add a table.</p></div></div>
+      <div class="statusbar"><span id="wordCount">0 words</span><span>•</span><span>Local autosave on</span><span class="status-spacer"></span><button id="zoomOut">−</button><span id="zoomLabel">100%</span><button id="zoomIn">＋</button></div>
+    </div>
+  </div>
+
+  <div id="subjectsView" class="app-view hidden simple-view"><div class="dashboard-head"><div><div class="eyebrow">ACADEMIC ORGANISATION</div><h1>Subjects</h1><p>Keep lecture notes, quick notes, assignments and important material organised.</p></div><button class="primary-btn" id="subjectsAdd">＋ Add subject</button></div><div id="subjectsCards" class="subject-cards"></div></div>
+  <div id="tasksView" class="app-view hidden simple-view"><div class="dashboard-head"><div><div class="eyebrow">WORK TO COMPLETE</div><h1>Tasks</h1><p>Assignments, reading, preparation and study tasks.</p></div><button class="primary-btn" id="addTaskBtn">＋ Add task</button></div><div id="tasksList" class="tasks-list"></div></div>
+  <div id="examsView" class="app-view hidden simple-view"><div class="dashboard-head"><div><div class="eyebrow">EXAM PLANNER</div><h1>Exams</h1><p>Keep exam dates visible beside your lecture calendar.</p></div><button class="primary-btn" id="addExamBtn">＋ Add exam</button></div><div id="examsList" class="tasks-list"></div></div>
+</section>
+</main>
+</div>
+<input id="imageInput" type="file" accept="image/*" hidden><input id="fileInput" type="file" hidden><input id="audioInput" type="file" accept="audio/*" hidden><input id="videoInput" type="file" accept="video/*" hidden>
+<div id="toast" class="toast"></div><div id="modalRoot"></div>
+<script src="app.js"></script>
+</body></html>
