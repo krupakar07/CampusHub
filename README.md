@@ -49,3 +49,7 @@ Events use a plain JSON shape. Local caches are namespaced by authenticated user
 ## Notes workspace
 
 CampusHub now includes a OneNote-style editor under **Notes** with Home and Insert ribbons, rich text formatting, headings, lists, checkboxes, tags, tables, pictures, attachments, audio/video, links, symbols, equations, dictation, zoom, printing, and autosave. Notes are namespaced by the signed-in Supabase user in browser storage. The included SQL also creates `campus_notes` with owner-only RLS if you want to extend cloud sync.
+
+
+### Notes editor interaction fix
+The Notes UI loads its functional OneNote-style Home/Insert ribbon and subject/page interactions from `notes-ui.js`.
