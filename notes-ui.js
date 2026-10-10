@@ -171,28 +171,90 @@
     restoreSelection();
   }
 
-  function exec(command, value = null) {
-    const editor = $('editor'); if (!editor) return false;
-    // Always restore the last editor range immediately before execCommand.
-    // The ribbon itself must never become the command's selection.
-    const restored = restoreSelection();
-    editor.focus({preventScroll:true});
-    if(restored) restoreSelection();
-    let ok=false;
-    try {
-      // Explicitly enable CSS styling so Chrome/Safari apply formatting to the
-      // selected range instead of relying on browser-specific <b>/<i> behavior.
-      document.execCommand('styleWithCSS', false, false);
-      ok = document.execCommand(command, false, value);
-    } catch (_) {}
-    captureSelection();
-    scheduleSave();
-    updateWordCount();
-    refreshToolbarState();
-    return ok;
+  function fallbackInlineToggle(command) {
+    const editor = $('editor');
+    const sel = window.getSelection();
+    if (!editor || !sel || !sel.rangeCount || sel.isCollapsed) return false;
+    const range = sel.getRangeAt(0);
+    if (!isRangeInsideEditor(range)) return false;
+
+    const tagMap = {bold:'strong', italic:'em', underline:'u', strikeThrough:'s', superscript:'sup', subscript:'sub'};
+    const tagName = tagMap[command];
+    if (!tagName) return false;
+
+    const root = range.commonAncestorContainer.nodeType === 1 ? range.commonAncestorContainer : range.commonAncestorContainer.parentElement;
+    const textNodes = [];
+    const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+    let node;
+    while ((node = walker.nextNode())) {
+      if (!node.nodeValue.trim()) continue;
+      try { if (range.intersectsNode(node)) textNodes.push(node); } catch (_) {}
+    }
+    if (!textNodes.length) return false;
+
+    const fullyTagged = textNodes.every(n => {
+      let el = n.parentElement;
+      while (el && el !== editor) {
+        if (el.tagName.toLowerCase() === tagName) return true;
+        el = el.parentElement;
+      }
+      return false;
+    });
+
+    if (fullyTagged) {
+      // Remove the matching inline element while preserving its children.
+      const elements = [];
+      textNodes.forEach(n => {
+        let el = n.parentElement;
+        while (el && el !== editor) {
+          if (el.tagName.toLowerCase() === tagName) { if (!elements.includes(el)) elements.push(el); break; }
+          el = el.parentElement;
+        }
+      });
+      elements.forEach(el => unwrap(el));
+    } else {
+      const wrapper = document.createElement(tagName);
+      const fragment = range.extractContents();
+      wrapper.appendChild(fragment);
+      range.insertNode(wrapper);
+      range.selectNodeContents(wrapper);
+    }
+    sel.removeAllRanges(); sel.addRange(range);
+    return true;
   }
 
-  function refreshToolbarState() {
+  function exec(command, value = null) {
+    const editor = $('editor'); if (!editor) return false;
+
+    // The critical part: do NOT focus the editor before restoring the saved
+    // selection. Focusing contenteditable can collapse the selection in Chrome.
+    // We restore the exact Range first, then execute the command immediately.
+    if (!savedRange || !isRangeInsideEditor(savedRange)) captureSelection();
+    const sel = window.getSelection();
+    if (!sel || !savedRange || !isRangeInsideEditor(savedRange)) return false;
+
+    try {
+      sel.removeAllRanges();
+      sel.addRange(savedRange.cloneRange());
+      document.execCommand('styleWithCSS', false, false);
+      let ok = document.execCommand(command, false, value);
+      if (!ok) ok = fallbackInlineToggle(command);
+
+      // Save the new caret/selection produced by the browser.
+      captureSelection();
+      scheduleSave();
+      updateWordCount();
+
+      // Updating toolbar state must happen after the command, but must never
+      // steal the editor selection while the command is being executed.
+      requestAnimationFrame(() => refreshToolbarState(false));
+      return ok;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  function refreshToolbarState(refocus = true) {
     const editor = $('editor');
     if (!editor) return;
     const stateButtons = document.querySelectorAll('.editor-ribbon .ribbon-tool[data-action]');
@@ -201,7 +263,8 @@
       if (!toggleActions.has(action)) return;
       let active = false;
       try {
-        focusEditor();
+        // queryCommandState reads the current selection. Never focus the editor
+        // here unless explicitly requested by the caller.
         active = document.queryCommandState(action);
       } catch (_) {}
       btn.classList.toggle('active', !!active);
@@ -428,7 +491,7 @@
         e.preventDefault();
         exec(action);
         control.dataset.handledPointer='1';
-        setTimeout(()=>delete control.dataset.handledPointer,0);
+        setTimeout(()=>delete control.dataset.handledPointer,250);
       }
     });
     app?.addEventListener('mousedown',e=>{
