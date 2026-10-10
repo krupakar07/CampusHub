@@ -172,13 +172,24 @@
   }
 
   function exec(command, value = null) {
-    const editor = $('editor'); if (!editor) return;
-    focusEditor();
-    try { document.execCommand(command, false, value); } catch (_) {}
+    const editor = $('editor'); if (!editor) return false;
+    // Always restore the last editor range immediately before execCommand.
+    // The ribbon itself must never become the command's selection.
+    const restored = restoreSelection();
+    editor.focus({preventScroll:true});
+    if(restored) restoreSelection();
+    let ok=false;
+    try {
+      // Explicitly enable CSS styling so Chrome/Safari apply formatting to the
+      // selected range instead of relying on browser-specific <b>/<i> behavior.
+      document.execCommand('styleWithCSS', false, false);
+      ok = document.execCommand(command, false, value);
+    } catch (_) {}
     captureSelection();
     scheduleSave();
     updateWordCount();
     refreshToolbarState();
+    return ok;
   }
 
   function refreshToolbarState() {
@@ -403,11 +414,26 @@
 
     $('noteTitle')?.addEventListener('change',()=>{const title=$('noteTitle').value.trim()||activePage;if(title===activePage)return;const data=getData(),pages=currentPages(data),content=pages[activePage];delete pages[activePage];pages[title]=content;activePage=title;saveData(data);renderPages();});
 
-    // Capture before the browser moves focus away from contenteditable. Preventing default
-    // keeps the selection intact, which makes toggles reliable.
+    // Preserve the editor range before any ribbon control takes focus. For formatting
+    // buttons, execute on pointer/mousedown so the browser cannot destroy the selection.
+    app?.addEventListener('pointerdown',e=>{
+      const control=e.target.closest('.editor-ribbon button[data-action]');
+      if(!control) return;
+      captureSelection();
+      // Formatting commands are handled immediately on pointerdown. This is much more
+      // reliable with contenteditable on Chrome/Safari than waiting for click.
+      const action=control.dataset.action;
+      const directToggle=['bold','italic','underline','strikeThrough','insertUnorderedList','insertOrderedList','outdent','indent','justifyLeft','justifyCenter','justifyRight','justifyFull','removeFormat','superscript','subscript'];
+      if(directToggle.includes(action)){
+        e.preventDefault();
+        exec(action);
+        control.dataset.handledPointer='1';
+        setTimeout(()=>delete control.dataset.handledPointer,0);
+      }
+    });
     app?.addEventListener('mousedown',e=>{
       const control=e.target.closest('.editor-ribbon button,.editor-ribbon select');
-      if(control){captureSelection(); if(control.tagName==='BUTTON')e.preventDefault();}
+      if(control) captureSelection();
     });
 
     app?.addEventListener('click',e=>{
@@ -419,7 +445,9 @@
       const dropdown=e.target.closest('[data-dropdown]');
       if(dropdown){const action=dropdown.dataset.dropdown,menu=document.querySelector(`[data-menu="${action}"]`),wasOpen=menu&&!menu.hidden;closeMenus();if(menu&&!wasOpen)positionMenu(menu,dropdown,action==='tags'?260:210);return;}
       if(!e.target.closest('.ribbon-color-menu,.ribbon-tag-menu,.table-picker,.symbol-menu'))closeMenus();
-      const tool=e.target.closest('.editor-ribbon button[data-action]');if(tool)handleAction(tool.dataset.action);
+      const tool=e.target.closest('.editor-ribbon button[data-action]');
+      if(tool && tool.dataset.handledPointer==='1') return;
+      if(tool)handleAction(tool.dataset.action);
     });
 
     app?.addEventListener('change',e=>{const s=e.target.closest('select[data-action]');if(s)handleSelect(s.dataset.action,s.value);});
