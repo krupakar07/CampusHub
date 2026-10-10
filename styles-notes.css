@@ -4,3 +4,39 @@
 @media(max-width:900px){.notes-sidebar{width:185px}.campus-notes-page .editor-canvas-wrap{padding:10px}.campus-notes-page .editor-canvas{padding:30px 24px}.campus-notes-page .ribbon-tool{min-width:35px}}
 @media(max-width:700px){.notes-sidebar{display:none}.campus-notes-page .editor-canvas-wrap{padding:8px}.campus-notes-page .editor-canvas{padding:28px 20px}}
 @media print{.campus-notes-page .notes-sidebar,.campus-notes-page .notes-page-header,.campus-notes-page .editor-tabs,.campus-notes-page .editor-ribbon,.campus-notes-page .statusbar{display:none!important}.campus-notes-page .editor-canvas-wrap{padding:0;background:white}.campus-notes-page .editor-canvas{box-shadow:none;border:0;max-width:none}}
+
+/* OneNote-style dropdowns and active/toggle states */
+.campus-notes-page .ribbon-dropdown-wrap{position:relative;display:flex;align-items:center}
+.campus-notes-page .ribbon-dropdown-trigger{position:relative;padding-bottom:8px!important}
+.campus-notes-page .ribbon-tool.active{background:#e8e4f7;border-color:#cfc7ed;color:#4e3f9f;box-shadow:inset 0 0 0 1px #d8d0f0}
+.campus-notes-page .ribbon-tool.active .big{color:#4e3f9f}
+.campus-notes-page .dropdown-arrow{position:absolute;right:4px;bottom:2px;font-size:9px;color:#8b8497}
+.campus-notes-page .color-swatch{position:absolute;bottom:1px;left:50%;transform:translateX(-50%);width:22px;height:3px;border-radius:2px;border:1px solid rgba(0,0,0,.12)}
+.campus-notes-page .ribbon-color-menu{position:fixed;z-index:1000;width:190px;padding:10px;background:#fff;border:1px solid #ddd8e7;border-radius:9px;box-shadow:0 12px 30px rgba(30,25,50,.2);display:grid;grid-template-columns:repeat(6,24px);gap:7px}
+.campus-notes-page .ribbon-color-menu[hidden]{display:none!important}
+.campus-notes-page .color-choice{width:24px;height:24px;border:1px solid #ddd8e7;background:#fff;border-radius:5px;padding:3px;cursor:pointer}
+.campus-notes-page .color-choice:hover{border-color:#7565c7;background:#f3f0fb}
+.campus-notes-page .color-choice span{display:block;width:100%;height:100%;border-radius:3px;border:1px solid rgba(0,0,0,.12)}
+
+/* OneNote-style Tags dropdown */
+.campus-notes-page .ribbon-tag-menu{position:fixed;z-index:1100;width:245px;background:#fff;border:1px solid #d7d3dd;border-radius:5px;box-shadow:0 10px 28px rgba(30,25,50,.20);padding:6px 0;overflow:hidden}
+.campus-notes-page .tag-menu-scroll{max-height:565px;overflow-y:auto;padding:0 0 3px}
+.campus-notes-page .tag-menu-item{width:100%;min-height:34px;border:0;background:#fff;display:grid;grid-template-columns:25px 1fr auto;align-items:center;gap:8px;padding:6px 12px;text-align:left;font-size:12px;color:#45414c;cursor:pointer}
+.campus-notes-page .tag-menu-item:hover{background:#f0eef8}
+.campus-notes-page .tag-menu-icon{font-size:15px;text-align:center;color:#6e657b}
+.campus-notes-page .tag-menu-item kbd{font-family:inherit;font-size:9px;color:#99939f;margin-left:8px}
+.campus-notes-page .tag-menu-item.remember span:nth-child(2){background:#fff59d;padding:2px 4px;width:max-content}
+.campus-notes-page .tag-menu-item.definition span:nth-child(2){background:#30d158;color:#111;padding:2px 4px;width:max-content}
+.campus-notes-page .tag-menu-item.highlight span:nth-child(2){background:#fff59d;padding:2px 4px;width:max-content}
+.campus-notes-page .tag-menu-item.critical .tag-menu-icon{color:#e53935}
+.campus-notes-page .tag-menu-item.project-a .tag-menu-icon{color:#e86b5b}
+.campus-notes-page .tag-menu-item.project-b .tag-menu-icon{color:#e8c65a}
+.campus-notes-page .tag-menu-item.customize{border-top:1px solid #e7e4eb;margin-top:3px;padding-top:9px}
+.campus-notes-page .tag-menu-item.remove-tag{color:#aaa;cursor:pointer}
+.campus-notes-page .tagged-text{border-radius:2px;padding:1px 3px;cursor:pointer}
+.campus-notes-page .tagged-text:hover{outline:1px dashed #8b7bd0;outline-offset:1px}
+.campus-notes-page .tagged-text.remember,.campus-notes-page .tagged-text.highlight{background:#fff59d}
+.campus-notes-page .tagged-text.definition{background:#30d158;color:#111}
+.campus-notes-page .tagged-text.critical{border-left:2px solid #e53935;padding-left:4px}
+.campus-notes-page .tagged-text.project-a{background:#ffe1dc}
+.campus-notes-page .tagged-text.project-b{background:#fff1bd}

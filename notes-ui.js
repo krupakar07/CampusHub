@@ -20,10 +20,10 @@
 
   const homeTools = [
     {group:'Clipboard', tools:[['Paste','📋','paste'],['Undo','↶','undo'],['Redo','↷','redo']]},
-    {group:'Font', tools:[['Font','Aa','fontName','select'],['Size','14','fontSize','select'],['Bold','B','bold'],['Italic','I','italic'],['Underline','U','underline'],['Strike','S','strikeThrough'],['Highlight','▰','hilite'],['Font color','A','foreColor']]},
+    {group:'Font', tools:[['Font','Aa','fontName','select'],['Size','14','fontSize','select'],['Bold','B','bold'],['Italic','I','italic'],['Underline','U','underline'],['Strike','S','strikeThrough'],['Highlight','▰','hilite','color'],['Font color','A','foreColor','color']]},
     {group:'Paragraph', tools:[['Bullets','•','insertUnorderedList'],['Numbering','1.','insertOrderedList'],['To Do','☐','todo'],['Outdent','←','outdent'],['Indent','→','indent'],['Align left','≡','justifyLeft'],['Center','≡','justifyCenter'],['Align right','≡','justifyRight'],['Justify','≡','justifyFull']]},
     {group:'Styles', tools:[['Style','Normal','formatBlock','select'],['Clear','⌫','removeFormat'],['Superscript','x²','superscript'],['Subscript','x₂','subscript']]},
-    {group:'Tags', tools:[['To Do','☐','tag-todo'],['Important','!','tag-important'],['Question','?','tag-question'],['Remember','★','tag-remember']]},
+    {group:'Tags', tools:[['Tags','✓','tags','tags']]},
     {group:'Dictate', tools:[['Dictate','🎙','dictate'],['Language','EN','dictation-language','select']]}
   ];
 
@@ -126,7 +126,42 @@
     rememberSelection();
     scheduleSave();
     updateWordCount();
+    refreshToolbarState();
   }
+
+  const colorPalettes = {
+    foreColor: [
+      ['#000000','Black'],['#434343','Dark gray'],['#666666','Gray'],['#999999','Light gray'],['#ffffff','White'],
+      ['#e03131','Red'],['#f08c00','Orange'],['#fcc419','Yellow'],['#2f9e44','Green'],['#1971c2','Blue'],['#6741d9','Purple'],['#d6336c','Pink'],
+      ['#c92a2a','Dark red'],['#e67700','Dark orange'],['#5c940d','Dark green'],['#1864ab','Dark blue'],['#5f3dc4','Dark purple'],['#a61e4d','Dark pink']
+    ],
+    hilite: [
+      ['transparent','None'],['#fff59d','Yellow'],['#ffd8a8','Orange'],['#ffc9c9','Red'],['#b2f2bb','Green'],['#a5d8ff','Blue'],['#d0bfff','Purple'],['#fcc2d7','Pink'],
+      ['#fff3bf','Light yellow'],['#ffe8cc','Light orange'],['#ffe3e3','Light red'],['#d3f9d8','Light green'],['#d0ebff','Light blue'],['#e5dbff','Light purple'],['#ffdeeb','Light pink']
+    ]
+  };
+
+  const toggleActions = new Set(['bold','italic','underline','strikeThrough','insertUnorderedList','insertOrderedList','superscript','subscript','justifyLeft','justifyCenter','justifyRight','justifyFull','createLink']);
+
+  const tagDefinitions = [
+    ['todo','To Do','✓',''],
+    ['important','Important','★',''],
+    ['question','Question','?',''],
+    ['remember','Remember for later','!','remember'],
+    ['definition','Definition','▣','definition'],
+    ['highlight','Highlight','✎','highlight'],
+    ['contact','Contact','♙',''],
+    ['address','Address','⌂',''],
+    ['phone','Phone number','☎',''],
+    ['website','Web site to visit','↗',''],
+    ['idea','Idea','💡',''],
+    ['password','Password','▢',''],
+    ['critical','Critical','!','critical'],
+    ['project-a','Project A','■','project-a'],
+    ['project-b','Project B','■','project-b'],
+    ['movie','Movie to see','▤',''],
+    ['book','Book to read','▥','']
+  ];
 
   function buildRibbon() {
     const ribbon = $('ribbon');
@@ -138,10 +173,35 @@
         if (action === 'fontName') return `<select class="ribbon-select" data-action="fontName" title="Font"><option value="Arial">Arial</option><option value="Calibri">Calibri</option><option value="Georgia">Georgia</option><option value="Times New Roman">Times New Roman</option><option value="Verdana">Verdana</option></select>`;
         if (action === 'fontSize') return `<select class="ribbon-select" data-action="fontSize" title="Font size"><option value="2">10</option><option value="3" selected>14</option><option value="4">18</option><option value="5">24</option><option value="6">32</option><option value="7">48</option></select>`;
         if (action === 'formatBlock') return `<select class="ribbon-select" data-action="formatBlock" title="Style"><option value="p">Normal</option><option value="h1">Title</option><option value="h2">Heading 1</option><option value="h3">Heading 2</option><option value="blockquote">Quote</option><option value="pre">Code</option></select>`;
-        return `<select class="ribbon-select" data-action="dictation-language" title="Dictation language"><option>EN</option><option>DE</option></select>`;
+        return `<select class="ribbon-select" data-action="dictation-language" title="Dictation language"><option value="EN">EN</option><option value="DE">DE</option></select>`;
+      }
+      if (type === 'color') {
+        const title = action === 'foreColor' ? 'Font color' : 'Highlight color';
+        const swatch = action === 'foreColor' ? '#5b4cc4' : '#fff2a8';
+        return `<div class="ribbon-dropdown-wrap"><button type="button" class="ribbon-tool ribbon-dropdown-trigger" data-dropdown="${action}" title="${title}"><span class="big">${icon}</span><span>${label}</span><span class="color-swatch" style="background:${swatch}"></span><span class="dropdown-arrow">▾</span></button><div class="ribbon-color-menu" data-menu="${action}" hidden>${colorPalettes[action].map(([color,name]) => `<button type="button" class="color-choice" data-color-action="${action}" data-color="${color}" title="${name}"><span style="background:${color}"></span></button>`).join('')}</div></div>`;
+      }
+      if (type === 'tags') {
+        const menu = tagDefinitions.map(([id,name,ico,cls]) => `<button type="button" class="tag-menu-item ${cls}" data-tag-id="${id}"><span class="tag-menu-icon">${ico}</span><span>${name}</span><kbd>${id==='todo'?'Ctrl+1':id==='important'?'Ctrl+2':id==='question'?'Ctrl+3':id==='remember'?'Ctrl+4':id==='definition'?'Ctrl+5':id==='highlight'?'Ctrl+6':id==='contact'?'Ctrl+7':id==='address'?'Ctrl+8':id==='phone'?'Ctrl+9':''}</kbd></button>`).join('');
+        return `<div class="ribbon-dropdown-wrap tags-dropdown-wrap"><button type="button" class="ribbon-tool ribbon-dropdown-trigger" data-dropdown="tags" title="Tags"><span class="big">☑</span><span>Tags</span><span class="dropdown-arrow">▾</span></button><div class="ribbon-tag-menu" data-menu="tags" hidden><div class="tag-menu-scroll">${menu}</div><button type="button" class="tag-menu-item customize" data-tag-id="customize"><span class="tag-menu-icon">⚙</span><span>Customize Tags...</span></button><button type="button" class="tag-menu-item remove-tag" data-tag-id="remove"><span class="tag-menu-icon">⌫</span><span>Remove Tag</span></button></div></div>`;
       }
       return `<button type="button" class="ribbon-tool" data-action="${action}" title="${label}"><span class="big">${icon}</span><span>${label}</span></button>`;
     }).join('')}</div>`).join('');
+    refreshToolbarState();
+  }
+
+  function refreshToolbarState() {
+    document.querySelectorAll('.ribbon-tool[data-action]').forEach(btn => {
+      const action = btn.dataset.action;
+      if (!toggleActions.has(action)) return;
+      let active = false;
+      try { active = !!document.queryCommandState(action); } catch (_) {}
+      btn.classList.toggle('active', active);
+      btn.setAttribute('aria-pressed', active ? 'true' : 'false');
+    });
+  }
+
+  function closeColorMenus() {
+    document.querySelectorAll('.ribbon-color-menu,.ribbon-tag-menu').forEach(menu => { menu.hidden = true; });
   }
 
   function insertHtml(html) {
@@ -153,6 +213,7 @@
     rememberSelection();
     scheduleSave();
     updateWordCount();
+    refreshToolbarState();
   }
 
   function insertTable() {
@@ -164,13 +225,82 @@
     insertHtml(html);
   }
 
+  function closestTag(node) {
+    let el = node && (node.nodeType === 1 ? node : node.parentElement);
+    while (el && el.id !== 'editor') {
+      if (el.dataset?.tag) return el;
+      el = el.parentElement;
+    }
+    return null;
+  }
+
+  function removeTagFromElement(el) {
+    if (!el) return false;
+    const parent = el.parentNode;
+    while (el.firstChild) parent.insertBefore(el.firstChild, el);
+    el.remove();
+    scheduleSave();
+    updateWordCount();
+    return true;
+  }
+
+  function applyTag(tagId) {
+    const editor = $('editor');
+    if (!editor) return;
+    editor.focus();
+    restoreSelection();
+    const sel = window.getSelection();
+    if (!sel || !sel.rangeCount) return;
+    const range = sel.getRangeAt(0);
+    const existing = closestTag(sel.anchorNode);
+    if (existing && existing.dataset.tag === tagId && (!sel.toString() || existing.contains(sel.focusNode))) {
+      removeTagFromElement(existing);
+      return;
+    }
+    if (range.collapsed) {
+      const def = tagDefinitions.find(x => x[0] === tagId) || [tagId, tagId, '✓', ''];
+      const chip = `<span class="tag-chip tagged-text ${escapeHtml(def[3])}" data-tag="${escapeHtml(tagId)}" title="Click to remove tag">${escapeHtml(def[2])} ${escapeHtml(def[1])}</span>&nbsp;`;
+      insertHtml(chip);
+      return;
+    }
+    const fragment = range.extractContents();
+    const wrapper = document.createElement('span');
+    const def = tagDefinitions.find(x => x[0] === tagId) || [tagId, tagId, '✓', ''];
+    wrapper.className = `tagged-text ${def[3] || ''}`.trim();
+    wrapper.dataset.tag = tagId;
+    wrapper.title = 'Click to remove tag';
+    wrapper.appendChild(fragment);
+    range.insertNode(wrapper);
+    sel.removeAllRanges();
+    const after = document.createRange();
+    after.selectNodeContents(wrapper);
+    sel.addRange(after);
+    rememberSelection();
+    scheduleSave();
+    updateWordCount();
+  }
+
+  function handleTagMenu(id) {
+    closeColorMenus();
+    if (id === 'remove') {
+      const editor = $('editor');
+      const sel = window.getSelection();
+      const tag = sel?.rangeCount ? closestTag(sel.anchorNode) : null;
+      if (tag) removeTagFromElement(tag);
+      else notify('Select a tagged item first.');
+      return;
+    }
+    if (id === 'customize') { notify('Tag customization will be available in a later update.'); return; }
+    applyTag(id);
+  }
+
   function handleAction(action) {
     if (action === 'paste') { navigator.clipboard?.readText?.().then(t => insertHtml(escapeHtml(t).replace(/\n/g,'<br>'))).catch(()=>notify('Paste is blocked by the browser. Use ⌘V / Ctrl+V in the editor.')); return; }
     if (['undo','redo','bold','italic','underline','strikeThrough','insertUnorderedList','insertOrderedList','outdent','indent','justifyLeft','justifyCenter','justifyRight','justifyFull','removeFormat','superscript','subscript'].includes(action)) return exec(action);
     if (action === 'hilite') return exec('hiliteColor', '#fff2a8');
-    if (action === 'foreColor') { const c=prompt('Font color (CSS color):','#5b4cc4'); if(c) exec('foreColor',c); return; }
-    if (action === 'todo') return insertHtml('<div class="todo-line"><input type="checkbox"> <span>To-do item</span></div>');
-    if (action.startsWith('tag-')) { const labels={'tag-todo':'☐ To Do','tag-important':'⚠ Important','tag-question':'? Question','tag-remember':'★ Remember for Later'}; return insertHtml(`<span class="tag-chip">${labels[action]}</span>&nbsp;`); }
+    if (action === 'foreColor') return exec('foreColor', '#5b4cc4');
+    if (action === 'todo') return applyTag('todo');
+    if (action.startsWith('tag-')) return applyTag(action.replace('tag-',''));
     if (action === 'dictate') return dictate();
     if (action === 'pagebreak') return insertHtml('<div style="page-break-after:always;border-top:1px dashed #bbb;margin:24px 0"></div>');
     if (action === 'date') return insertHtml(`<span>${new Intl.DateTimeFormat('en-GB',{dateStyle:'medium'}).format(new Date())}</span>`);
@@ -276,6 +406,7 @@
 
   function bind() {
     if (bound) return; bound = true;
+    $('editor')?.addEventListener('click', e => { const tag=e.target.closest('[data-tag]'); if(tag && tag.closest('#editor')) { removeTagFromElement(tag); e.preventDefault(); } });
     $('editor')?.addEventListener('input', () => { updateWordCount(); scheduleSave(); });
     $('editor')?.addEventListener('mouseup', rememberSelection);
     $('editor')?.addEventListener('keyup', rememberSelection);
@@ -293,8 +424,39 @@
     $('notesNewPage')?.addEventListener('click', addPage);
     $('editorApp')?.addEventListener('click', e => {
       const tab=e.target.closest('[data-tab]');
-      if(tab){ activeTab=tab.dataset.tab; document.querySelectorAll('.editor-tabs [data-tab]').forEach(x=>x.classList.toggle('selected',x===tab)); buildRibbon(); return; }
-      const tool=e.target.closest('[data-action]'); if(tool && tool.tagName==='BUTTON') handleAction(tool.dataset.action);
+      if(tab){ activeTab=tab.dataset.tab; document.querySelectorAll('.editor-tabs [data-tab]').forEach(x=>x.classList.toggle('selected',x===tab)); closeColorMenus(); buildRibbon(); return; }
+
+      const colorChoice=e.target.closest('[data-color-action]');
+      if(colorChoice){
+        const action=colorChoice.dataset.colorAction;
+        const color=colorChoice.dataset.color;
+        closeColorMenus();
+        if(action==='foreColor') exec('foreColor', color);
+        if(action==='hilite') exec('hiliteColor', color === 'transparent' ? 'transparent' : color);
+        return;
+      }
+
+      const tagChoice = e.target.closest('[data-tag-id]');
+      if (tagChoice) { handleTagMenu(tagChoice.dataset.tagId); return; }
+
+      const dropdown=e.target.closest('[data-dropdown]');
+      if(dropdown){
+        const action=dropdown.dataset.dropdown;
+        const menu=document.querySelector(`[data-menu="${action}"]`);
+        const wasOpen=menu && !menu.hidden;
+        closeColorMenus();
+        if(menu && !wasOpen){
+          menu.hidden=false;
+          const rect=dropdown.getBoundingClientRect();
+          menu.style.left=`${Math.max(4, Math.min(window.innerWidth-210, rect.left))}px`;
+          menu.style.top=`${rect.bottom+4}px`;
+        }
+        return;
+      }
+
+      if(!e.target.closest('.ribbon-color-menu,.ribbon-tag-menu')) closeColorMenus();
+      const tool=e.target.closest('[data-action]');
+      if(tool && tool.tagName==='BUTTON') handleAction(tool.dataset.action);
     });
     $('editorApp')?.addEventListener('change', e => { const s=e.target.closest('select[data-action]'); if(s) handleSelect(s.dataset.action,s.value); });
     $('notesImageInput')?.addEventListener('change', e=>handleFiles(e.target,'picture'));
@@ -303,7 +465,8 @@
     $('notesVideoInput')?.addEventListener('change', e=>handleFiles(e.target,'video'));
     $('zoomOut')?.addEventListener('click',()=>{zoom=Math.max(60,zoom-10); applyZoom();});
     $('zoomIn')?.addEventListener('click',()=>{zoom=Math.min(180,zoom+10); applyZoom();});
-    document.addEventListener('selectionchange', rememberSelection);
+    document.addEventListener('selectionchange', () => { rememberSelection(); refreshToolbarState(); });
+    document.addEventListener('click', e => { if(!e.target.closest('.ribbon-dropdown-wrap')) closeColorMenus(); });
   }
 
   function applyZoom(){ if($('editor')) $('editor').style.fontSize=`${15*zoom/100}px`; if($('zoomLabel')) $('zoomLabel').textContent=`${zoom}%`; }
