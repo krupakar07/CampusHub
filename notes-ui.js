@@ -541,11 +541,14 @@
       const color=e.target.closest('[data-color-action]');
       if(color){const action=color.dataset.colorAction,value=color.dataset.color;closeMenus();focusEditor();exec(action==='foreColor'?'foreColor':'hiliteColor',value==='transparent'?'transparent':value);return;}
       const tag=e.target.closest('[data-tag-id]');if(tag){handleTagMenu(tag.dataset.tagId);return;}
+      // Pointer-down handlers already opened/handled these controls. Return before
+      // the outside-click menu closer can immediately hide the newly opened menu.
+      const handledTool=e.target.closest('.editor-ribbon button[data-action]');
+      if(handledTool && handledTool.dataset.handledPointer==='1') return;
       const dropdown=e.target.closest('[data-dropdown]');
       if(dropdown){const action=dropdown.dataset.dropdown,menu=document.querySelector(`[data-menu="${action}"]`),wasOpen=menu&&!menu.hidden;closeMenus();if(menu&&!wasOpen)positionMenu(menu,dropdown,action==='tags'?260:210);return;}
       if(!e.target.closest('.ribbon-color-menu,.ribbon-tag-menu,.table-picker,.symbol-menu'))closeMenus();
       const tool=e.target.closest('.editor-ribbon button[data-action]');
-      if(tool && tool.dataset.handledPointer==='1') return;
       if(tool)handleAction(tool.dataset.action);
     });
 
