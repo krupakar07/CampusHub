@@ -122,6 +122,10 @@
     if (!editor) return;
     editor.focus();
     restoreSelection();
+    // Restore the exact selection immediately before executing the command.
+    // For toggle commands, execCommand itself switches the state on/off.
+    // Keeping the range intact is critical because clicking the ribbon normally
+    // causes the browser to move focus away from contenteditable.
     try { document.execCommand(command, false, value); } catch (_) {}
     rememberSelection();
     scheduleSave();
@@ -131,7 +135,7 @@
 
   const colorPalettes = {
     foreColor: [
-      ['#000000','Black'],['#434343','Dark gray'],['#666666','Gray'],['#999999','Light gray'],['#ffffff','White'],
+      ['#000000','Automatic / Black'],['#434343','Dark gray'],['#666666','Gray'],['#999999','Light gray'],['#ffffff','White'],
       ['#e03131','Red'],['#f08c00','Orange'],['#fcc419','Yellow'],['#2f9e44','Green'],['#1971c2','Blue'],['#6741d9','Purple'],['#d6336c','Pink'],
       ['#c92a2a','Dark red'],['#e67700','Dark orange'],['#5c940d','Dark green'],['#1864ab','Dark blue'],['#5f3dc4','Dark purple'],['#a61e4d','Dark pink']
     ],
@@ -422,6 +426,18 @@
     $('notesPageList')?.addEventListener('click', e => { const b=e.target.closest('[data-note-page]'); if(b) switchPage(b.dataset.notePage); });
     $('notesAddSubject')?.addEventListener('click', addSubject);
     $('notesNewPage')?.addEventListener('click', addPage);
+    // Preserve the editor selection when the mouse moves onto the ribbon.
+    // Without this, the browser can collapse the selection before a formatting
+    // command runs, which makes toggle commands (bold/italic/etc.) appear stuck.
+    $('editorApp')?.addEventListener('mousedown', e => {
+      const tool = e.target.closest('.ribbon-tool');
+      if (tool && tool.closest('.editor-ribbon')) {
+        rememberSelection();
+        // Keep the text selection while clicking a toolbar button.
+        // Dropdown triggers are handled by click, but also need the selection preserved.
+        e.preventDefault();
+      }
+    });
     $('editorApp')?.addEventListener('click', e => {
       const tab=e.target.closest('[data-tab]');
       if(tab){ activeTab=tab.dataset.tab; document.querySelectorAll('.editor-tabs [data-tab]').forEach(x=>x.classList.toggle('selected',x===tab)); closeColorMenus(); buildRibbon(); return; }
