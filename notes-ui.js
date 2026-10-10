@@ -299,8 +299,15 @@
   function positionMenu(menu, anchor, width = 220) {
     const rect = anchor.getBoundingClientRect();
     menu.hidden = false;
-    const left = Math.max(6, Math.min(window.innerWidth - width - 6, rect.left));
-    const top = Math.min(window.innerHeight - 20, rect.bottom + 4);
+    menu.style.display = 'block';
+    const measuredWidth = Math.max(width, menu.offsetWidth || width);
+    const measuredHeight = menu.offsetHeight || 320;
+    const left = Math.max(6, Math.min(window.innerWidth - measuredWidth - 6, rect.left));
+    const below = rect.bottom + 4;
+    const above = rect.top - measuredHeight - 4;
+    const top = (below + measuredHeight <= window.innerHeight - 6 || above < 6)
+      ? Math.max(6, below)
+      : above;
     menu.style.left = `${left}px`;
     menu.style.top = `${top}px`;
   }
@@ -340,18 +347,18 @@
   }
 
   function openTablePicker(anchor) {
+    if (!anchor) return;
     closeMenus();
     let picker = document.querySelector('.table-picker');
     if (!picker) {
       picker = document.createElement('div');
       picker.className = 'table-picker';
-      picker.hidden = true;
       picker.innerHTML = `<div class="picker-label">1 × 1</div><div class="table-grid">${Array.from({length:100},(_,i)=>`<button type="button" class="table-cell" data-r="${Math.floor(i/10)+1}" data-c="${i%10+1}" aria-label="${Math.floor(i/10)+1} by ${i%10+1}"></button>`).join('')}</div>`;
       document.body.appendChild(picker);
       picker.addEventListener('mouseover', e => { const cell=e.target.closest('.table-cell'); if(!cell) return; const r=+cell.dataset.r,c=+cell.dataset.c; picker.querySelector('.picker-label').textContent=`${r} × ${c}`; picker.querySelectorAll('.table-cell').forEach(x=>x.classList.toggle('active', +x.dataset.r<=r && +x.dataset.c<=c)); });
-      picker.addEventListener('click', e => { const cell=e.target.closest('.table-cell'); if(!cell) return; insertTable(+cell.dataset.r,+cell.dataset.c); picker.hidden=true; });
+      picker.addEventListener('click', e => { const cell=e.target.closest('.table-cell'); if(!cell) return; insertTable(+cell.dataset.r,+cell.dataset.c); picker.hidden=true; picker.style.display='none'; });
     }
-    positionMenu(picker, anchor, 230);
+    positionMenu(picker, anchor, 250);
   }
 
   function insertTable(rows, cols) {
@@ -500,6 +507,15 @@
     // Preserve the editor range before any ribbon control takes focus. For formatting
     // buttons, execute on pointer/mousedown so the browser cannot destroy the selection.
     app?.addEventListener('pointerdown',e=>{
+      const tableControl=e.target.closest('.editor-ribbon button[data-action="table"]');
+      if(tableControl){
+        e.preventDefault();
+        captureSelection();
+        openTablePicker(tableControl);
+        tableControl.dataset.handledPointer='1';
+        setTimeout(()=>delete tableControl.dataset.handledPointer,250);
+        return;
+      }
       const control=e.target.closest('.editor-ribbon button[data-action]');
       if(!control) return;
       captureSelection();
