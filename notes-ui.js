@@ -335,6 +335,17 @@
       if (type==='tags') return buildTagMenu();
       return `<button type="button" class="ribbon-tool" data-action="${action}" title="${escapeHtml(label)}" aria-pressed="false"><span class="big">${icon}</span><span>${escapeHtml(label)}</span></button>`;
     }).join('')}</div>`).join('');
+    // Table uses a dedicated click handler on the actual button. This prevents the
+    // ribbon's generic click/outside-menu handler from swallowing the interaction.
+    const tableButton = ribbon.querySelector('button[data-action="table"]');
+    if (tableButton) {
+      tableButton.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        captureSelection();
+        openTablePicker(tableButton);
+      });
+    }
     refreshToolbarState();
   }
 
@@ -510,6 +521,7 @@
       const tableControl=e.target.closest('.editor-ribbon button[data-action="table"]');
       if(tableControl){
         e.preventDefault();
+        e.stopPropagation();
         captureSelection();
         openTablePicker(tableControl);
         tableControl.dataset.handledPointer='1';
