@@ -66,3 +66,15 @@
 .campus-notes-page .table-picker{position:fixed!important;z-index:99999!important;background:#fff!important;display:block!important;visibility:visible!important;opacity:1!important;pointer-events:auto!important}
 
 .campus-notes-page .table-picker .picker-title{font-size:12px;font-weight:700;color:#393542;margin:2px 2px 4px;text-align:center}.campus-notes-page .table-picker .picker-hint{font-size:9px;color:#8a8692;text-align:center;margin-top:7px}.campus-notes-page .table-picker{min-width:270px;box-sizing:border-box;pointer-events:auto!important}.campus-notes-page .table-picker[hidden]{display:none!important}
+
+/* Native table dialog: intentionally independent of ribbon/menu stacking. */
+.campus-table-dialog{border:1px solid #d8d3e2;border-radius:12px;padding:0;background:#fff;box-shadow:0 18px 60px rgba(30,25,50,.28);width:330px;max-width:calc(100vw - 24px);z-index:100000;}
+.campus-table-dialog::backdrop{background:rgba(30,25,50,.12);}
+.campus-table-dialog-inner{padding:14px;}
+.campus-table-dialog-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;font-size:13px;color:#393542;}
+.campus-table-size{font-size:11px;color:#7565c7;font-weight:700;background:#f0eefb;border-radius:5px;padding:4px 7px;min-width:45px;text-align:center;}
+.campus-table-grid{display:grid;grid-template-columns:repeat(10,22px);gap:3px;justify-content:center;padding:5px 0;}
+.campus-table-cell{width:22px;height:22px;padding:0;border:1px solid #d7d2e0;background:#faf9fc;border-radius:2px;cursor:pointer;}
+.campus-table-cell:hover,.campus-table-cell.active{background:#dcd5f4;border-color:#8c7bd0;}
+.campus-table-dialog-foot{display:flex;align-items:center;justify-content:space-between;margin-top:10px;font-size:9px;color:#8a8692;}
+.campus-table-dialog-foot button{border:1px solid #ddd8e7;background:#fff;border-radius:6px;padding:5px 9px;font-size:10px;cursor:pointer;}

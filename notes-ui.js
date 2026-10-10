@@ -340,61 +340,67 @@
     if (tableButton) {
       tableButton.setAttribute('aria-haspopup', 'dialog');
       tableButton.setAttribute('aria-expanded', 'false');
+      // Table is deliberately handled through a native dialog, completely outside
+      // the ribbon's delegated event system.
       tableButton.onclick = (e) => {
-        e.preventDefault(); e.stopPropagation(); e.stopImmediatePropagation?.();
+        e.preventDefault();
+        e.stopPropagation();
+        e.stopImmediatePropagation?.();
         captureSelection();
-        toggleTablePicker(tableButton);
+        window.__campusOpenTableDialog?.(tableButton);
       };
       tableButton.onpointerdown = (e) => {
-        // Capture the editor selection without cancelling the browser's normal
-        // click sequence. Cancelling pointerdown can suppress click in some browsers.
-        e.stopPropagation(); e.stopImmediatePropagation?.();
+        e.stopPropagation();
+        e.stopImmediatePropagation?.();
         captureSelection();
       };
     }
     refreshToolbarState();
   }
 
-  function tablePickerIsOpen() {
-    const picker = document.querySelector('.table-picker');
-    return !!(picker && picker.dataset.open === 'true');
-  }
-
-  function toggleTablePicker(anchor) {
-    if (tablePickerIsOpen()) return closeTablePicker();
-    openTablePicker(anchor);
-  }
-
-  function closeTablePicker() {
-    const picker = document.querySelector('.table-picker');
-    if (picker) { picker.dataset.open='false'; picker.hidden=true; picker.style.display='none'; }
-    const button=document.querySelector('button[data-action="table"]');
-    if(button) button.setAttribute('aria-expanded','false');
-  }
-
-  function openTablePicker(anchor) {
-    if (!anchor) return;
-    document.querySelectorAll('.ribbon-color-menu,.ribbon-tag-menu,.symbol-menu').forEach(m=>{m.hidden=true;m.style.display='none';});
-    let picker=document.querySelector('.table-picker');
-    if(!picker){
-      picker=document.createElement('div');
-      picker.className='table-picker';
-      picker.setAttribute('role','dialog');
-      picker.setAttribute('aria-label','Insert table');
-      picker.innerHTML=`<div class="picker-title">Insert table</div><div class="picker-label">1 × 1</div><div class="table-grid">${Array.from({length:100},(_,i)=>`<button type="button" class="table-cell" data-r="${Math.floor(i/10)+1}" data-c="${i%10+1}" aria-label="${Math.floor(i/10)+1} by ${i%10+1}"></button>`).join('')}</div><div class="picker-hint">Move over the grid, then click</div>`;
-      document.body.appendChild(picker);
-      picker.addEventListener('pointerdown',e=>e.stopPropagation());
-      picker.addEventListener('mouseover',e=>{const cell=e.target.closest('.table-cell');if(!cell)return;const r=+cell.dataset.r,c=+cell.dataset.c;picker.querySelector('.picker-label').textContent=`${r} × ${c}`;picker.querySelectorAll('.table-cell').forEach(x=>x.classList.toggle('active',+x.dataset.r<=r&&+x.dataset.c<=c));});
-      picker.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();const cell=e.target.closest('.table-cell');if(!cell)return;insertTable(+cell.dataset.r,+cell.dataset.c);closeTablePicker();});
-    }
-    picker.dataset.open='true'; picker.hidden=false; picker.style.display='block'; picker.style.visibility='hidden';
-    const rect=anchor.getBoundingClientRect();
-    const width=Math.max(270,picker.offsetWidth||270), height=Math.max(330,picker.offsetHeight||330);
-    const left=Math.max(8,Math.min(window.innerWidth-width-8,rect.left));
-    const below=rect.bottom+6, above=rect.top-height-6;
-    const top=(below+height<=window.innerHeight-8||above<8)?Math.max(8,below):above;
-    picker.style.left=`${left}px`; picker.style.top=`${top}px`; picker.style.visibility='visible';
-    anchor.setAttribute('aria-expanded','true');
+  function setupTableDialog() {
+    const dialog = $('campusTableDialog');
+    if (!dialog || dialog.dataset.ready === 'true') return;
+    dialog.dataset.ready = 'true';
+    const grid = dialog.querySelector('.campus-table-grid');
+    const label = dialog.querySelector('.campus-table-size');
+    let hoverRows = 1, hoverCols = 1;
+    const paint = (rows, cols) => {
+      hoverRows = rows; hoverCols = cols;
+      label.textContent = `${rows} × ${cols}`;
+      grid.querySelectorAll('.campus-table-cell').forEach(cell => {
+        const r=+cell.dataset.r, c=+cell.dataset.c;
+        cell.classList.toggle('active', r<=rows && c<=cols);
+      });
+    };
+    grid.addEventListener('mouseover', e => {
+      const cell=e.target.closest('.campus-table-cell');
+      if(cell) paint(+cell.dataset.r,+cell.dataset.c);
+    });
+    grid.addEventListener('click', e => {
+      const cell=e.target.closest('.campus-table-cell');
+      if(!cell) return;
+      e.preventDefault();
+      e.stopPropagation();
+      captureSelection();
+      insertTable(+cell.dataset.r,+cell.dataset.c);
+      dialog.close();
+      const button=document.querySelector('button[data-action="table"]');
+      if(button) button.setAttribute('aria-expanded','false');
+    });
+    dialog.querySelector('[data-table-cancel]')?.addEventListener('click', () => dialog.close());
+    dialog.addEventListener('close', () => {
+      const button=document.querySelector('button[data-action="table"]');
+      if(button) button.setAttribute('aria-expanded','false');
+      paint(1,1);
+    });
+    window.__campusOpenTableDialog = (anchor) => {
+      captureSelection();
+      paint(1,1);
+      if (typeof dialog.showModal === 'function') dialog.showModal();
+      else { dialog.setAttribute('open',''); dialog.style.display='block'; }
+      anchor?.setAttribute('aria-expanded','true');
+    };
   }
 
   function insertTable(rows, cols) {
@@ -456,6 +462,7 @@
     if(action==='quote') return insertHtml('<blockquote>Quote</blockquote><p></p>');
     if(action==='code') return insertHtml('<pre>Code</pre><p></p>');
     if(action==='sticker') return insertHtml('<span class="tag-chip">⭐ Sticker</span>&nbsp;');
+    if(action==='table') return window.__campusOpenTableDialog?.(document.querySelector('button[data-action="table"]'));
     if(action==='fullscreen') return $('editorApp')?.requestFullscreen?.();
   }
 
@@ -591,7 +598,7 @@
 
   function activate(){
     bind(); const data=getData();data.subjects ||= {};defaultSubjects.forEach(([name])=>data.subjects[name] ||= {pages:{'Lecture Notes':defaultContent(name)}});saveData(data);
-    renderSubjects();renderPages();buildRibbon();restoreEditor();applyZoom();
+    renderSubjects();renderPages();setupTableDialog();buildRibbon();restoreEditor();applyZoom();
   }
 
   window.CampusNotes={activate};
