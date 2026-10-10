@@ -20,6 +20,11 @@
   let savedRange = null;
   let selectionInsideEditor = false;
   let dictation = null;
+  // Structural undo fallback for editor operations (notably table insertion).
+  // Native contenteditable undo is preferred; this snapshot is used only when
+  // the browser reports no usable undo transaction.
+  let structuralUndo = null;
+  let structuralRedo = null;
 
   const homeTools = [
     {group:'Clipboard', tools:[['Paste','📋','paste'],['Undo','↶','undo'],['Redo','↷','redo']]},
@@ -444,11 +449,40 @@
   }
 
   function insertTable(rows, cols) {
+    const editor = $('editor');
+    if (!editor) return false;
     rows=Math.max(1,rows||3); cols=Math.max(1,cols||3);
+
+    // Keep a pre-insertion snapshot as a safety net. Most browsers place
+    // insertHTML into the native undo stack, but WebKit/Chromium can lose that
+    // transaction when focus has moved through a modal dialog.
+    const beforeHtml = editor.innerHTML;
     let html='<table><tbody>';
     for(let r=0;r<rows;r++){html+='<tr>';for(let c=0;c<cols;c++)html+='<td>&nbsp;</td>';html+='</tr>';}
     html+='</tbody></table><p></p>';
-    insertHtml(html);
+    const ok = insertHtml(html);
+    if (ok) {
+      structuralUndo = {beforeHtml, afterHtml: editor.innerHTML};
+      structuralRedo = null;
+    }
+    return ok;
+  }
+
+  function restoreEditorHtml(html) {
+    const editor = $('editor');
+    if (!editor) return false;
+    editor.innerHTML = html || '<p><br></p>';
+    const range = document.createRange();
+    range.selectNodeContents(editor);
+    range.collapse(false);
+    const sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(range);
+    savedRange = range.cloneRange();
+    scheduleSave();
+    updateWordCount();
+    requestAnimationFrame(() => refreshToolbarState(false));
+    return true;
   }
 
   function closestTag(node) {
@@ -481,7 +515,54 @@
   }
 
   function handleAction(action) {
-    if(['undo','redo','bold','italic','underline','strikeThrough','insertUnorderedList','insertOrderedList','outdent','indent','justifyLeft','justifyCenter','justifyRight','justifyFull','removeFormat','superscript','subscript'].includes(action)) return exec(action);
+    if (action === 'undo') {
+      const editor = $('editor');
+      if (!editor) return false;
+      const before = editor.innerHTML;
+      try {
+        focusEditor();
+        const nativeResult = document.execCommand('undo', false, null);
+        const changed = editor.innerHTML !== before;
+        if (nativeResult && changed) {
+          structuralUndo = null;
+          structuralRedo = null;
+          captureSelection();
+          scheduleSave(); updateWordCount();
+          return true;
+        }
+      } catch (_) {}
+      if (structuralUndo) {
+        const current = editor.innerHTML;
+        structuralRedo = {beforeHtml: structuralUndo.beforeHtml, afterHtml: current};
+        const ok = restoreEditorHtml(structuralUndo.beforeHtml);
+        structuralUndo = null;
+        return ok;
+      }
+      return false;
+    }
+    if (action === 'redo') {
+      const editor = $('editor');
+      if (!editor) return false;
+      try {
+        focusEditor();
+        const nativeResult = document.execCommand('redo', false, null);
+        if (nativeResult) {
+          structuralRedo = null;
+          structuralUndo = null;
+          captureSelection();
+          scheduleSave(); updateWordCount();
+          return true;
+        }
+      } catch (_) {}
+      if (structuralRedo) {
+        const ok = restoreEditorHtml(structuralRedo.afterHtml);
+        structuralUndo = {beforeHtml: structuralRedo.beforeHtml, afterHtml: structuralRedo.afterHtml};
+        structuralRedo = null;
+        return ok;
+      }
+      return false;
+    }
+    if(['bold','italic','underline','strikeThrough','insertUnorderedList','insertOrderedList','outdent','indent','justifyLeft','justifyCenter','justifyRight','justifyFull','removeFormat','superscript','subscript'].includes(action)) return exec(action);
     if(action==='paste'){ navigator.clipboard?.readText?.().then(t=>insertHtml(escapeHtml(t).replace(/\n/g,'<br>'))).catch(()=>notify('Use ⌘V / Ctrl+V to paste into the editor.')); return; }
     if(action==='hilite') return exec('hiliteColor','#fff59d');
     if(action==='foreColor') return exec('foreColor','#5b4cc4');
@@ -570,7 +651,13 @@
     if(bound)return;bound=true;
     const app=$('editorApp'),editor=$('editor');
 
-    editor?.addEventListener('input',()=>{updateWordCount();captureSelection();scheduleSave();});
+    editor?.addEventListener('input',()=>{
+      // User typing should return undo control to the browser's native history.
+      // The structural snapshot is only a fallback for the table/insert flow.
+      structuralUndo = null;
+      structuralRedo = null;
+      updateWordCount();captureSelection();scheduleSave();
+    });
     editor?.addEventListener('mouseup',captureSelection); editor?.addEventListener('keyup',captureSelection); editor?.addEventListener('focus',captureSelection);
     editor?.addEventListener('click',e=>{const tag=e.target.closest('[data-tag]');if(tag){e.preventDefault();removeTagFromElement(tag);}});
     editor?.addEventListener('paste',e=>{
