@@ -335,48 +335,70 @@
       if (type==='tags') return buildTagMenu();
       return `<button type="button" class="ribbon-tool" data-action="${action}" title="${escapeHtml(label)}" aria-pressed="false"><span class="big">${icon}</span><span>${escapeHtml(label)}</span></button>`;
     }).join('')}</div>`).join('');
-    // Table is handled directly on the button. Do not route it through the
-    // ribbon's delegated pointer/click handlers; those handlers also close menus.
+
     const tableButton = ribbon.querySelector('button[data-action="table"]');
     if (tableButton) {
-      const open = (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        if (e.stopImmediatePropagation) e.stopImmediatePropagation();
+      tableButton.setAttribute('aria-haspopup', 'dialog');
+      tableButton.setAttribute('aria-expanded', 'false');
+      tableButton.onclick = (e) => {
+        e.preventDefault(); e.stopPropagation(); e.stopImmediatePropagation?.();
         captureSelection();
-        openTablePicker(tableButton);
+        toggleTablePicker(tableButton);
       };
-      tableButton.addEventListener('pointerdown', open);
-      tableButton.addEventListener('click', open);
+      tableButton.onpointerdown = (e) => {
+        // Capture the editor selection without cancelling the browser's normal
+        // click sequence. Cancelling pointerdown can suppress click in some browsers.
+        e.stopPropagation(); e.stopImmediatePropagation?.();
+        captureSelection();
+      };
     }
     refreshToolbarState();
   }
 
-  function insertHtml(html) {
-    const editor = $('editor'); if (!editor) return;
-    focusEditor();
-    try { document.execCommand('insertHTML', false, html); } catch (_) {}
-    captureSelection();
-    scheduleSave(); updateWordCount(); refreshToolbarState();
+  function tablePickerIsOpen() {
+    const picker = document.querySelector('.table-picker');
+    return !!(picker && picker.dataset.open === 'true');
+  }
+
+  function toggleTablePicker(anchor) {
+    if (tablePickerIsOpen()) return closeTablePicker();
+    openTablePicker(anchor);
+  }
+
+  function closeTablePicker() {
+    const picker = document.querySelector('.table-picker');
+    if (picker) { picker.dataset.open='false'; picker.hidden=true; picker.style.display='none'; }
+    const button=document.querySelector('button[data-action="table"]');
+    if(button) button.setAttribute('aria-expanded','false');
   }
 
   function openTablePicker(anchor) {
     if (!anchor) return;
-    closeMenus();
-    let picker = document.querySelector('.table-picker');
-    if (!picker) {
-      picker = document.createElement('div');
-      picker.className = 'table-picker';
-      picker.innerHTML = `<div class="picker-label">1 × 1</div><div class="table-grid">${Array.from({length:100},(_,i)=>`<button type="button" class="table-cell" data-r="${Math.floor(i/10)+1}" data-c="${i%10+1}" aria-label="${Math.floor(i/10)+1} by ${i%10+1}"></button>`).join('')}</div>`;
+    document.querySelectorAll('.ribbon-color-menu,.ribbon-tag-menu,.symbol-menu').forEach(m=>{m.hidden=true;m.style.display='none';});
+    let picker=document.querySelector('.table-picker');
+    if(!picker){
+      picker=document.createElement('div');
+      picker.className='table-picker';
+      picker.setAttribute('role','dialog');
+      picker.setAttribute('aria-label','Insert table');
+      picker.innerHTML=`<div class="picker-title">Insert table</div><div class="picker-label">1 × 1</div><div class="table-grid">${Array.from({length:100},(_,i)=>`<button type="button" class="table-cell" data-r="${Math.floor(i/10)+1}" data-c="${i%10+1}" aria-label="${Math.floor(i/10)+1} by ${i%10+1}"></button>`).join('')}</div><div class="picker-hint">Move over the grid, then click</div>`;
       document.body.appendChild(picker);
-      picker.addEventListener('mouseover', e => { const cell=e.target.closest('.table-cell'); if(!cell) return; const r=+cell.dataset.r,c=+cell.dataset.c; picker.querySelector('.picker-label').textContent=`${r} × ${c}`; picker.querySelectorAll('.table-cell').forEach(x=>x.classList.toggle('active', +x.dataset.r<=r && +x.dataset.c<=c)); });
-      picker.addEventListener('click', e => { const cell=e.target.closest('.table-cell'); if(!cell) return; insertTable(+cell.dataset.r,+cell.dataset.c); picker.hidden=true; picker.style.display='none'; });
+      picker.addEventListener('pointerdown',e=>e.stopPropagation());
+      picker.addEventListener('mouseover',e=>{const cell=e.target.closest('.table-cell');if(!cell)return;const r=+cell.dataset.r,c=+cell.dataset.c;picker.querySelector('.picker-label').textContent=`${r} × ${c}`;picker.querySelectorAll('.table-cell').forEach(x=>x.classList.toggle('active',+x.dataset.r<=r&&+x.dataset.c<=c));});
+      picker.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();const cell=e.target.closest('.table-cell');if(!cell)return;insertTable(+cell.dataset.r,+cell.dataset.c);closeTablePicker();});
     }
-    positionMenu(picker, anchor, 250);
+    picker.dataset.open='true'; picker.hidden=false; picker.style.display='block'; picker.style.visibility='hidden';
+    const rect=anchor.getBoundingClientRect();
+    const width=Math.max(270,picker.offsetWidth||270), height=Math.max(330,picker.offsetHeight||330);
+    const left=Math.max(8,Math.min(window.innerWidth-width-8,rect.left));
+    const below=rect.bottom+6, above=rect.top-height-6;
+    const top=(below+height<=window.innerHeight-8||above<8)?Math.max(8,below):above;
+    picker.style.left=`${left}px`; picker.style.top=`${top}px`; picker.style.visibility='visible';
+    anchor.setAttribute('aria-expanded','true');
   }
 
   function insertTable(rows, cols) {
-    rows = Math.max(1, rows || 3); cols = Math.max(1, cols || 3);
+    rows=Math.max(1,rows||3); cols=Math.max(1,cols||3);
     let html='<table><tbody>';
     for(let r=0;r<rows;r++){html+='<tr>';for(let c=0;c<cols;c++)html+='<td>&nbsp;</td>';html+='</tr>';}
     html+='</tbody></table><p></p>';

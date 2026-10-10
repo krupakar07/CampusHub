@@ -64,3 +64,5 @@
 .campus-notes-page .editor-ribbon [data-action="table"]{min-width:64px;font-weight:700}.campus-notes-page .editor-ribbon .ribbon-group:has([data-action="table"]){min-width:88px}
 
 .campus-notes-page .table-picker{position:fixed!important;z-index:99999!important;background:#fff!important;display:block!important;visibility:visible!important;opacity:1!important;pointer-events:auto!important}
+
+.campus-notes-page .table-picker .picker-title{font-size:12px;font-weight:700;color:#393542;margin:2px 2px 4px;text-align:center}.campus-notes-page .table-picker .picker-hint{font-size:9px;color:#8a8692;text-align:center;margin-top:7px}.campus-notes-page .table-picker{min-width:270px;box-sizing:border-box;pointer-events:auto!important}.campus-notes-page .table-picker[hidden]{display:none!important}
