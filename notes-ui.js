@@ -118,10 +118,13 @@
   function renderSubjects() {
     const wrap = $('notesSubjectList'); if (!wrap) return;
     const data = getData();
-    const names = [...new Set([...defaultSubjects.map(x=>x[0]), ...Object.keys(data.subjects || {})])];
+    const names = Object.keys(data.subjects || {});
     wrap.innerHTML = names.map((name,i) => {
       const color = defaultSubjects.find(x=>x[0]===name)?.[1] || ['purple','blue','green','orange'][i%4];
-      return `<button type="button" class="notes-subject ${name===activeSubject?'active':''}" data-subject="${escapeHtml(name)}"><span class="notes-dot ${color}"></span>${escapeHtml(name)}</button>`;
+      return `<div class="notes-list-row ${name===activeSubject?'active':''}">` +
+        `<button type="button" class="notes-subject ${name===activeSubject?'active':''}" data-subject="${escapeHtml(name)}"><span class="notes-dot ${color}"></span><span class="notes-list-label">${escapeHtml(name)}</span></button>` +
+        `<button type="button" class="notes-delete-item" data-delete-subject="${escapeHtml(name)}" aria-label="Delete subject ${escapeHtml(name)}" title="Delete subject">×</button>` +
+      `</div>`;
     }).join('');
   }
 
@@ -130,7 +133,10 @@
     const pages = currentPages(getData());
     const names = Object.keys(pages);
     if (!names.includes(activePage)) activePage = names[0] || 'Lecture Notes';
-    wrap.innerHTML = names.map(p => `<button type="button" class="notes-page-link ${p===activePage?'active':''}" data-note-page="${escapeHtml(p)}">📄 <span>${escapeHtml(p)}</span></button>`).join('');
+    wrap.innerHTML = names.map(p => `<div class="notes-list-row ${p===activePage?'active':''}">` +
+      `<button type="button" class="notes-page-link ${p===activePage?'active':''}" data-note-page="${escapeHtml(p)}">📄 <span class="notes-list-label">${escapeHtml(p)}</span></button>` +
+      `<button type="button" class="notes-delete-item" data-delete-page="${escapeHtml(p)}" aria-label="Delete page ${escapeHtml(p)}" title="Delete page">×</button>` +
+    `</div>`).join('');
   }
 
   function restoreEditor() {
@@ -640,8 +646,43 @@
   function switchSubject(name){if(!name)return;scheduleSave();activeSubject=name;const pages=currentPages(getData());activePage=Object.keys(pages)[0]||'Lecture Notes';renderSubjects();renderPages();restoreEditor();}
   function switchPage(name){if(!name)return;scheduleSave();activePage=name;renderPages();restoreEditor();}
 
-  function addSubject(){const name=prompt('Subject name:');if(!name?.trim())return;const clean=name.trim();const data=getData();data.subjects[clean] ||= {pages:{'Lecture Notes':defaultContent(clean)}};saveData(data);activeSubject=clean;activePage='Lecture Notes';renderSubjects();renderPages();restoreEditor();}
-  function addPage(){const name=prompt('Page name:','Lecture Notes');if(!name?.trim())return;const clean=name.trim();const data=getData();const pages=currentPages(data);if(!pages[clean])pages[clean]=defaultContent(activeSubject);saveData(data);activePage=clean;renderPages();restoreEditor();}
+  function addSubject(){const name=prompt('Subject name:');if(!name?.trim())return;const clean=name.trim();const data=getData();data.subjects ||= {};if(data.subjects[clean]){notify('That subject already exists.');return;}data.subjects[clean]={pages:{'Lecture Notes':defaultContent(clean)}};saveData(data);activeSubject=clean;activePage='Lecture Notes';renderSubjects();renderPages();restoreEditor();}
+  function addPage(){const name=prompt('Page name:','Lecture Notes');if(!name?.trim())return;const clean=name.trim();const data=getData();const pages=currentPages(data);if(pages[clean]){notify('That page already exists.');return;}pages[clean]=defaultContent(activeSubject);saveData(data);activePage=clean;renderPages();restoreEditor();}
+
+  function deletePage(name){
+    if(!name)return;
+    const data=getData(), pages=currentPages(data), names=Object.keys(pages);
+    if(names.length<=1){notify('A subject must keep at least one page.');return;}
+    if(!confirm(`Delete the page “${name}”? This cannot be undone.`))return;
+    scheduleSave();
+    delete pages[name];
+    activePage = activePage===name ? (Object.keys(pages)[0] || '') : activePage;
+    saveData(data);
+    renderPages();
+    restoreEditor();
+    notify(`Page “${name}” deleted`);
+  }
+
+  function deleteSubject(name){
+    if(!name)return;
+    const data=getData();
+    const names=Object.keys(data.subjects || {});
+    if(names.length<=1){notify('Keep at least one subject in My Notes.');return;}
+    if(!data.subjects?.[name])return;
+    if(!confirm(`Delete the subject “${name}” and all of its pages? This cannot be undone.`))return;
+    scheduleSave();
+    delete data.subjects[name];
+    if(activeSubject===name){
+      activeSubject=Object.keys(data.subjects)[0];
+      const pages=data.subjects[activeSubject]?.pages || {};
+      activePage=Object.keys(pages)[0] || 'Lecture Notes';
+    }
+    saveData(data);
+    renderSubjects();
+    renderPages();
+    restoreEditor();
+    notify(`Subject “${name}” deleted`);
+  }
   function notify(message){const t=$('toast');if(!t)return;t.textContent=message;t.classList.add('show');clearTimeout(window.__campusNoteToast);window.__campusNoteToast=setTimeout(()=>t.classList.remove('show'),2400);}
   function applyZoom(){if($('editor'))$('editor').style.fontSize=`${15*zoom/100}px`;if($('zoomLabel'))$('zoomLabel').textContent=`${zoom}%`;}
 
@@ -667,8 +708,16 @@
       else if(text){e.preventDefault();insertHtml(escapeHtml(text).replace(/\n/g,'<br>'));}
     });
 
-    $('notesSubjectList')?.addEventListener('click',e=>{const b=e.target.closest('[data-subject]');if(b)switchSubject(b.dataset.subject);});
-    $('notesPageList')?.addEventListener('click',e=>{const b=e.target.closest('[data-note-page]');if(b)switchPage(b.dataset.notePage);});
+    $('notesSubjectList')?.addEventListener('click',e=>{
+      const del=e.target.closest('[data-delete-subject]');
+      if(del){e.preventDefault();e.stopPropagation();deleteSubject(del.dataset.deleteSubject);return;}
+      const b=e.target.closest('[data-subject]');if(b)switchSubject(b.dataset.subject);
+    });
+    $('notesPageList')?.addEventListener('click',e=>{
+      const del=e.target.closest('[data-delete-page]');
+      if(del){e.preventDefault();e.stopPropagation();deletePage(del.dataset.deletePage);return;}
+      const b=e.target.closest('[data-note-page]');if(b)switchPage(b.dataset.notePage);
+    });
     $('notesAddSubject')?.addEventListener('click',addSubject);$('notesNewPage')?.addEventListener('click',addPage);
 
     $('noteTitle')?.addEventListener('change',()=>{const title=$('noteTitle').value.trim()||activePage;if(title===activePage)return;const data=getData(),pages=currentPages(data),content=pages[activePage];delete pages[activePage];pages[title]=content;activePage=title;saveData(data);renderPages();});
@@ -724,7 +773,9 @@
   }
 
   function activate(){
-    bind(); const data=getData();data.subjects ||= {};defaultSubjects.forEach(([name])=>data.subjects[name] ||= {pages:{'Lecture Notes':defaultContent(name)}});saveData(data);
+    bind(); const data=getData();data.subjects ||= {};if(!Object.keys(data.subjects).length){defaultSubjects.forEach(([name])=>data.subjects[name]={pages:{'Lecture Notes':defaultContent(name)}});saveData(data);}
+    if(!data.subjects[activeSubject])activeSubject=Object.keys(data.subjects)[0] || '';
+    if(activeSubject){const pages=data.subjects[activeSubject]?.pages||{};if(!Object.keys(pages).length){data.subjects[activeSubject].pages={'Lecture Notes':defaultContent(activeSubject)};saveData(data);}activePage=Object.keys(data.subjects[activeSubject].pages)[0] || 'Lecture Notes';}
     renderSubjects();renderPages();setupTableDialog();buildRibbon();restoreEditor();applyZoom();
   }
 
