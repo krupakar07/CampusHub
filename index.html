@@ -23,6 +23,7 @@
         <button class="nav-item" data-page="calendar"><span class="nav-icon">▣</span>Calendar</button>
         <button class="nav-item" data-page="planner"><span class="nav-icon">✓</span>Study planner</button>
         <button class="nav-item" data-page="notes"><span class="nav-icon">▤</span>Notes</button>
+        <button class="nav-item" data-page="quick-notes"><span class="nav-icon">✎</span>Quick Notes</button>
         <button class="nav-item" data-page="exams"><span class="nav-icon">◉</span>Exams</button>
       </nav>
       <div class="side-label category-label">CATEGORIES <button class="tiny-plus" id="addCategory" aria-label="Add event">+</button></div>
@@ -45,6 +46,13 @@
         <section class="calendar-title-row"><div><div class="eyebrow"><span class="eyebrow-line"></span> YOUR PERSONAL TIMETABLE</div><h1>Calendar</h1><p class="subheading">Plan your semester, one day at a time.</p></div><div class="calendar-actions"><details class="tools-menu"><summary>⇩ &nbsp; Export / backup</summary><div class="tools-popover"><button id="exportIcs">Export calendar (.ics)</button><button id="downloadBackup">Download backup (.json)</button><button id="restoreBackup">Restore backup (.json)</button></div></details><input id="backupFileInput" type="file" accept=".json,application/json" hidden><button class="secondary-button" id="importCsvButton">⇧ &nbsp; Import timetable</button><input id="csvFileInput" type="file" accept=".csv,.ics,text/csv,text/calendar" hidden><button class="primary-button" id="calendarAdd">＋ &nbsp; Add event</button></div></section>
         <section class="panel calendar-panel"><div class="calendar-toolbar"><div class="calendar-nav"><button id="prevPeriod" aria-label="Previous period">‹</button><button id="nextPeriod" aria-label="Next period">›</button><button class="today-control" id="calendarToday">Today</button><h2 id="periodLabel"></h2></div><div class="calendar-tools"><label class="calendar-search"><span>⌕</span><input id="calendarSearch" type="search" placeholder="Search classes" aria-label="Search classes"></label><select id="calendarFilter" class="calendar-filter" aria-label="Filter by event type"><option value="all">All types</option></select><div class="view-switch" role="tablist" aria-label="Calendar view"><button data-view="day">Day</button><button data-view="week" class="selected">Week</button><button data-view="month">Month</button></div></div></div><div id="calendarGrid" class="calendar-grid"></div><div id="calendarTravelAdvice"></div></section>
         <div class="calendar-legend" id="calendarLegend"></div>
+      </div>
+      <div class="content quick-notes-content hidden" id="quickNotesPage">
+        <section class="calendar-title-row quick-notes-title-row"><div><div class="eyebrow"><span class="eyebrow-line"></span> CAPTURE WITHOUT FRICTION</div><h1>Quick Notes</h1><p class="subheading">Capture an idea now. Organize it properly when you are ready.</p></div><button class="primary-button" id="quickNoteAdd">＋ New quick note</button></section>
+        <section class="quick-notes-layout">
+          <article class="panel quick-notes-list-panel"><div class="quick-notes-list-head"><div><h2>Scratchpad</h2><p>Fast notes, reminders and lecture thoughts.</p></div><div class="quick-note-filters"><button class="quick-filter selected" data-qfilter="all">All</button><button class="quick-filter" data-qfilter="pinned">Pinned</button><button class="quick-filter" data-qfilter="archived">Archived</button></div></div><div id="quickNotesList"></div></article>
+          <article class="panel quick-note-editor-panel" id="quickNoteEditorPanel"><div class="quick-empty-editor"><span>✎</span><strong>Select a quick note</strong><small>Or create a new one. Your text saves automatically.</small></div></article>
+        </section>
       </div>
       <div class="content exams-content hidden" id="examsPage">
         <section class="calendar-title-row exam-title-row"><div><div class="eyebrow"><span class="eyebrow-line"></span> PREPARE WITH PURPOSE</div><h1>Exams</h1><p class="subheading">Each exam is a workspace for your syllabus, revision and practice.</p></div><button class="primary-button" id="examAdd">＋ New exam</button></section>
@@ -126,6 +134,6 @@
       <div class="campus-table-dialog-foot"><span>Choose rows × columns</span><button type="button" data-table-cancel>Cancel</button></div>
     </div>
   </dialog>
-  <script src="assignments.js"></script><script src="exams.js"></script><script src="app.js"></script><script src="notes-ui.js"></script>
+  <script src="assignments.js"></script><script src="exams.js"></script><script src="quick-notes.js"></script><script src="app.js"></script><script src="notes-ui.js"></script>
 </body>
 </html>

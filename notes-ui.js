@@ -932,6 +932,20 @@
     showSubjectWorkspace('overview');
   }
 
-  window.CampusNotes={activate,getStructure,openLocation};
+  function createPage(subject, topic, page, content='') {
+    const data=getData();
+    if(!data.subjects?.[subject]) return false;
+    const topics=currentTopics(data);
+    topics[topic] ||= {pages:{}};
+    topics[topic].pages ||= {};
+    if(topics[topic].pages[page]) return false;
+    topics[topic].pages[page]=content || defaultContent(subject);
+    saveData(data);
+    activeSubject=subject; activeTopic=topic; activePage=page;
+    renderSubjects(); renderPages(); restoreEditor(); showNoteEditor();
+    return true;
+  }
+
+  window.CampusNotes={activate,getStructure,openLocation,createPage};
   if(document.readyState!=='loading')setTimeout(activate,0);else document.addEventListener('DOMContentLoaded',()=>setTimeout(activate,0));
 })();
