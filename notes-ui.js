@@ -12,6 +12,7 @@
   ];
 
   let activeSubject = defaultSubjects[0][0];
+  let activeTopic = 'General';
   let activePage = 'Lecture Notes';
   let activeTab = 'Home';
   let zoom = 100;
@@ -86,16 +87,37 @@
     return `<h1>${escapeHtml(subject)}</h1><p>Start typing your lecture notes here. Everything saves automatically on this device.</p><p><strong>Tip:</strong> Use <strong>Home</strong> for formatting and <strong>Insert</strong> for tables, pictures, files, links and more.</p>`;
   }
 
+  function normalizeData(data) {
+    data ||= {subjects:{}};
+    data.subjects ||= {};
+    Object.entries(data.subjects).forEach(([name, subject]) => {
+      if (!subject || typeof subject !== 'object') subject = data.subjects[name] = {};
+      // Migrate the v22 Subject -> Pages model into Subject -> Topics -> Pages.
+      if (!subject.topics) {
+        const oldPages = subject.pages && typeof subject.pages === 'object' ? subject.pages : {};
+        const topicName = 'General';
+        subject.topics = {[topicName]: {pages: Object.keys(oldPages).length ? oldPages : {'Lecture Notes':defaultContent(name)}}};
+        delete subject.pages;
+      }
+      Object.values(subject.topics).forEach(topic => {
+        topic ||= {};
+        topic.pages ||= {};
+      });
+      if (!Object.keys(subject.topics).length) subject.topics = {General:{pages:{'Lecture Notes':defaultContent(name)}}};
+    });
+    return data;
+  }
+
   function loadData() {
     try {
       const raw = localStorage.getItem(getUserKey());
-      if (raw) return JSON.parse(raw);
+      if (raw) return normalizeData(JSON.parse(raw));
       const legacyKey = getUserKey().replace(STORE, LEGACY_STORE);
       const legacy = localStorage.getItem(legacyKey);
-      if (legacy) { const migrated = JSON.parse(legacy); localStorage.setItem(getUserKey(), JSON.stringify(migrated)); return migrated; }
+      if (legacy) { const migrated = normalizeData(JSON.parse(legacy)); localStorage.setItem(getUserKey(), JSON.stringify(migrated)); return migrated; }
     } catch (_) {}
     const subjects = {};
-    defaultSubjects.forEach(([name]) => { subjects[name] = {pages:{'Lecture Notes':defaultContent(name)}}; });
+    defaultSubjects.forEach(([name]) => { subjects[name] = {topics:{'Getting Started':{pages:{'Lecture Notes':defaultContent(name)}}}}; });
     return {subjects};
   }
 
@@ -107,12 +129,21 @@
 
   function getData() { return loadData(); }
 
+  function currentTopics(data) {
+    normalizeData(data);
+    data.subjects[activeSubject] ||= {topics:{}};
+    data.subjects[activeSubject].topics ||= {};
+    if (!Object.keys(data.subjects[activeSubject].topics).length) data.subjects[activeSubject].topics = {'Getting Started':{pages:{'Lecture Notes':defaultContent(activeSubject)}}};
+    if (!data.subjects[activeSubject].topics[activeTopic]) activeTopic = Object.keys(data.subjects[activeSubject].topics)[0];
+    return data.subjects[activeSubject].topics;
+  }
+
   function currentPages(data) {
-    data.subjects ||= {};
-    data.subjects[activeSubject] ||= {pages:{}};
-    data.subjects[activeSubject].pages ||= {};
-    if (!Object.keys(data.subjects[activeSubject].pages).length) data.subjects[activeSubject].pages['Lecture Notes'] = defaultContent(activeSubject);
-    return data.subjects[activeSubject].pages;
+    const topics=currentTopics(data);
+    topics[activeTopic] ||= {pages:{}};
+    topics[activeTopic].pages ||= {};
+    if (!Object.keys(topics[activeTopic].pages).length) topics[activeTopic].pages['Lecture Notes'] = defaultContent(activeSubject);
+    return topics[activeTopic].pages;
   }
 
   function renderSubjects() {
@@ -130,13 +161,16 @@
 
   function renderPages() {
     const wrap = $('notesPageList'); if (!wrap) return;
-    const pages = currentPages(getData());
-    const names = Object.keys(pages);
-    if (!names.includes(activePage)) activePage = names[0] || 'Lecture Notes';
-    wrap.innerHTML = names.map(p => `<div class="notes-list-row ${p===activePage?'active':''}">` +
-      `<button type="button" class="notes-page-link ${p===activePage?'active':''}" data-note-page="${escapeHtml(p)}">📄 <span class="notes-list-label">${escapeHtml(p)}</span></button>` +
-      `<button type="button" class="notes-delete-item" data-delete-page="${escapeHtml(p)}" aria-label="Delete page ${escapeHtml(p)}" title="Delete page">×</button>` +
-    `</div>`).join('');
+    const data=getData(), topics=currentTopics(data);
+    const topicNames=Object.keys(topics);
+    if(!topicNames.includes(activeTopic)) activeTopic=topicNames[0]||'General';
+    const topicHtml=topicNames.map(topicName=>{
+      const pages=topics[topicName]?.pages||{};
+      const open=topicName===activeTopic;
+      const pagesHtml=open?Object.keys(pages).map(p=>`<div class="notes-tree-page ${p===activePage?'active':''}"><button type="button" class="notes-page-link" data-note-page="${escapeHtml(p)}">📄 <span class="notes-list-label">${escapeHtml(p)}</span></button><button type="button" class="notes-delete-item" data-delete-page="${escapeHtml(p)}" aria-label="Delete page ${escapeHtml(p)}" title="Delete page">×</button></div>`).join(''):'';
+      return `<div class="notes-tree-topic ${open?'open':''}"><button type="button" class="notes-topic-toggle" data-topic="${escapeHtml(topicName)}"><span class="notes-topic-chevron">${open?'▾':'▸'}</span><span>📂</span><span class="notes-list-label">${escapeHtml(topicName)}</span><small>${Object.keys(pages).length}</small></button>${pagesHtml}</div>`;
+    }).join('');
+    wrap.innerHTML=topicHtml;
   }
 
   function restoreEditor() {
@@ -145,6 +179,8 @@
     editor.innerHTML = pages[activePage] || defaultContent(activeSubject);
     const title = $('noteTitle');
     if (title) title.value = activePage === 'Lecture Notes' ? `${activeSubject} — Lecture Notes` : activePage;
+    const crumb = $('notesBreadcrumb');
+    if (crumb) crumb.innerHTML = `<span>${escapeHtml(activeSubject)}</span><b>›</b><span>${escapeHtml(activeTopic)}</span><b>›</b><strong>${escapeHtml(activePage)}</strong>`;
     savedRange = null;
     updateWordCount();
     refreshToolbarState();
@@ -643,7 +679,8 @@
 
   function updateWordCount(){const text=$('editor')?.innerText?.trim()||'';const words=text?text.split(/\s+/).length:0;if($('wordCount'))$('wordCount').textContent=`${words} words`;}
 
-  function switchSubject(name){if(!name)return;scheduleSave();activeSubject=name;const pages=currentPages(getData());activePage=Object.keys(pages)[0]||'Lecture Notes';renderSubjects();renderPages();restoreEditor();showSubjectWorkspace('overview');}
+  function switchSubject(name){if(!name)return;scheduleSave();activeSubject=name;const data=getData();const topics=currentTopics(data);activeTopic=Object.keys(topics)[0]||'General';const pages=currentPages(data);activePage=Object.keys(pages)[0]||'Lecture Notes';renderSubjects();renderPages();restoreEditor();showSubjectWorkspace('overview');}
+  function switchTopic(name){if(!name)return;scheduleSave();activeTopic=name;const pages=currentPages(getData());activePage=Object.keys(pages)[0]||'Lecture Notes';renderPages();showTopicWorkspace(name);}
   function switchPage(name){if(!name)return;scheduleSave();activePage=name;renderPages();restoreEditor();showNoteEditor();}
 
   function getSubjectCalendarEvents(){
@@ -680,94 +717,93 @@
     workspace.scrollIntoView({behavior:'smooth',block:'start'});
   }
 
+  function showTopicWorkspace(topic){
+    activeTopic=topic;
+    const workspace=$('subjectWorkspace'), editorView=$('noteEditorView');
+    if(!workspace)return;
+    editorView?.classList.add('hidden');
+    workspace.classList.remove('hidden');
+    $('notesSubjectOverview')?.classList.remove('active');
+    document.querySelectorAll('[data-subject-tab]').forEach(b=>b.classList.remove('selected'));
+    renderTopicWorkspace();
+    workspace.scrollIntoView({behavior:'smooth',block:'start'});
+  }
+
+  function subjectTopicNames(){return Object.keys(currentTopics(getData()));}
   function subjectPageNames(){return Object.keys(currentPages(getData()));}
 
   function subjectWorkspaceCard(icon,title,value,detail,action=''){
     return `<button type="button" class="subject-stat-card" ${action?`data-workspace-action="${action}"`:''}><span class="subject-stat-icon">${icon}</span><span class="subject-stat-copy"><strong>${escapeHtml(String(value))}</strong><span>${escapeHtml(title)}</span><small>${escapeHtml(detail)}</small></span><span class="subject-stat-arrow">›</span></button>`;
   }
 
+  function renderTopicWorkspace(){
+    const title=$('subjectWorkspaceTitle'),subtitle=$('subjectWorkspaceSubtitle'),content=$('subjectWorkspaceContent');
+    if(title)title.innerHTML=`<span class="workspace-breadcrumb-link" data-back-subject="1">${escapeHtml(activeSubject)}</span><span class="workspace-breadcrumb-sep">›</span>${escapeHtml(activeTopic)}`;
+    if(subtitle)subtitle.textContent='Pages inside this topic.';
+    const pages=subjectPageNames();
+    content.innerHTML=`<div class="workspace-breadcrumb"><button type="button" class="secondary-button" data-back-subject="1">← ${escapeHtml(activeSubject)}</button></div>
+      <div class="subject-section-intro"><div><span class="subject-panel-kicker">TOPIC</span><h3>${escapeHtml(activeTopic)}</h3><p>${pages.length} ${pages.length===1?'page':'pages'} in this topic.</p></div><div class="subject-workspace-actions"><button type="button" class="secondary-button" id="workspaceNewTopic">＋ New topic</button><button type="button" class="primary-button" id="workspaceCreatePage">＋ New page</button></div></div>
+      <div class="subject-notes-grid">${pages.map(p=>`<button type="button" class="subject-note-card" data-open-page="${escapeHtml(p)}"><span>📄</span><strong>${escapeHtml(p)}</strong><small>Open page</small></button>`).join('')||'<div class="subject-empty">No pages yet.</div>'}</div>`;
+    content.querySelectorAll('[data-open-page]').forEach(b=>b.addEventListener('click',()=>{activePage=b.dataset.openPage;renderPages();restoreEditor();showNoteEditor();}));
+    content.querySelectorAll('[data-back-subject]').forEach(b=>b.addEventListener('click',()=>showSubjectWorkspace('notes')));
+    $('workspaceCreatePage')?.addEventListener('click',()=>addPage());
+    $('workspaceNewTopic')?.addEventListener('click',()=>addTopic());
+  }
+
   function renderSubjectWorkspace(tab='overview'){
     const title=$('subjectWorkspaceTitle'),subtitle=$('subjectWorkspaceSubtitle'),content=$('subjectWorkspaceContent');
     if(!content)return;
     if(title)title.textContent=activeSubject;
-    if(subtitle)subtitle.textContent='Your notes, study material, deadlines and schedule for this subject.';
-    const pages=subjectPageNames(),events=getSubjectCalendarEvents(),today=new Date();today.setHours(0,0,0,0);
+    if(subtitle)subtitle.textContent='Your notes, topics, study material, deadlines and schedule for this subject.';
+    const topics=subjectTopicNames(),events=getSubjectCalendarEvents(),today=new Date();today.setHours(0,0,0,0);
     const future=events.filter(e=>new Date(`${e.date}T${e.start||'00:00'}`)>=today);
     const assignments=events.filter(e=>e.type==='assignment'||e.type==='deadline');
     const exams=events.filter(e=>e.type==='exam');
-
-    if(tab==='overview'){
-      const recent=pages.slice(-4).reverse();
-      content.innerHTML=`
-        <div class="subject-stat-grid">
-          ${subjectWorkspaceCard('▤','Notes',pages.length,`${pages.length===1?'page':'pages'} in this subject`,'notes')}
-          ${subjectWorkspaceCard('⚡','Quick Notes','0','Ready for lecture capture','quick')}
-          ${subjectWorkspaceCard('✓','Assignments',assignments.length,assignments.length?'Upcoming work':'No assignments yet','assignments')}
-          ${subjectWorkspaceCard('◇','Exams',exams.length,exams.length?'Exam dates found':'No exams yet','exams')}
-          ${subjectWorkspaceCard('□','Files','0','Attachments coming next','files')}
-          ${subjectWorkspaceCard('◷','Schedule',future.length,`${future.length?'Upcoming':'No upcoming'} events`,'calendar')}
-        </div>
-        <div class="subject-workspace-columns">
-          <article class="subject-panel"><div class="subject-panel-heading"><div><span class="subject-panel-kicker">RECENT NOTES</span><h3>Continue where you left off</h3></div><button type="button" class="text-button" data-workspace-action="notes">View all</button></div>
-            <div class="subject-list">${recent.length?recent.map((p,i)=>`<button type="button" class="subject-list-item" data-open-page="${escapeHtml(p)}"><span class="subject-list-icon">📄</span><span><strong>${escapeHtml(p)}</strong><small>${i===0?'Most recent page':'Subject note'}</small></span><span>›</span></button>`).join(''):'<div class="subject-empty">No pages yet. Create your first note.</div>'}</div>
-          </article>
-          <article class="subject-panel"><div class="subject-panel-heading"><div><span class="subject-panel-kicker">UP NEXT</span><h3>Subject schedule</h3></div><button type="button" class="text-button" data-workspace-action="calendar">View calendar</button></div>
-            <div class="subject-list">${future.slice(0,4).map(e=>`<div class="subject-list-item readonly"><span class="subject-event-dot"></span><span><strong>${escapeHtml(e.title||'Class')}</strong><small>${escapeHtml(subjectDate(e.date))} · ${escapeHtml(e.start||'')}–${escapeHtml(e.end||'')}${e.room?' · '+escapeHtml(e.room):''}</small></span></div>`).join('')||'<div class="subject-empty">No upcoming events linked to this subject.</div>'}</div>
-          </article>
-        </div>`;
-    } else if(tab==='notes'){
-      content.innerHTML=`<div class="subject-section-intro"><div><span class="subject-panel-kicker">NOTES</span><h3>All pages in ${escapeHtml(activeSubject)}</h3><p>Keep lecture notes, research and exam preparation organized inside this subject.</p></div><button type="button" class="primary-button" id="workspaceCreatePage">＋ New page</button></div><div class="subject-notes-grid">${pages.map(p=>`<button type="button" class="subject-note-card" data-open-page="${escapeHtml(p)}"><span>📄</span><strong>${escapeHtml(p)}</strong><small>Open note</small></button>`).join('')||'<div class="subject-empty">No notes yet.</div>'}</div>`;
+    if(tab==='overview' || tab==='notes'){
+      const cards=topics.map(t=>{const count=Object.keys(currentTopics(getData())[t]?.pages||{}).length;return `<button type="button" class="subject-note-card subject-topic-card" data-open-topic="${escapeHtml(t)}"><span>📂</span><strong>${escapeHtml(t)}</strong><small>${count} ${count===1?'page':'pages'} · Open topic ›</small></button>`}).join('');
+      content.innerHTML=`<div class="subject-section-intro"><div><span class="subject-panel-kicker">${tab==='notes'?'TOPICS':'SUBJECT NOTES'}</span><h3>${tab==='notes'?'Topics in '+escapeHtml(activeSubject):'Organize your notes by topic'}</h3><p>Each topic contains its own pages, so you always know exactly where you are.</p></div><div class="subject-workspace-actions"><button type="button" class="secondary-button" id="workspaceNewTopic">＋ New topic</button><button type="button" class="primary-button" id="workspaceCreatePage">＋ New page</button></div></div><div class="subject-notes-grid">${cards||'<div class="subject-empty">No topics yet. Create your first topic.</div>'}</div>`;
+    } else if(tab==='overview-old') {
+      content.innerHTML='';
     } else if(tab==='assignments' || tab==='exams'){
       const list=tab==='assignments'?assignments:exams;
       content.innerHTML=`<div class="subject-section-intro"><div><span class="subject-panel-kicker">${tab==='assignments'?'ASSIGNMENTS':'EXAMS'}</span><h3>${tab==='assignments'?'Subject assignments':'Subject exams'}</h3><p>Calendar items linked to ${escapeHtml(activeSubject)} appear here automatically.</p></div><button type="button" class="secondary-button" data-workspace-action="calendar">Open calendar</button></div><div class="subject-list subject-large-list">${list.map(e=>`<div class="subject-list-item readonly"><span class="subject-event-badge">${tab==='assignments'?'✓':'◇'}</span><span><strong>${escapeHtml(e.title)}</strong><small>${escapeHtml(subjectDate(e.date))} · ${escapeHtml(e.start||'')}–${escapeHtml(e.end||'')}${e.room?' · '+escapeHtml(e.room):''}</small></span></div>`).join('')||`<div class="subject-empty">No ${tab} linked to this subject yet.</div>`}</div>`;
     } else if(tab==='calendar'){
       content.innerHTML=`<div class="subject-section-intro"><div><span class="subject-panel-kicker">CALENDAR</span><h3>${escapeHtml(activeSubject)} schedule</h3><p>Events currently associated with this subject.</p></div><button type="button" class="primary-button" data-workspace-action="calendar">Open full calendar</button></div><div class="subject-list subject-large-list">${events.map(e=>`<div class="subject-list-item readonly"><span class="subject-event-dot"></span><span><strong>${escapeHtml(e.title)}</strong><small>${escapeHtml(subjectDate(e.date))} · ${escapeHtml(e.start||'')}–${escapeHtml(e.end||'')}${e.room?' · '+escapeHtml(e.room):''}</small></span></div>`).join('')||'<div class="subject-empty">No calendar events linked to this subject.</div>'}</div>`;
     } else if(tab==='quick'){
-      content.innerHTML=`<div class="subject-placeholder"><div class="subject-placeholder-icon">⚡</div><span class="subject-panel-kicker">QUICK NOTES</span><h3>Capture lecture thoughts instantly</h3><p>Quick Notes will give you a lightweight scratchpad for this subject, with autosave and a one-click conversion into a proper note.</p><button type="button" class="primary-button" data-workspace-action="notes">Open notes for now</button></div>`;
+      content.innerHTML=`<div class="subject-placeholder"><div class="subject-placeholder-icon">⚡</div><span class="subject-panel-kicker">QUICK NOTES</span><h3>Capture lecture thoughts instantly</h3><p>Quick Notes will give you a lightweight scratchpad for this subject, with autosave and a one-click conversion into a proper page.</p><button type="button" class="primary-button" data-workspace-action="notes">Open topics</button></div>`;
     } else {
-      content.innerHTML=`<div class="subject-placeholder"><div class="subject-placeholder-icon">${tab==='files'?'□':'⚙'}</div><span class="subject-panel-kicker">${tab.toUpperCase()}</span><h3>${tab==='files'?'Subject files are next':'This section is being built'}</h3><p>${tab==='files'?'A dedicated area for lecture slides, PDFs, assignments and other subject material will be added next.':'The subject workspace foundation is ready. We can build this section on top of the same subject data model.'}</p><button type="button" class="secondary-button" data-workspace-action="overview">Back to overview</button></div>`;
+      content.innerHTML=`<div class="subject-placeholder"><div class="subject-placeholder-icon">${tab==='files'?'□':'⚙'}</div><span class="subject-panel-kicker">${tab.toUpperCase()}</span><h3>${tab==='files'?'Subject files are next':'This section is being built'}</h3><p>${tab==='files'?'A dedicated area for lecture slides, PDFs, assignments and other subject material will be added next.':'The subject workspace foundation is ready.'}</p><button type="button" class="secondary-button" data-workspace-action="overview">Back to overview</button></div>`;
     }
+    content.querySelectorAll('[data-open-topic]').forEach(b=>b.addEventListener('click',()=>showTopicWorkspace(b.dataset.openTopic)));
     content.querySelectorAll('[data-open-page]').forEach(b=>b.addEventListener('click',()=>{activePage=b.dataset.openPage;renderPages();restoreEditor();showNoteEditor();}));
-    content.querySelectorAll('[data-workspace-action]').forEach(b=>b.addEventListener('click',()=>{const action=b.dataset.workspaceAction;if(action==='notes')showNoteEditor();else if(action==='calendar'){document.querySelector('[data-page="calendar"]')?.click();}else if(action==='overview')showSubjectWorkspace('overview');else if(action==='quick'||action==='assignments'||action==='exams'||action==='files')showSubjectWorkspace(action);}));
+    content.querySelectorAll('[data-workspace-action]').forEach(b=>b.addEventListener('click',()=>{const action=b.dataset.workspaceAction;if(action==='notes')showSubjectWorkspace('notes');else if(action==='calendar'){document.querySelector('[data-page="calendar"]')?.click();}else if(action==='overview')showSubjectWorkspace('overview');else if(action==='quick'||action==='assignments'||action==='exams'||action==='files')showSubjectWorkspace(action);}));
     $('workspaceCreatePage')?.addEventListener('click',()=>addPage());
+    $('workspaceNewTopic')?.addEventListener('click',()=>addTopic());
   }
 
-  function addSubject(){const name=prompt('Subject name:');if(!name?.trim())return;const clean=name.trim();const data=getData();data.subjects ||= {};if(data.subjects[clean]){notify('That subject already exists.');return;}data.subjects[clean]={pages:{'Lecture Notes':defaultContent(clean)}};saveData(data);activeSubject=clean;activePage='Lecture Notes';renderSubjects();renderPages();restoreEditor();showSubjectWorkspace('overview');}
-  function addPage(){const name=prompt('Page name:','Lecture Notes');if(!name?.trim())return;const clean=name.trim();const data=getData();const pages=currentPages(data);if(pages[clean]){notify('That page already exists.');return;}pages[clean]=defaultContent(activeSubject);saveData(data);activePage=clean;renderPages();restoreEditor();}
+
+  function addSubject(){const name=prompt('Subject name:');if(!name?.trim())return;const clean=name.trim();const data=getData();data.subjects ||= {};if(data.subjects[clean]){notify('That subject already exists.');return;}data.subjects[clean]={topics:{'Getting Started':{pages:{'Lecture Notes':defaultContent(clean)}}}};saveData(data);activeSubject=clean;activeTopic='Getting Started';activePage='Lecture Notes';renderSubjects();renderPages();restoreEditor();showSubjectWorkspace('overview');}
+  function addTopic(){const name=prompt('Topic name:');if(!name?.trim())return;const clean=name.trim();const data=getData();const topics=currentTopics(data);if(topics[clean]){notify('That topic already exists.');return;}topics[clean]={pages:{'Lecture Notes':defaultContent(activeSubject)}};saveData(data);activeTopic=clean;activePage='Lecture Notes';renderPages();restoreEditor();showTopicWorkspace(clean);notify(`Topic “${clean}” created`);}
+  function addPage(){const name=prompt('Page name:','Lecture Notes');if(!name?.trim())return;const clean=name.trim();const data=getData();const pages=currentPages(data);if(pages[clean]){notify('That page already exists.');return;}pages[clean]=defaultContent(activeSubject);saveData(data);activePage=clean;renderPages();restoreEditor();showNoteEditor();}
 
   function deletePage(name){
     if(!name)return;
     const data=getData(), pages=currentPages(data), names=Object.keys(pages);
-    if(names.length<=1){notify('A subject must keep at least one page.');return;}
+    if(names.length<=1){notify('A topic must keep at least one page.');return;}
     if(!confirm(`Delete the page “${name}”? This cannot be undone.`))return;
-    scheduleSave();
-    delete pages[name];
-    activePage = activePage===name ? (Object.keys(pages)[0] || '') : activePage;
-    saveData(data);
-    renderPages();
-    restoreEditor();
-    notify(`Page “${name}” deleted`);
+    scheduleSave(); delete pages[name]; activePage=activePage===name ? (Object.keys(pages)[0] || '') : activePage;
+    saveData(data); renderPages(); restoreEditor(); notify(`Page “${name}” deleted`);
   }
 
   function deleteSubject(name){
     if(!name)return;
-    const data=getData();
-    const names=Object.keys(data.subjects || {});
+    const data=getData(); const names=Object.keys(data.subjects || {});
     if(names.length<=1){notify('Keep at least one subject in My Notes.');return;}
     if(!data.subjects?.[name])return;
-    if(!confirm(`Delete the subject “${name}” and all of its pages? This cannot be undone.`))return;
-    scheduleSave();
-    delete data.subjects[name];
-    if(activeSubject===name){
-      activeSubject=Object.keys(data.subjects)[0];
-      const pages=data.subjects[activeSubject]?.pages || {};
-      activePage=Object.keys(pages)[0] || 'Lecture Notes';
-    }
-    saveData(data);
-    renderSubjects();
-    renderPages();
-    restoreEditor();
-    notify(`Subject “${name}” deleted`);
+    if(!confirm(`Delete the subject “${name}” and all of its topics and pages? This cannot be undone.`))return;
+    scheduleSave(); delete data.subjects[name];
+    if(activeSubject===name){activeSubject=Object.keys(data.subjects)[0];activeTopic=Object.keys(data.subjects[activeSubject]?.topics||{})[0]||'General';const pages=currentPages(data);activePage=Object.keys(pages)[0]||'Lecture Notes';}
+    saveData(data); renderSubjects(); renderPages(); restoreEditor(); showSubjectWorkspace('overview'); notify(`Subject “${name}” deleted`);
   }
   function notify(message){const t=$('toast');if(!t)return;t.textContent=message;t.classList.add('show');clearTimeout(window.__campusNoteToast);window.__campusNoteToast=setTimeout(()=>t.classList.remove('show'),2400);}
   function applyZoom(){if($('editor'))$('editor').style.fontSize=`${15*zoom/100}px`;if($('zoomLabel'))$('zoomLabel').textContent=`${zoom}%`;}
@@ -802,9 +838,10 @@
     $('notesPageList')?.addEventListener('click',e=>{
       const del=e.target.closest('[data-delete-page]');
       if(del){e.preventDefault();e.stopPropagation();deletePage(del.dataset.deletePage);return;}
-      const b=e.target.closest('[data-note-page]');if(b)switchPage(b.dataset.notePage);
+      const page=e.target.closest('[data-note-page]');if(page){switchPage(page.dataset.notePage);return;}
+      const topic=e.target.closest('[data-topic]');if(topic){switchTopic(topic.dataset.topic);return;}
     });
-    $('notesAddSubject')?.addEventListener('click',addSubject);$('notesNewPage')?.addEventListener('click',addPage);$('notesSubjectOverview')?.addEventListener('click',()=>showSubjectWorkspace('overview'));$('subjectOpenNotes')?.addEventListener('click',showNoteEditor);$('subjectNewPage')?.addEventListener('click',addPage);document.querySelectorAll('[data-subject-tab]').forEach(b=>b.addEventListener('click',()=>showSubjectWorkspace(b.dataset.subjectTab)));
+    $('notesAddSubject')?.addEventListener('click',addSubject);$('notesNewTopic')?.addEventListener('click',addTopic);$('notesNewPage')?.addEventListener('click',addPage);$('notesSubjectOverview')?.addEventListener('click',()=>showSubjectWorkspace('overview'));$('subjectOpenNotes')?.addEventListener('click',()=>showSubjectWorkspace('notes'));$('subjectNewPage')?.addEventListener('click',addPage);document.querySelectorAll('[data-subject-tab]').forEach(b=>b.addEventListener('click',()=>showSubjectWorkspace(b.dataset.subjectTab)));
 
     $('noteTitle')?.addEventListener('change',()=>{const title=$('noteTitle').value.trim()||activePage;if(title===activePage)return;const data=getData(),pages=currentPages(data),content=pages[activePage];delete pages[activePage];pages[title]=content;activePage=title;saveData(data);renderPages();});
 
@@ -859,11 +896,12 @@
   }
 
   function activate(){
-    bind(); const data=getData();data.subjects ||= {};if(!Object.keys(data.subjects).length){defaultSubjects.forEach(([name])=>data.subjects[name]={pages:{'Lecture Notes':defaultContent(name)}});saveData(data);}
+    bind();
+    const data=getData(); normalizeData(data);
+    if(!Object.keys(data.subjects).length){defaultSubjects.forEach(([name])=>data.subjects[name]={topics:{'Getting Started':{pages:{'Lecture Notes':defaultContent(name)}}}});saveData(data);}
     if(!data.subjects[activeSubject])activeSubject=Object.keys(data.subjects)[0] || '';
-    if(activeSubject){const pages=data.subjects[activeSubject]?.pages||{};if(!Object.keys(pages).length){data.subjects[activeSubject].pages={'Lecture Notes':defaultContent(activeSubject)};saveData(data);}activePage=Object.keys(data.subjects[activeSubject].pages)[0] || 'Lecture Notes';}
+    if(activeSubject){const topics=currentTopics(data);activeTopic=Object.keys(topics)[0] || 'General';const pages=currentPages(data);activePage=Object.keys(pages)[0] || 'Lecture Notes';saveData(data);}
     renderSubjects();renderPages();setupTableDialog();buildRibbon();restoreEditor();applyZoom();
-    // The Notes landing view is now the subject workspace, making the new feature visible immediately.
     showSubjectWorkspace('overview');
   }
 

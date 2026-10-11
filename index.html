@@ -57,9 +57,10 @@
               <button class="notes-subject" data-subject="German"><span class="notes-dot orange"></span>German</button>
             </div>
             <button class="notes-add" id="notesAddSubject">＋ Add subject</button>
-            <div class="notes-section-label notes-pages-heading">PAGES</div>
+            <div class="notes-section-label notes-pages-heading">TOPICS &amp; PAGES</div>
             <button type="button" class="notes-overview-link" id="notesSubjectOverview">⌂ <span>Subject overview</span></button>
             <div id="notesPageList"><button class="notes-page-link active" data-note-page="Lecture Notes">📄 <span>Lecture Notes</span></button></div>
+            <button class="notes-add" id="notesNewTopic">＋ New topic</button>
             <button class="notes-add" id="notesNewPage">＋ New page</button>
             <div class="notes-storage-card"><strong>CampusHub Notes</strong><p>Autosaves privately on this device for the signed-in account.</p></div>
           </aside>
@@ -88,7 +89,7 @@
               <div id="subjectWorkspaceContent" class="subject-workspace-content"></div>
             </section>
             <section id="noteEditorView">
-              <div class="notes-page-header"><input id="noteTitle" value="Academic Research & Writing — Lecture Notes" aria-label="Page title"><span id="saveState">Saved locally</span></div>
+              <div class="notes-page-header"><div class="notes-breadcrumb" id="notesBreadcrumb"><span>Subject</span><b>›</b><span>Topic</span><b>›</b><strong>Page</strong></div><input id="noteTitle" value="Academic Research & Writing — Lecture Notes" aria-label="Page title"><span id="saveState">Saved locally</span></div>
               <div class="onenote-editor" id="editorApp">
                 <div class="editor-tabs"><button type="button" data-tab="Home" class="selected">Home</button><button type="button" data-tab="Insert">Insert</button></div>
                 <div class="editor-ribbon" id="ribbon"></div>
