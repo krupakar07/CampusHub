@@ -122,7 +122,7 @@
     wrap.innerHTML = names.map((name,i) => {
       const color = defaultSubjects.find(x=>x[0]===name)?.[1] || ['purple','blue','green','orange'][i%4];
       return `<div class="notes-list-row ${name===activeSubject?'active':''}">` +
-        `<button type="button" class="notes-subject ${name===activeSubject?'active':''}" data-subject="${escapeHtml(name)}"><span class="notes-dot ${color}"></span><span class="notes-list-label">${escapeHtml(name)}</span></button>` +
+        `<button type="button" class="notes-subject ${name===activeSubject?'active':''}" data-subject="${escapeHtml(name)}"><span class="notes-dot ${color}"></span><span class="notes-list-label">${escapeHtml(name)}</span><span class="notes-subject-open" aria-hidden="true">›</span></button>` +
         `<button type="button" class="notes-delete-item" data-delete-subject="${escapeHtml(name)}" aria-label="Delete subject ${escapeHtml(name)}" title="Delete subject">×</button>` +
       `</div>`;
     }).join('');
@@ -663,16 +663,21 @@
   }
 
   function showNoteEditor(){
-    $('subjectWorkspace')?.classList.add('hidden');
-    $('noteEditorView')?.classList.remove('hidden');
+    const workspace=$('subjectWorkspace'), editorView=$('noteEditorView');
+    workspace?.classList.add('hidden');
+    editorView?.classList.remove('hidden');
     $('notesSubjectOverview')?.classList.remove('active');
   }
 
   function showSubjectWorkspace(tab='overview'){
-    $('noteEditorView')?.classList.add('hidden');
-    $('subjectWorkspace')?.classList.remove('hidden');
+    const workspace=$('subjectWorkspace'), editorView=$('noteEditorView');
+    if(!workspace)return;
+    editorView?.classList.add('hidden');
+    workspace.classList.remove('hidden');
+    $('notesSubjectOverview')?.classList.add('active');
     document.querySelectorAll('[data-subject-tab]').forEach(b=>b.classList.toggle('selected',b.dataset.subjectTab===tab));
     renderSubjectWorkspace(tab);
+    workspace.scrollIntoView({behavior:'smooth',block:'start'});
   }
 
   function subjectPageNames(){return Object.keys(currentPages(getData()));}
@@ -858,6 +863,8 @@
     if(!data.subjects[activeSubject])activeSubject=Object.keys(data.subjects)[0] || '';
     if(activeSubject){const pages=data.subjects[activeSubject]?.pages||{};if(!Object.keys(pages).length){data.subjects[activeSubject].pages={'Lecture Notes':defaultContent(activeSubject)};saveData(data);}activePage=Object.keys(data.subjects[activeSubject].pages)[0] || 'Lecture Notes';}
     renderSubjects();renderPages();setupTableDialog();buildRibbon();restoreEditor();applyZoom();
+    // The Notes landing view is now the subject workspace, making the new feature visible immediately.
+    showSubjectWorkspace('overview');
   }
 
   window.CampusNotes={activate};
