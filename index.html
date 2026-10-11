@@ -23,6 +23,7 @@
         <button class="nav-item" data-page="calendar"><span class="nav-icon">▣</span>Calendar</button>
         <button class="nav-item" data-page="planner"><span class="nav-icon">✓</span>Study planner</button>
         <button class="nav-item" data-page="notes"><span class="nav-icon">▤</span>Notes</button>
+        <button class="nav-item" data-page="exams"><span class="nav-icon">◉</span>Exams</button>
       </nav>
       <div class="side-label category-label">CATEGORIES <button class="tiny-plus" id="addCategory" aria-label="Add event">+</button></div>
       <div class="category-list" id="categoryList"></div>
@@ -44,6 +45,11 @@
         <section class="calendar-title-row"><div><div class="eyebrow"><span class="eyebrow-line"></span> YOUR PERSONAL TIMETABLE</div><h1>Calendar</h1><p class="subheading">Plan your semester, one day at a time.</p></div><div class="calendar-actions"><details class="tools-menu"><summary>⇩ &nbsp; Export / backup</summary><div class="tools-popover"><button id="exportIcs">Export calendar (.ics)</button><button id="downloadBackup">Download backup (.json)</button><button id="restoreBackup">Restore backup (.json)</button></div></details><input id="backupFileInput" type="file" accept=".json,application/json" hidden><button class="secondary-button" id="importCsvButton">⇧ &nbsp; Import timetable</button><input id="csvFileInput" type="file" accept=".csv,.ics,text/csv,text/calendar" hidden><button class="primary-button" id="calendarAdd">＋ &nbsp; Add event</button></div></section>
         <section class="panel calendar-panel"><div class="calendar-toolbar"><div class="calendar-nav"><button id="prevPeriod" aria-label="Previous period">‹</button><button id="nextPeriod" aria-label="Next period">›</button><button class="today-control" id="calendarToday">Today</button><h2 id="periodLabel"></h2></div><div class="calendar-tools"><label class="calendar-search"><span>⌕</span><input id="calendarSearch" type="search" placeholder="Search classes" aria-label="Search classes"></label><select id="calendarFilter" class="calendar-filter" aria-label="Filter by event type"><option value="all">All types</option></select><div class="view-switch" role="tablist" aria-label="Calendar view"><button data-view="day">Day</button><button data-view="week" class="selected">Week</button><button data-view="month">Month</button></div></div></div><div id="calendarGrid" class="calendar-grid"></div><div id="calendarTravelAdvice"></div></section>
         <div class="calendar-legend" id="calendarLegend"></div>
+      </div>
+      <div class="content exams-content hidden" id="examsPage">
+        <section class="calendar-title-row exam-title-row"><div><div class="eyebrow"><span class="eyebrow-line"></span> PREPARE WITH PURPOSE</div><h1>Exams</h1><p class="subheading">Each exam is a workspace for your syllabus, revision and practice.</p></div><button class="primary-button" id="examAdd">＋ New exam</button></section>
+        <section class="exam-summary" id="examSummary"></section>
+        <section class="exam-layout"><article class="panel exam-list-panel"><div class="panel-heading"><div><h2>Your exams</h2><p>Open an exam to manage everything needed for it.</p></div></div><div id="examList"></div></article><aside class="panel exam-side-panel"><div class="panel-heading"><div><h2>Exam workflow</h2><p>A focused path from syllabus to readiness.</p></div></div><div class="exam-flow"><div><span>01</span><b>Understand</b><small>Capture syllabus, format, location and important topics.</small></div><div><span>02</span><b>Revise</b><small>Link your notes and create a revision checklist.</small></div><div><span>03</span><b>Practice</b><small>Keep practice questions and study sessions beside the exam.</small></div><div><span>04</span><b>Ready</b><small>Track progress and mark the exam ready when you are prepared.</small></div></div></aside></section>
       </div>
       <div class="content planner-content hidden" id="plannerPage"><section class="calendar-title-row"><div><div class="eyebrow"><span class="eyebrow-line"></span> PLAN YOUR STUDY TIME</div><h1>Study planner</h1><p class="subheading">Assignments, exam preparation, and the weeks ahead.</p></div><button class="primary-button" id="plannerAddTask">＋ Add task</button></section><section class="planner-columns"><article class="panel planner-task-panel"><div class="panel-heading"><div><h2>Upcoming tasks</h2><p>Assignments and deadlines from your calendar</p></div></div><div id="plannerTasks"></div></article><article class="panel planner-overview-panel"><div class="panel-heading"><div><h2>Semester at a glance</h2><p>Your next 12 weeks</p></div></div><div id="semesterOverview"></div></article></section></div>
       <div class="content campus-notes-page hidden" id="notesPage">
@@ -120,6 +126,6 @@
       <div class="campus-table-dialog-foot"><span>Choose rows × columns</span><button type="button" data-table-cancel>Cancel</button></div>
     </div>
   </dialog>
-  <script src="assignments.js"></script><script src="app.js"></script><script src="notes-ui.js"></script>
+  <script src="assignments.js"></script><script src="exams.js"></script><script src="app.js"></script><script src="notes-ui.js"></script>
 </body>
 </html>
