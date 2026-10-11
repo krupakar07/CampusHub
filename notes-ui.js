@@ -764,9 +764,18 @@
       content.innerHTML=`<div class="subject-section-intro"><div><span class="subject-panel-kicker">${tab==='notes'?'TOPICS':'SUBJECT NOTES'}</span><h3>${tab==='notes'?'Topics in '+escapeHtml(activeSubject):'Organize your notes by topic'}</h3><p>Each topic contains its own pages, so you always know exactly where you are.</p></div><div class="subject-workspace-actions"><button type="button" class="secondary-button" id="workspaceNewTopic">＋ New topic</button><button type="button" class="primary-button" id="workspaceCreatePage">＋ New page</button></div></div><div class="subject-notes-grid">${cards||'<div class="subject-empty">No topics yet. Create your first topic.</div>'}</div>`;
     } else if(tab==='overview-old') {
       content.innerHTML='';
-    } else if(tab==='assignments' || tab==='exams'){
-      const list=tab==='assignments'?assignments:exams;
-      content.innerHTML=`<div class="subject-section-intro"><div><span class="subject-panel-kicker">${tab==='assignments'?'ASSIGNMENTS':'EXAMS'}</span><h3>${tab==='assignments'?'Subject assignments':'Subject exams'}</h3><p>Calendar items linked to ${escapeHtml(activeSubject)} appear here automatically.</p></div><button type="button" class="secondary-button" data-workspace-action="calendar">Open calendar</button></div><div class="subject-list subject-large-list">${list.map(e=>`<div class="subject-list-item readonly"><span class="subject-event-badge">${tab==='assignments'?'✓':'◇'}</span><span><strong>${escapeHtml(e.title)}</strong><small>${escapeHtml(subjectDate(e.date))} · ${escapeHtml(e.start||'')}–${escapeHtml(e.end||'')}${e.room?' · '+escapeHtml(e.room):''}</small></span></div>`).join('')||`<div class="subject-empty">No ${tab} linked to this subject yet.</div>`}</div>`;
+    } else if(tab==='assignments'){
+      const work=window.CampusAssignments?.getForSubject?.(activeSubject)||[];
+      const calendarOnly=assignments.filter(e=>!work.some(a=>a.sourceEventId===e.id||a.title===e.title&&a.dueDate===e.date));
+      content.innerHTML=`<div class="subject-section-intro"><div><span class="subject-panel-kicker">ASSIGNMENTS</span><h3>Work on ${escapeHtml(activeSubject)} assignments</h3><p>Each assignment has its own workspace for writing, research, checklist, files and submission tracking.</p></div><div class="subject-workspace-actions"><button type="button" class="secondary-button" data-workspace-action="calendar">Open calendar</button><button type="button" class="primary-button" data-create-assignment="1">＋ New assignment</button></div></div>
+      <div class="assignment-subject-grid">${work.map(a=>{const st=({'not-started':['Not Started','status-not-started'],'in-progress':['In Progress','status-in-progress'],completed:['Completed','status-completed']})[a.status]||['Not Started','status-not-started'];const done=(a.tasks||[]).filter(t=>t.done).length;const total=(a.tasks||[]).length;return `<button type="button" class="assignment-subject-card" data-open-assignment="${escapeHtml(a.id)}"><div class="assignment-subject-card-top"><span class="assignment-event-badge">✓</span><em class="assignment-status ${st[1]}">${st[0]}</em></div><strong>${escapeHtml(a.title)}</strong><small>Due ${escapeHtml(subjectDate(a.dueDate))} · ${escapeHtml(a.dueTime||'23:59')}</small><div class="assignment-progress"><i style="width:${total?Math.round(done/total*100):0}%"></i></div><span class="assignment-progress-label">${done}/${total} tasks complete · Open workspace ›</span></button>`}).join('')||'<div class="subject-empty">No assignments yet. Create one to get a complete workspace for it.</div>'}</div>
+      ${calendarOnly.length?`<div class="assignment-import-note"><strong>Calendar assignments</strong><span>${calendarOnly.length} assignment/deadline event${calendarOnly.length===1?'':'s'} from your calendar can be opened here and converted into a full workspace.</span><button type="button" class="secondary-button" data-import-calendar-assignment="1">Create workspaces from calendar</button></div>`:''}`;
+      content.querySelector('[data-create-assignment]')?.addEventListener('click',()=>window.CampusAssignments?.create?.(activeSubject));
+      content.querySelector('[data-import-calendar-assignment]')?.addEventListener('click',()=>{window.CampusAssignments?.activate?.();showSubjectWorkspace('assignments')});
+      content.querySelectorAll('[data-open-assignment]').forEach(b=>b.addEventListener('click',()=>window.CampusAssignments?.openWorkspace?.(b.dataset.openAssignment)));
+    } else if(tab==='exams'){
+      const list=exams;
+      content.innerHTML=`<div class="subject-section-intro"><div><span class="subject-panel-kicker">EXAMS</span><h3>Subject exams</h3><p>Calendar items linked to ${escapeHtml(activeSubject)} appear here automatically.</p></div><button type="button" class="secondary-button" data-workspace-action="calendar">Open calendar</button></div><div class="subject-list subject-large-list">${list.map(e=>`<div class="subject-list-item readonly"><span class="subject-event-badge">◇</span><span><strong>${escapeHtml(e.title)}</strong><small>${escapeHtml(subjectDate(e.date))} · ${escapeHtml(e.start||'')}–${escapeHtml(e.end||'')}${e.room?' · '+escapeHtml(e.room):''}</small></span></div>`).join('')||'<div class="subject-empty">No exams linked to this subject yet.</div>'}</div>`;
     } else if(tab==='calendar'){
       content.innerHTML=`<div class="subject-section-intro"><div><span class="subject-panel-kicker">CALENDAR</span><h3>${escapeHtml(activeSubject)} schedule</h3><p>Events currently associated with this subject.</p></div><button type="button" class="primary-button" data-workspace-action="calendar">Open full calendar</button></div><div class="subject-list subject-large-list">${events.map(e=>`<div class="subject-list-item readonly"><span class="subject-event-dot"></span><span><strong>${escapeHtml(e.title)}</strong><small>${escapeHtml(subjectDate(e.date))} · ${escapeHtml(e.start||'')}–${escapeHtml(e.end||'')}${e.room?' · '+escapeHtml(e.room):''}</small></span></div>`).join('')||'<div class="subject-empty">No calendar events linked to this subject.</div>'}</div>`;
     } else if(tab==='quick'){
@@ -895,6 +904,24 @@
     window.addEventListener('resize',closeMenus); window.addEventListener('scroll',closeMenus,true);
   }
 
+  function getStructure(){
+    const data=getData();
+    return Object.entries(data.subjects||{}).map(([name,subject])=>({
+      name,
+      topics:Object.entries(subject.topics||{}).map(([topic,entry])=>({name:topic,pages:Object.keys(entry.pages||{})}))
+    }));
+  }
+  function openLocation(subject,topic,page){
+    const data=getData();
+    if(!data.subjects?.[subject])return;
+    activeSubject=subject;
+    const topics=currentTopics(data);
+    activeTopic=topics?.[topic]?topic:(Object.keys(topics)[0]||'General');
+    const pages=currentPages(data);
+    activePage=pages?.[page]?page:(Object.keys(pages)[0]||'Lecture Notes');
+    renderSubjects();renderPages();restoreEditor();showNoteEditor();
+  }
+
   function activate(){
     bind();
     const data=getData(); normalizeData(data);
@@ -905,6 +932,6 @@
     showSubjectWorkspace('overview');
   }
 
-  window.CampusNotes={activate};
+  window.CampusNotes={activate,getStructure,openLocation};
   if(document.readyState!=='loading')setTimeout(activate,0);else document.addEventListener('DOMContentLoaded',()=>setTimeout(activate,0));
 })();
