@@ -57,19 +57,45 @@
               <button class="notes-subject" data-subject="German"><span class="notes-dot orange"></span>German</button>
             </div>
             <button class="notes-add" id="notesAddSubject">＋ Add subject</button>
-            <div class="notes-section-label">PAGES</div>
+            <div class="notes-section-label notes-pages-heading">PAGES</div>
+            <button type="button" class="notes-overview-link" id="notesSubjectOverview">⌂ <span>Subject overview</span></button>
             <div id="notesPageList"><button class="notes-page-link active" data-note-page="Lecture Notes">📄 <span>Lecture Notes</span></button></div>
             <button class="notes-add" id="notesNewPage">＋ New page</button>
             <div class="notes-storage-card"><strong>CampusHub Notes</strong><p>Autosaves privately on this device for the signed-in account.</p></div>
           </aside>
           <section class="notes-editor-shell">
-            <div class="notes-page-header"><input id="noteTitle" value="Academic Research & Writing — Lecture Notes" aria-label="Page title"><span id="saveState">Saved locally</span></div>
-            <div class="onenote-editor" id="editorApp">
-              <div class="editor-tabs"><button type="button" data-tab="Home" class="selected">Home</button><button type="button" data-tab="Insert">Insert</button></div>
-              <div class="editor-ribbon" id="ribbon"></div>
-              <div class="editor-canvas-wrap"><div id="editor" class="editor-canvas" contenteditable="true" spellcheck="true"><h1>Academic Research &amp; Writing</h1><p>Start typing your lecture notes here. Select text and use the Home or Insert ribbon like OneNote.</p><p>Use <strong>Home → Dictate</strong> for speech-to-text, or <strong>Insert → Table</strong> to add a table.</p></div></div>
-              <div class="statusbar"><span id="wordCount">0 words</span><span>•</span><span>Local autosave on</span><span class="status-spacer"></span><button id="zoomOut">−</button><span id="zoomLabel">100%</span><button id="zoomIn">＋</button></div>
-            </div>
+            <section id="subjectWorkspace" class="subject-workspace hidden" aria-label="Subject workspace">
+              <div class="subject-workspace-top">
+                <div>
+                  <div class="eyebrow"><span class="eyebrow-line"></span> SUBJECT WORKSPACE</div>
+                  <h2 id="subjectWorkspaceTitle">Academic Research &amp; Writing</h2>
+                  <p id="subjectWorkspaceSubtitle">Everything for this subject in one place.</p>
+                </div>
+                <div class="subject-workspace-actions">
+                  <button type="button" class="secondary-button" id="subjectOpenNotes">Open notes</button>
+                  <button type="button" class="primary-button" id="subjectNewPage">＋ New page</button>
+                </div>
+              </div>
+              <div class="subject-workspace-tabs" role="tablist" aria-label="Subject sections">
+                <button type="button" class="selected" data-subject-tab="overview">Overview</button>
+                <button type="button" data-subject-tab="notes">Notes</button>
+                <button type="button" data-subject-tab="quick">Quick Notes</button>
+                <button type="button" data-subject-tab="assignments">Assignments</button>
+                <button type="button" data-subject-tab="exams">Exams</button>
+                <button type="button" data-subject-tab="files">Files</button>
+                <button type="button" data-subject-tab="calendar">Calendar</button>
+              </div>
+              <div id="subjectWorkspaceContent" class="subject-workspace-content"></div>
+            </section>
+            <section id="noteEditorView">
+              <div class="notes-page-header"><input id="noteTitle" value="Academic Research & Writing — Lecture Notes" aria-label="Page title"><span id="saveState">Saved locally</span></div>
+              <div class="onenote-editor" id="editorApp">
+                <div class="editor-tabs"><button type="button" data-tab="Home" class="selected">Home</button><button type="button" data-tab="Insert">Insert</button></div>
+                <div class="editor-ribbon" id="ribbon"></div>
+                <div class="editor-canvas-wrap"><div id="editor" class="editor-canvas" contenteditable="true" spellcheck="true"><h1>Academic Research &amp; Writing</h1><p>Start typing your lecture notes here. Select text and use the Home or Insert ribbon like OneNote.</p><p>Use <strong>Home → Dictate</strong> for speech-to-text, or <strong>Insert → Table</strong> to add a table.</p></div></div>
+                <div class="statusbar"><span id="wordCount">0 words</span><span>•</span><span>Local autosave on</span><span class="status-spacer"></span><button id="zoomOut">−</button><span id="zoomLabel">100%</span><button id="zoomIn">＋</button></div>
+              </div>
+            </section>
           </section>
         </div>
       </div>
