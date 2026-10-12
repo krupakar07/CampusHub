@@ -4,6 +4,11 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="theme-color" content="#f7f8fc">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="CampusHub">
+  <link rel="apple-touch-icon" href="icon.svg">
   <meta name="description" content="CampusHub — private university calendar, study planner and OneNote-style notes workspace.">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="icon.svg" type="image/svg+xml">
@@ -115,6 +120,13 @@
         </div>
       </div>
     </main>
+    <nav class="mobile-bottom-nav" id="mobileBottomNav" aria-label="Mobile navigation">
+      <button class="mobile-nav-item active" data-page="dashboard"><span>▦</span><small>Home</small></button>
+      <button class="mobile-nav-item" data-page="calendar"><span>▣</span><small>Calendar</small></button>
+      <button class="mobile-nav-item" data-page="notes"><span>▤</span><small>Notes</small></button>
+      <button class="mobile-nav-item" data-page="planner"><span>✓</span><small>Planner</small></button>
+      <button class="mobile-nav-item" data-page="exams"><span>◉</span><small>Exams</small></button>
+    </nav>
   </div>
   <div class="modal-backdrop hidden" id="detailsModal" role="presentation"><section class="event-modal details-modal" role="dialog" aria-modal="true" aria-labelledby="detailsTitle"><div class="modal-header"><div><div class="eyebrow"><span class="eyebrow-line"></span> EVENT DETAILS</div><h2 id="detailsTitle"></h2></div><div class="details-menu-wrap"><button class="details-menu-button" id="detailsMenuButton" aria-label="Event actions" aria-expanded="false">⋯</button><div class="details-menu hidden" id="detailsMenu"><button id="detailsEdit">Edit event</button><button id="detailsEditOccurrence" class="hidden">Edit this occurrence</button><button id="detailsDelete">Delete event</button><button id="detailsDeleteSeries" class="hidden">Delete entire series</button></div><button class="close-button" id="closeDetails" aria-label="Close">×</button></div></div><div id="detailsBody" class="details-body"></div></section></div>
   <div class="modal-backdrop hidden" id="settingsModal" role="presentation"><section class="event-modal settings-modal" role="dialog" aria-modal="true" aria-labelledby="settingsTitle"><div class="modal-header"><div><div class="eyebrow"><span class="eyebrow-line"></span> PERSONAL PREFERENCES</div><h2 id="settingsTitle">Calendar settings</h2></div><button class="close-button" id="closeSettings" aria-label="Close">×</button></div><form id="settingsForm"><label class="field full-field">Your name<input id="settingsName" maxlength="60" required></label><label class="field full-field">Your university<select id="settingsUniversity"><option value="Hochschule Wismar">Hochschule Wismar</option><option value="Hochschule Worms">Hochschule Worms</option></select></label><label class="field full-field">Default calendar view<select id="settingsView"><option value="day">Day</option><option value="week">Week</option><option value="month">Month</option></select></label><label class="field full-field">Travel buffer between classes<select id="travelBuffer"><option value="0">Off</option><option value="5">5 minutes</option><option value="10">10 minutes</option><option value="15">15 minutes</option><option value="20">20 minutes</option></select></label><label class="field full-field">Class reminder<select id="reminderMinutes"><option value="0">Off</option><option value="5">5 minutes before</option><option value="10">10 minutes before</option><option value="15">15 minutes before</option><option value="30">30 minutes before</option></select></label><div class="settings-note">Browser reminders appear while this app is open. Allow notifications when your browser asks.</div><div class="modal-actions"><span class="form-spacer"></span><button type="button" class="cancel-button" id="cancelSettings">Cancel</button><button type="submit" class="primary-button save-button">Save settings <span>→</span></button></div></form></section></div>
