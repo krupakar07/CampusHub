@@ -120,3 +120,9 @@ create policy "Users can delete their own CampusHub files"
 
 -- Enable realtime updates so changes made on another signed-in device can appear without a reload.
 alter publication supabase_realtime add table public.campus_user_data;
+
+-- CampusHub Files & Materials migration (run this block if your existing
+-- campus_user_data table was created before Files & Materials was added).
+alter table public.campus_user_data drop constraint if exists campus_user_data_namespace_check;
+alter table public.campus_user_data add constraint campus_user_data_namespace_check
+  check (namespace in ('notes','assignments','exams','quick-notes','files'));
