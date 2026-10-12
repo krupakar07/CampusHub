@@ -742,7 +742,7 @@
     $('notesSubjectOverview')?.classList.add('active');
     document.querySelectorAll('[data-subject-tab]').forEach(b=>b.classList.toggle('selected',b.dataset.subjectTab===tab));
     renderSubjectWorkspace(tab);
-    workspace.scrollIntoView({behavior:'smooth',block:'start'});
+    if(!window.matchMedia('(max-width: 760px)').matches){workspace.scrollIntoView({behavior:'smooth',block:'start'});}
   }
 
   function showTopicWorkspace(topic){
@@ -754,7 +754,7 @@
     $('notesSubjectOverview')?.classList.remove('active');
     document.querySelectorAll('[data-subject-tab]').forEach(b=>b.classList.remove('selected'));
     renderTopicWorkspace();
-    workspace.scrollIntoView({behavior:'smooth',block:'start'});
+    if(!window.matchMedia('(max-width: 760px)').matches){workspace.scrollIntoView({behavior:'smooth',block:'start'});}
   }
 
   function subjectTopicNames(){return Object.keys(currentTopics(getData()));}
@@ -847,8 +847,25 @@
 
   function handleTagMenu(id){closeMenus();if(id==='remove'){const sel=window.getSelection();const tag=sel?.rangeCount?closestTag(sel.anchorNode):null;if(tag)removeTagFromElement(tag);else notify('Select tagged text first.');return;}if(id==='customize'){notify('Tag customization is planned for a later update.');return;}applyTag(id);}
 
+  function syncMobileNotesLayout(){
+    const page=$('notesPage');
+    if(!page) return;
+    const mobile=window.matchMedia('(max-width: 760px)').matches;
+    page.classList.toggle('mobile-notes-mode', mobile);
+    const sidebar=page.querySelector('.notes-sidebar');
+    if(sidebar){
+      // Enforce the mobile information architecture in JS as well as CSS so an
+      // older cached stylesheet can never leave the desktop Notes tree over the
+      // mobile workspace.
+      sidebar.style.display=mobile?'none':'';
+      sidebar.setAttribute('aria-hidden', mobile?'true':'false');
+    }
+  }
+
   function bind(){
     if(bound)return;bound=true;
+    syncMobileNotesLayout();
+    window.addEventListener('resize',syncMobileNotesLayout);
     const app=$('editorApp'),editor=$('editor');
 
     editor?.addEventListener('input',()=>{
@@ -887,7 +904,7 @@
       const page=e.target.closest('[data-note-page]');if(page){switchPage(page.dataset.notePage);return;}
       const topic=e.target.closest('[data-topic]');if(topic){switchTopic(topic.dataset.topic);return;}
     });
-    $('notesAddSubject')?.addEventListener('click',addSubject);$('notesNewTopic')?.addEventListener('click',addTopic);$('notesNewPage')?.addEventListener('click',addPage);$('notesSubjectOverview')?.addEventListener('click',()=>showSubjectWorkspace('overview'));$('subjectOpenNotes')?.addEventListener('click',()=>showSubjectWorkspace('notes'));$('subjectNewPage')?.addEventListener('click',addPage);document.querySelectorAll('[data-subject-tab]').forEach(b=>b.addEventListener('click',()=>showSubjectWorkspace(b.dataset.subjectTab)));
+    $('notesAddSubject')?.addEventListener('click',addSubject);$('mobileNotesAddSubject')?.addEventListener('click',addSubject);$('notesNewTopic')?.addEventListener('click',addTopic);$('notesNewPage')?.addEventListener('click',addPage);$('notesSubjectOverview')?.addEventListener('click',()=>showSubjectWorkspace('overview'));$('subjectOpenNotes')?.addEventListener('click',()=>showSubjectWorkspace('notes'));$('subjectNewPage')?.addEventListener('click',addPage);document.querySelectorAll('[data-subject-tab]').forEach(b=>b.addEventListener('click',()=>showSubjectWorkspace(b.dataset.subjectTab)));
 
     $('noteTitle')?.addEventListener('change',()=>{const title=$('noteTitle').value.trim()||activePage;if(title===activePage)return;const data=getData(),pages=currentPages(data),content=pages[activePage];delete pages[activePage];pages[title]=content;activePage=title;saveData(data);renderPages();});
 

@@ -67,12 +67,15 @@
       <div class="content planner-content hidden" id="plannerPage"><section class="calendar-title-row"><div><div class="eyebrow"><span class="eyebrow-line"></span> PLAN YOUR STUDY TIME</div><h1>Study planner</h1><p class="subheading">Assignments, exam preparation, and the weeks ahead.</p></div><button class="primary-button" id="plannerAddTask">＋ Add task</button></section><section class="planner-columns"><article class="panel planner-task-panel"><div class="panel-heading"><div><h2>Upcoming tasks</h2><p>Assignments and deadlines from your calendar</p></div></div><div id="plannerTasks"></div></article><article class="panel planner-overview-panel"><div class="panel-heading"><div><h2>Semester at a glance</h2><p>Your next 12 weeks</p></div></div><div id="semesterOverview"></div></article></section></div>
       <div class="content campus-notes-page hidden" id="notesPage">
         <div class="notes-workspace">
-          <aside class="notes-sidebar">
-            <div class="notes-sidebar-title">MY NOTES</div>
-            <div class="mobile-subject-picker" id="mobileSubjectPicker">
-              <label for="mobileSubjectSelect">SUBJECT</label>
+          <div class="mobile-notes-header" id="mobileNotesHeader" aria-label="Mobile subject navigation">
+            <div class="mobile-notes-header-main">
+              <span class="mobile-notes-header-label">SUBJECT</span>
               <select id="mobileSubjectSelect" aria-label="Select subject"></select>
             </div>
+            <button type="button" class="mobile-notes-add" id="mobileNotesAddSubject" aria-label="Add subject">＋</button>
+          </div>
+          <aside class="notes-sidebar">
+            <div class="notes-sidebar-title">MY NOTES</div>
             <div class="notes-subjects" id="notesSubjectList">
               <button class="notes-subject active" data-subject="Academic Research & Writing"><span class="notes-dot purple"></span>Academic Research & Writing</button>
               <button class="notes-subject" data-subject="International Management"><span class="notes-dot blue"></span>International Management</button>
