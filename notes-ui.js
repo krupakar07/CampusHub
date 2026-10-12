@@ -925,7 +925,30 @@
     });
     window.addEventListener('resize',closeMenus); window.addEventListener('scroll',closeMenus,true);
     window.addEventListener('campushub-auth', e => { if (e.detail?.user) hydrateCloudNotes(); });
-    window.addEventListener('campus-cloud-changed', e => { if (e.detail?.namespace==='notes' && window.CampusHubAuth?.user) { const data=normalizeData(e.detail.data); try{localStorage.setItem(getUserKey(),JSON.stringify(data));}catch(_){} renderSubjects(); renderPages(); restoreEditor(); showSubjectWorkspace('overview'); const state=$('saveState'); if(state) state.textContent='Updated from another device'; } });
+    window.addEventListener('campus-cloud-changed', e => {
+      if (e.detail?.namespace !== 'notes' || !window.CampusHubAuth?.user) return;
+      const data = normalizeData(e.detail.data);
+      try { localStorage.setItem(getUserKey(), JSON.stringify(data)); } catch(_) {}
+
+      // IMPORTANT: a Realtime update from another device must never navigate
+      // this device away from the page the user is currently editing.
+      // Previously this handler called showSubjectWorkspace('overview'), which
+      // made the other laptop/phone jump back to the subject overview whenever
+      // someone typed on the first device.
+      const editorEl = $('editor');
+      const editorFocused = !!(editorEl && (document.activeElement === editorEl || editorEl.contains(document.activeElement)));
+
+      renderSubjects();
+      renderPages();
+
+      if (!editorFocused) {
+        // Safe to refresh the visible page when the user is not actively typing.
+        restoreEditor();
+      }
+
+      const state = $('saveState');
+      if (state) state.textContent = editorFocused ? 'Updated elsewhere · your editing is protected' : 'Updated from another device';
+    });
   }
 
   function getStructure(){
