@@ -727,11 +727,34 @@
     try{return new Date(`${value}T12:00:00`).toLocaleDateString(undefined,{weekday:'short',day:'numeric',month:'short',year:'numeric'});}catch(_){return value||''}
   }
 
+  function syncMobileNotesViews(){
+    const page=$('notesPage');
+    const workspace=$('subjectWorkspace');
+    const editorView=$('noteEditorView');
+    const mobile=!!(page && window.matchMedia('(max-width: 760px)').matches);
+    if(!workspace || !editorView) return;
+    // On mobile the workspace and editor are mutually exclusive full-screen views.
+    // Inline display is intentional here: the high-specificity mobile layout CSS
+    // must never be able to resurrect a hidden sibling underneath the active view.
+    if(mobile){
+      const editorOpen=!editorView.classList.contains('hidden');
+      workspace.style.display=editorOpen?'none':'block';
+      editorView.style.display=editorOpen?'block':'none';
+      page.classList.toggle('mobile-editor-open',editorOpen);
+      page.classList.toggle('mobile-workspace-open',!editorOpen);
+    }else{
+      workspace.style.display='';
+      editorView.style.display='';
+      page.classList.remove('mobile-editor-open','mobile-workspace-open');
+    }
+  }
+
   function showNoteEditor(){
     const workspace=$('subjectWorkspace'), editorView=$('noteEditorView');
     workspace?.classList.add('hidden');
     editorView?.classList.remove('hidden');
     $('notesSubjectOverview')?.classList.remove('active');
+    syncMobileNotesViews();
   }
 
   function showSubjectWorkspace(tab='overview'){
@@ -742,6 +765,7 @@
     $('notesSubjectOverview')?.classList.add('active');
     document.querySelectorAll('[data-subject-tab]').forEach(b=>b.classList.toggle('selected',b.dataset.subjectTab===tab));
     renderSubjectWorkspace(tab);
+    syncMobileNotesViews();
     if(!window.matchMedia('(max-width: 760px)').matches){workspace.scrollIntoView({behavior:'smooth',block:'start'});}
   }
 
@@ -860,6 +884,7 @@
       sidebar.style.display=mobile?'none':'';
       sidebar.setAttribute('aria-hidden', mobile?'true':'false');
     }
+    syncMobileNotesViews();
   }
 
   function bind(){

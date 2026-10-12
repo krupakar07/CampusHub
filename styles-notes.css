@@ -330,3 +330,16 @@
   .campus-notes-page.mobile-notes-mode .subject-workspace-actions{grid-template-columns:1fr!important;}
   .campus-notes-page.mobile-notes-mode .subject-workspace-actions button{min-height:44px!important;}
 }
+
+/* v37 — mobile editor/workspace are mutually exclusive.  The subject workspace
+   must never remain underneath the editor; this also guards against high-
+   specificity mobile rules overriding the generic .hidden utility. */
+@media (max-width:760px){
+  .campus-notes-page.mobile-editor-open #subjectWorkspace{display:none!important;}
+  .campus-notes-page.mobile-editor-open #noteEditorView{display:block!important;width:100%!important;height:100%!important;min-width:0!important;min-height:0!important;overflow:hidden!important;}
+  .campus-notes-page.mobile-editor-open #noteEditorView .notes-page-header{flex:0 0 auto!important;}
+  .campus-notes-page.mobile-editor-open #noteEditorView .onenote-editor{height:calc(100% - 58px)!important;min-height:0!important;display:flex!important;flex-direction:column!important;}
+  .campus-notes-page.mobile-editor-open #noteEditorView .editor-canvas-wrap{flex:1 1 auto!important;min-height:0!important;overflow:auto!important;}
+  .campus-notes-page.mobile-workspace-open #subjectWorkspace{display:block!important;}
+  .campus-notes-page.mobile-workspace-open #noteEditorView{display:none!important;}
+}
