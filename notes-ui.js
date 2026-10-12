@@ -180,6 +180,11 @@
         `<button type="button" class="notes-delete-item" data-delete-subject="${escapeHtml(name)}" aria-label="Delete subject ${escapeHtml(name)}" title="Delete subject">×</button>` +
       `</div>`;
     }).join('');
+    const mobileSelect = $('mobileSubjectSelect');
+    if (mobileSelect) {
+      mobileSelect.innerHTML = names.map(name => `<option value="${escapeHtml(name)}">${escapeHtml(name)}</option>`).join('');
+      mobileSelect.value = activeSubject;
+    }
   }
 
   function renderPages() {
@@ -867,6 +872,10 @@
       else if(text){e.preventDefault();insertHtml(escapeHtml(text).replace(/\n/g,'<br>'));}
     });
 
+    $('mobileSubjectSelect')?.addEventListener('change',e=>{
+      const name=e.target.value;
+      if(name) switchSubject(name);
+    });
     $('notesSubjectList')?.addEventListener('click',e=>{
       const del=e.target.closest('[data-delete-subject]');
       if(del){e.preventDefault();e.stopPropagation();deleteSubject(del.dataset.deleteSubject);return;}

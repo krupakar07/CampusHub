@@ -208,3 +208,46 @@
     pointer-events:auto !important;
   }
 }
+
+/* Dedicated mobile subject switcher. Native select is intentionally used on touch
+   devices so subject navigation never depends on a tiny/scrollable sidebar button. */
+.mobile-subject-picker{display:none}
+@media(max-width:760px){
+  .campus-notes-page .mobile-subject-picker{
+    display:flex;
+    flex-direction:column;
+    gap:5px;
+    padding:0 0 9px;
+    position:relative;
+    z-index:60;
+  }
+  .campus-notes-page .mobile-subject-picker label{
+    font-size:9px;
+    font-weight:800;
+    letter-spacing:.09em;
+    color:#77737f;
+  }
+  .campus-notes-page .mobile-subject-picker select{
+    width:100%;
+    min-height:48px;
+    border:1px solid #d9d5e5;
+    border-radius:11px;
+    background:#fff;
+    color:#343040;
+    padding:0 42px 0 13px;
+    font-size:15px;
+    font-weight:700;
+    outline:none;
+    box-shadow:0 2px 8px rgba(45,38,75,.06);
+    -webkit-appearance:auto;
+    appearance:auto;
+    pointer-events:auto;
+    touch-action:manipulation;
+  }
+  .campus-notes-page .mobile-subject-picker select:focus{
+    border-color:#7665c7;
+    box-shadow:0 0 0 3px rgba(118,101,199,.12);
+  }
+  .campus-notes-page .notes-subjects{display:none !important}
+  .campus-notes-page .notes-sidebar{max-height:145px;overflow:visible;position:relative;z-index:50}
+}
