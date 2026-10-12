@@ -26,6 +26,7 @@
   // the browser reports no usable undo transaction.
   let structuralUndo = null;
   let structuralRedo = null;
+  let liveRemoteTimer = null;
 
   const homeTools = [
     {group:'Clipboard', tools:[['Paste','📋','paste'],['Undo','↶','undo'],['Redo','↷','redo']]},
@@ -696,7 +697,7 @@
 
   function scheduleSave(){
     clearTimeout(saveTimer); if($('saveState'))$('saveState').textContent='Saving…';
-    saveTimer=setTimeout(()=>{const data=getData();currentPages(data)[activePage]=$('editor')?.innerHTML||'';saveData(data);},350);
+    saveTimer=setTimeout(()=>{const data=getData();currentPages(data)[activePage]=$('editor')?.innerHTML||'';saveData(data);},120);
   }
 
   function updateWordCount(){const text=$('editor')?.innerText?.trim()||'';const words=text?text.split(/\s+/).length:0;if($('wordCount'))$('wordCount').textContent=`${words} words`;}
@@ -850,7 +851,12 @@
       // The structural snapshot is only a fallback for the table/insert flow.
       structuralUndo = null;
       structuralRedo = null;
-      updateWordCount();captureSelection();scheduleSave();
+      updateWordCount();captureSelection();
+      const content=$('editor')?.innerHTML||'';
+      if(window.CampusCloudSync?.broadcastNotesEdit && window.CampusHubAuth?.user){
+        window.CampusCloudSync.broadcastNotesEdit({subject:activeSubject,topic:activeTopic,page:activePage,content,ts:Date.now()});
+      }
+      scheduleSave();
     });
     editor?.addEventListener('mouseup',captureSelection); editor?.addEventListener('keyup',captureSelection); editor?.addEventListener('focus',captureSelection);
     editor?.addEventListener('click',e=>{const tag=e.target.closest('[data-tag]');if(tag){e.preventDefault();removeTagFromElement(tag);}});
@@ -925,6 +931,26 @@
     });
     window.addEventListener('resize',closeMenus); window.addEventListener('scroll',closeMenus,true);
     window.addEventListener('campushub-auth', e => { if (e.detail?.user) hydrateCloudNotes(); });
+    window.addEventListener('campus-cloud-live-edit', e => {
+      if (e.detail?.namespace !== 'notes' || !window.CampusHubAuth?.user) return;
+      const {subject,topic,page,content}=e.detail;
+      if(subject!==activeSubject || topic!==activeTopic || page!==activePage) return;
+      const editorEl=$('editor');
+      if(!editorEl || typeof content!=='string') return;
+      if(editorEl.innerHTML===content) return;
+      // Apply the remote edit immediately. Save the surrounding data locally
+      // without re-broadcasting it, so the two open devices mirror typing.
+      const data=getData();
+      if(!data.subjects?.[subject]?.topics?.[topic]?.pages) return;
+      data.subjects[subject].topics[topic].pages[page]=content;
+      try { localStorage.setItem(getUserKey(), JSON.stringify(data)); } catch(_) {}
+      const wasFocused=document.activeElement===editorEl || editorEl.contains(document.activeElement);
+      editorEl.innerHTML=content;
+      updateWordCount();
+      if(!wasFocused) restoreEditor();
+      const state=$('saveState'); if(state) state.textContent='Live update from another device';
+    });
+
     window.addEventListener('campus-cloud-changed', e => {
       if (e.detail?.namespace !== 'notes' || !window.CampusHubAuth?.user) return;
       const data = normalizeData(e.detail.data);
