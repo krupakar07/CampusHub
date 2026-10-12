@@ -10,8 +10,18 @@
       .on('postgres_changes',{event:'*',schema:'public',table:'campus_user_data',filter:`user_id=eq.${uid}`},payload=>{
         const row=payload.new||payload.old||{}; if(!row.namespace||payload.eventType==='DELETE')return;
         if(payload.eventType==='UPDATE'||payload.eventType==='INSERT'){
+          // Supabase Realtime also echoes writes made by this browser. If we
+          // immediately hydrate those echoes, the Notes UI re-renders and
+          // hides the editor while the user is typing. Only notify the app
+          // when the incoming cloud value is actually different from the
+          // local cache.
+          const current = localGet(row.namespace, undefined);
+          let same = false;
+          try { same = JSON.stringify(current) === JSON.stringify(row.data); } catch(_) {}
           localSet(row.namespace,row.data);
-          window.dispatchEvent(new CustomEvent('campus-cloud-changed',{detail:{namespace:row.namespace,data:row.data}}));
+          if(!same){
+            window.dispatchEvent(new CustomEvent('campus-cloud-changed',{detail:{namespace:row.namespace,data:row.data}}));
+          }
         }
       }).subscribe();
   }
