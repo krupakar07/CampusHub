@@ -123,8 +123,30 @@
 
   function saveData(data) {
     try { localStorage.setItem(getUserKey(), JSON.stringify(data)); } catch (_) {}
+    if (window.CampusCloudSync?.save && window.CampusHubAuth?.user) window.CampusCloudSync.save('notes', data);
     const state = $('saveState');
-    if (state) state.textContent = 'Saved locally';
+    if (state) state.textContent = window.CampusHubAuth?.user ? 'Saved · syncing…' : 'Saved locally';
+  }
+
+  async function hydrateCloudNotes() {
+    const user = window.CampusHubAuth?.user;
+    if (!user || !window.CampusCloudSync) return;
+    try {
+      const userKey = getUserKey(), legacyKey = `${STORE}:local`;
+      if (!localStorage.getItem(userKey) && localStorage.getItem(legacyKey)) localStorage.setItem(userKey, localStorage.getItem(legacyKey));
+      const local = loadData();
+      await window.CampusCloudSync.hydrate('notes', local, cloud => {
+        const normalized = normalizeData(cloud);
+        try { localStorage.setItem(userKey, JSON.stringify(normalized)); } catch (_) {}
+        activeSubject = normalized.subjects?.[activeSubject] ? activeSubject : Object.keys(normalized.subjects||{})[0] || '';
+        const topics = normalized.subjects?.[activeSubject]?.topics || {};
+        activeTopic = topics[activeTopic] ? activeTopic : Object.keys(topics)[0] || 'General';
+        const pages = topics[activeTopic]?.pages || {};
+        activePage = pages[activePage] ? activePage : Object.keys(pages)[0] || 'Lecture Notes';
+        renderSubjects(); renderPages(); restoreEditor(); showSubjectWorkspace('overview');
+        const state=$('saveState'); if(state) state.textContent='Synced to your account';
+      });
+    } catch (error) { console.warn('CampusHub notes cloud sync failed', error); }
   }
 
   function getData() { return loadData(); }
@@ -902,6 +924,8 @@
       if(key==='k'&&document.activeElement?.closest('#editor')){e.preventDefault();const url=prompt('Enter URL:','https://');if(url)exec('createLink',url);}
     });
     window.addEventListener('resize',closeMenus); window.addEventListener('scroll',closeMenus,true);
+    window.addEventListener('campushub-auth', e => { if (e.detail?.user) hydrateCloudNotes(); });
+    window.addEventListener('campus-cloud-changed', e => { if (e.detail?.namespace==='notes' && window.CampusHubAuth?.user) { const data=normalizeData(e.detail.data); try{localStorage.setItem(getUserKey(),JSON.stringify(data));}catch(_){} renderSubjects(); renderPages(); restoreEditor(); showSubjectWorkspace('overview'); const state=$('saveState'); if(state) state.textContent='Updated from another device'; } });
   }
 
   function getStructure(){

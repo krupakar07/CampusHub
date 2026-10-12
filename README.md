@@ -53,3 +53,31 @@ CampusHub now includes a OneNote-style editor under **Notes** with Home and Inse
 
 ### Notes editor interaction fix
 The Notes UI loads its functional OneNote-style Home/Insert ribbon and subject/page interactions from `notes-ui.js`.
+
+## CampusHub v28 — Cloud Sync
+
+v28 adds cross-device persistence using the existing Supabase project.
+
+### One-time Supabase setup
+
+1. Open the Supabase SQL Editor for the project configured in `supabase-config.js`.
+2. Run the complete `supabase-schema.sql` file.
+3. In Supabase Authentication, enable Email/Password sign-in.
+4. If email confirmation is enabled, users must confirm their email before the first sign-in.
+5. Deploy the `src` folder as before. The browser uses the publishable/anon key only; never place a `service_role` key in `supabase-config.js`.
+
+### What syncs in v28
+
+- Private calendar data
+- OneNote-style Subjects → Topics → Pages
+- Assignment Workspaces
+- Exam Workspaces
+- Quick Notes
+- Per-account settings/profile metadata
+- Realtime updates for the cloud-synced modules when Supabase Realtime is enabled
+
+The existing local data is retained as a cache. When an account signs in, CampusHub migrates the old `:local` browser cache when present, then hydrates the account from Supabase. If cloud data does not exist yet, the local account data is uploaded.
+
+### Security model
+
+All cloud rows are protected with Row Level Security and are keyed to `auth.users.id`. A signed-in user can only read/write their own data. The private `campushub-files` Storage bucket and its object policies are included for future large attachment uploads.

@@ -12,7 +12,7 @@
     completed:['Completed','status-completed']
   };
   function load(){try{const x=JSON.parse(localStorage.getItem(userKey())||'[]');return Array.isArray(x)?x:[]}catch(_){return []}}
-  function save(list){try{localStorage.setItem(userKey(),JSON.stringify(list))}catch(_){} window.dispatchEvent(new CustomEvent('campus-assignments-changed'))}
+  function save(list){try{localStorage.setItem(userKey(),JSON.stringify(list))}catch(_){} if(window.CampusCloudSync?.save&&window.CampusHubAuth?.user)window.CampusCloudSync.save('assignments',list); window.dispatchEvent(new CustomEvent('campus-assignments-changed'))}
   function today(){const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`}
   function subjects(){return window.CampusNotes?.getStructure?.()||[]}
   function topicNames(subject){return subjects().find(s=>s.name===subject)?.topics||[]}
@@ -58,9 +58,10 @@
   function collect(a,body){const x={...a};body.querySelectorAll('[data-a-field]').forEach(el=>{x[el.dataset.aField]=el.value});x.submission={...(a.submission||{})};body.querySelectorAll('[data-s-field]').forEach(el=>x.submission[el.dataset.sField]=el.value);x.work=body.querySelector('[data-work-editor]')?.innerHTML||a.work||'';x.tasks=a.tasks||[];return x}
   function saveFromWorkspace(id,body){const a=find(id);if(!a)return;const x=collect(a,body);upsert(x);const s=body.querySelector('[data-ws-state]');if(s)s.textContent='Saved locally'}
   function saveEditor(id,body){const a=find(id);if(!a)return;a.work=body.querySelector('[data-work-editor]')?.innerHTML||'';a.updatedAt=new Date().toISOString();const list=load(),i=list.findIndex(x=>x.id===id);if(i>=0){list[i]=a;save(list);syncCalendar(a)}const s=body.querySelector('[data-ws-state]');if(s){s.textContent='Saving…';clearTimeout(window.__assignmentStateTimer);window.__assignmentStateTimer=setTimeout(()=>s.textContent='Saved locally',350)}}
+  async function hydrateCloud(){const user=window.CampusHubAuth?.user;if(!user||!window.CampusCloudSync)return;try{const uk=userKey(),legacy=`${STORE}:local`;if(!localStorage.getItem(uk)&&localStorage.getItem(legacy))localStorage.setItem(uk,localStorage.getItem(legacy));const local=load();await window.CampusCloudSync.hydrate('assignments',local,cloud=>{localStorage.setItem(uk,JSON.stringify(Array.isArray(cloud)?cloud:[]));window.dispatchEvent(new CustomEvent('campus-assignments-changed'));});}catch(e){console.warn('Assignment cloud sync failed',e)}}
   function render(){migrateCalendar();window.dispatchEvent(new CustomEvent('campus-assignments-rendered'))}
   function notify(msg){const t=document.getElementById('toast');if(!t)return;t.textContent=msg;t.classList.add('show');clearTimeout(window.__assignmentToast);window.__assignmentToast=setTimeout(()=>t.classList.remove('show'),2200)}
-  function bind(){if(bound)return;bound=true;window.addEventListener('campushub-auth',render)}
+  function bind(){if(bound)return;bound=true;window.addEventListener('campushub-auth',e=>{render();if(e.detail?.user)hydrateCloud()});window.addEventListener('campus-cloud-changed',e=>{if(e.detail?.namespace==='assignments'&&window.CampusHubAuth?.user){localStorage.setItem(userKey(),JSON.stringify(Array.isArray(e.detail.data)?e.detail.data:[]));window.dispatchEvent(new CustomEvent('campus-assignments-changed'));}})}
   bind();
   window.CampusAssignments={activate:render,render,getForSubject,find,openWorkspace,closeWorkspace,create:(subject)=>openWorkspace(null,subject),delete:deleteAssignment};
 })();
