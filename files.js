@@ -63,21 +63,9 @@
 
     showFileStatus(`Preparing ${files.length} file${files.length===1?'':'s'}…`,'info');
 
-    // Verify the bucket is reachable before starting the batch. This produces
-    // a much more useful error than a generic upload failure when the bucket
-    // or Storage policies have not been installed.
-    try{
-      const {data,error}=await c.storage.listBuckets();
-      if(error)throw error;
-      const bucketExists=(data||[]).some(b=>b.id==='campushub-files');
-      if(!bucketExists){
-        throw new Error('The Supabase Storage bucket "campushub-files" does not exist. Run files-migration.sql first.');
-      }
-    }catch(error){
-      console.error('CampusHub Storage check failed:',error);
-      showFileStatus(`Storage setup error: ${error?.message||String(error)}`,'error');
-      return;
-    }
+    // Do not call storage.listBuckets() here. Supabase can restrict bucket
+    // listing even when an authenticated user is fully allowed to upload to
+    // a known private bucket. The actual upload is the authoritative check.
 
     for(const file of files){
       const id=crypto.randomUUID();
