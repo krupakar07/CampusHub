@@ -1,6 +1,6 @@
 (() => {
   'use strict';
-  const state = { timers: new Map(), revisions: new Map(), channel: null, uid: null };
+  const state = { timers: new Map(), revisions: new Map(), pending: new Map(), channel: null, uid: null };
   function startRealtime(){
     const c=client(), uid=userId();
     if(!c||!uid||state.uid===uid)return;
@@ -15,9 +15,22 @@
           // hides the editor while the user is typing. Only notify the app
           // when the incoming cloud value is actually different from the
           // local cache.
+          // A Realtime UPDATE does not tell us whether it originated in this
+          // browser. Track the exact payload we just sent so our own echo is
+          // ignored. The app's local cache uses its own key, so comparing only
+          // against localGet() is not reliable.
+          let incoming = '';
+          try { incoming = JSON.stringify(row.data); } catch(_) {}
+          const pending = state.pending.get(row.namespace);
+          const sameAsOwnWrite = pending && pending === incoming;
+          if (sameAsOwnWrite) {
+            state.pending.delete(row.namespace);
+            localSet(row.namespace,row.data);
+            return;
+          }
           const current = localGet(row.namespace, undefined);
           let same = false;
-          try { same = JSON.stringify(current) === JSON.stringify(row.data); } catch(_) {}
+          try { same = JSON.stringify(current) === incoming; } catch(_) {}
           localSet(row.namespace,row.data);
           if(!same){
             window.dispatchEvent(new CustomEvent('campus-cloud-changed',{detail:{namespace:row.namespace,data:row.data}}));
@@ -48,6 +61,7 @@
     const run=async()=>{
       const revision=(state.revisions.get(namespace)||0)+1; state.revisions.set(namespace,revision);
       const record={user_id:uid,namespace,data:value,updated_at:new Date().toISOString()};
+      try { state.pending.set(namespace, JSON.stringify(value)); } catch(_) {}
       const {error}=await c.from('campus_user_data').upsert(record,{onConflict:'user_id,namespace'});
       if(error) throw error;
     };
