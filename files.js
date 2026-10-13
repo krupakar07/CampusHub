@@ -6,29 +6,47 @@
   const auth=()=>window.CampusHubAuth?.user||null;
   const client=()=>window.CampusHubAuth?.client||null;
   const uid=()=>auth()?.id||null;
+  let hydratedUid=null;
+  let hydrationPromise=null;
   function getAll(){try{return JSON.parse(localStorage.getItem(`${KEY}:${uid()||'local'}`)||'[]')}catch{return[]}}
   function setAll(v){localStorage.setItem(`${KEY}:${uid()||'local'}`,JSON.stringify(v))}
   function bytes(n){if(n<1024)return `${n} B`;if(n<1048576)return `${(n/1024).toFixed(1)} KB`;if(n<1073741824)return `${(n/1048576).toFixed(1)} MB`;return `${(n/1073741824).toFixed(1)} GB`}
   function icon(name,type=''){const x=(type||name).toLowerCase();if(x.includes('pdf'))return '📕';if(x.includes('presentation')||x.includes('powerpoint')||/\.pptx?$/i.test(name))return '📊';if(x.includes('spreadsheet')||x.includes('excel')||/\.(xlsx?|csv)$/i.test(name))return '📈';if(x.startsWith('image/')||/\.(png|jpe?g|gif|webp)$/i.test(name))return '🖼️';if(x.startsWith('video/')||/\.(mp4|mov|webm)$/i.test(name))return '🎥';if(x.startsWith('audio/')||/\.(mp3|wav|m4a)$/i.test(name))return '🎧';if(x.includes('word')||/\.docx?$/i.test(name))return '📘';return '📄'}
   async function syncMeta(list){
     const cloud=window.CampusCloudSync;
-    if(cloud?.save && uid()) await cloud.save('files',list,{immediate:true});
+    if(cloud?.save && uid()){
+      const result=await cloud.save('files',list,{immediate:true});
+      if(result?.ok===false) throw result.error||new Error('Cloud metadata save failed');
+      return result;
+    }
   }
-  async function hydrate(){
+  async function hydrate(force=false){
     const cloud=window.CampusCloudSync;
-    if(!cloud?.hydrate||!uid())return;
+    const currentUid=uid();
+    if(!cloud?.hydrate||!currentUid)return;
+    if(!force && hydratedUid===currentUid)return hydrationPromise;
+    hydratedUid=currentUid;
     const local=getAll();
-    await cloud.hydrate('files',local,v=>{if(Array.isArray(v))setAll(v);render();});
+    hydrationPromise=cloud.hydrate('files',local,v=>{
+      if(Array.isArray(v)){
+        setAll(v);
+        render();
+      }
+    }).finally(()=>{ hydrationPromise=null; });
+    return hydrationPromise;
   }
   function currentSubject(){return window.CampusNotes?.activeSubject?.() || window.__campusActiveSubject || document.getElementById('subjectWorkspaceTitle')?.textContent || 'General'}
   function currentSubjectFallback(){return $('subjectWorkspaceTitle')?.textContent||'General'}
   function list(){const subject=currentSubjectFallback();return getAll().filter(f=>f.subject===subject).sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt))}
   function render(){
     const root=$('subjectFilesPanel'); if(!root)return;
+    if(uid() && hydratedUid!==uid()) hydrate();
     const files=list();
-    root.innerHTML=`<div class="files-toolbar"><div><span class="subject-panel-kicker">MATERIALS</span><h3>${esc(currentSubjectFallback())} files</h3><p>Keep lecture slides, PDFs, spreadsheets, images and other study material together.</p></div><div class="files-toolbar-actions"><label class="file-upload-button primary-button">＋ Add files<input id="subjectFilesInput" type="file" multiple hidden></label><button type="button" class="secondary-button" id="filesRefresh">↻ Refresh</button></div><div id="filesUploadStatus" class="files-upload-status" data-type="info"></div></div><div class="files-grid">${files.map(f=>`<article class="file-card"><div class="file-card-icon">${icon(f.name,f.type)}</div><div class="file-card-body"><strong title="${esc(f.name)}">${esc(f.name)}</strong><small>${esc(f.type||'File')} · ${bytes(f.size||0)}</small><small>Added ${new Date(f.createdAt).toLocaleDateString()}</small></div><div class="file-card-actions"><button type="button" data-file-open="${esc(f.id)}" title="Open">Open</button><button type="button" data-file-download="${esc(f.id)}" title="Download">↓</button><button type="button" data-file-delete="${esc(f.id)}" title="Delete">×</button></div></article>`).join('')||`<div class="files-empty"><div>📁</div><h4>No materials yet</h4><p>Upload lecture slides, PDFs, case studies, images or any other files for this subject.</p></div>`}</div>`;
+    const formatDate=f=>{try{return new Date(f.createdAt).toLocaleDateString(undefined,{day:'2-digit',month:'short',year:'numeric'})}catch{return ''}};
+    const ext=f=>{const m=String(f.name||'').match(/\.([^.]+)$/);return (m?.[1]||'FILE').toUpperCase().slice(0,6)};
+    root.innerHTML=`<div class="files-toolbar"><div class="files-toolbar-copy"><span class="subject-panel-kicker">MATERIALS</span><h3>${esc(currentSubjectFallback())}</h3><p>Lecture slides, PDFs, spreadsheets, images and other study material for this subject.</p></div><div class="files-toolbar-actions"><label class="file-upload-button primary-button"><span>＋</span> Add files<input id="subjectFilesInput" type="file" multiple hidden></label><button type="button" class="secondary-button files-refresh-button" id="filesRefresh"><span>↻</span> Refresh</button></div></div><div id="filesUploadStatus" class="files-upload-status" data-type="info"></div><div class="files-grid">${files.map(f=>`<article class="file-card"><div class="file-card-top"><div class="file-card-icon">${icon(f.name,f.type)}</div><span class="file-extension">${ext(f)}</span></div><div class="file-card-body"><strong title="${esc(f.name)}">${esc(f.name)}</strong><div class="file-card-meta"><span>${bytes(f.size||0)}</span><span>•</span><span>${formatDate(f)}</span></div></div><div class="file-card-actions"><button type="button" class="file-open-action" data-file-open="${esc(f.id)}"><span>Open</span><b>↗</b></button><button type="button" class="file-icon-action" data-file-download="${esc(f.id)}" title="Download" aria-label="Download">↓</button><button type="button" class="file-icon-action danger" data-file-delete="${esc(f.id)}" title="Delete" aria-label="Delete">×</button></div></article>`).join('')||`<div class="files-empty"><div class="files-empty-icon">＋</div><h4>No materials yet</h4><p>Upload lecture slides, PDFs, case studies, images or other study material for this subject.</p><label class="file-upload-button primary-button"><span>＋</span> Add your first file<input id="subjectFilesInputEmpty" type="file" multiple hidden></label></div>`}</div>`;
     const input=$('subjectFilesInput')||$('subjectFilesInputEmpty'); input?.addEventListener('change',e=>handleFiles(e.target.files));
-    $('filesRefresh')?.addEventListener('click',()=>{hydrate();render()});
+    $('filesRefresh')?.addEventListener('click',async()=>{await hydrate(true);render()});
 
     root.querySelectorAll('[data-file-open]').forEach(b=>b.addEventListener('click',()=>openFile(b.dataset.fileOpen)));
     root.querySelectorAll('[data-file-download]').forEach(b=>b.addEventListener('click',()=>downloadFile(b.dataset.fileDownload)));
@@ -148,6 +166,14 @@
   async function downloadFile(id){const f=find(id);if(!f)return;const c=client();if(!c)return;const {data,error}=await c.storage.from('campushub-files').download(f.storagePath);if(error){alert('Could not download this file.');return}const url=URL.createObjectURL(data),a=document.createElement('a');a.href=url;a.download=f.name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)}
   async function deleteFile(id){const f=find(id);if(!f||!confirm(`Delete “${f.name}”?`))return;const c=client();if(c)await c.storage.from('campushub-files').remove([f.storagePath]);const next=getAll().filter(x=>x.id!==id);setAll(next);await syncMeta(next);render()}
   window.CampusHubFiles={render,hydrate,refresh:render,currentSubjectChanged:render};
-  window.addEventListener('campushub-auth',()=>hydrate());
-  document.addEventListener('campushub-files-refresh',()=>render());
+  window.addEventListener('campushub-auth',()=>{ hydratedUid=null; hydrate(true); });
+  window.addEventListener('campus-cloud-changed',e=>{
+    if(e.detail?.namespace!=='files')return;
+    const value=e.detail?.data;
+    if(Array.isArray(value)){
+      setAll(value);
+      render();
+    }
+  });
+  document.addEventListener('campushub-files-refresh',()=>hydrate(true));
 })();

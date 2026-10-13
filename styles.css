@@ -223,3 +223,37 @@ button,input,select,textarea{touch-action:manipulation;}
 .files-upload-status[data-type="success"]{color:#247a55}
 .files-upload-status[data-type="error"]{color:#b33a45}
 .files-upload-status[data-type="info"]{color:#687080}
+
+/* CampusHub Files — polished materials library */
+.subject-files-panel{padding-top:2px}
+.files-toolbar{display:flex;justify-content:space-between;align-items:flex-end;gap:28px;margin:0 0 14px;padding:0 2px}
+.files-toolbar-copy{min-width:0}
+.files-toolbar-copy .subject-panel-kicker{display:block;margin-bottom:6px}
+.files-toolbar h3{margin:0 0 6px;font-size:25px;line-height:1.12;letter-spacing:-.02em;color:#292b45}
+.files-toolbar p{margin:0;max-width:680px;color:#85889b;font-size:13px;line-height:1.55}
+.files-toolbar-actions{display:flex;gap:9px;align-items:center;flex:0 0 auto}
+.file-upload-button{cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:42px;padding:0 15px;border-radius:10px;font-weight:700;text-decoration:none}
+.files-refresh-button{display:inline-flex;align-items:center;gap:6px;min-height:42px;border-radius:10px}
+.files-upload-status{min-height:0;margin:0 2px 14px;padding:0;font-size:12px;line-height:1.45;font-weight:600}
+.files-upload-status:empty{display:none}
+.files-upload-status[data-type="success"]{color:#25805a}.files-upload-status[data-type="error"]{color:#bd4652}.files-upload-status[data-type="info"]{color:#73778a}
+.files-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;align-items:stretch}
+.file-card{position:relative;display:flex;flex-direction:column;min-width:0;min-height:205px;padding:16px;border:1px solid #e8e8f1;border-radius:15px;background:#fff;box-shadow:0 2px 9px rgba(35,36,63,.035);transition:transform .16s ease,box-shadow .16s ease,border-color .16s ease}
+.file-card:hover{transform:translateY(-2px);border-color:#dcd9fb;box-shadow:0 10px 28px rgba(42,40,92,.09)}
+.file-card-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:17px}
+.file-card-icon{width:48px;height:54px;display:flex;align-items:center;justify-content:center;border-radius:12px;background:#f5f3ff;font-size:27px;border:1px solid #ece9ff}
+.file-extension{font-size:9px;font-weight:800;letter-spacing:.08em;color:#7471a8;background:#f4f3fb;border:1px solid #e9e8f3;border-radius:999px;padding:5px 7px;line-height:1}
+.file-card-body{min-width:0;flex:1}
+.file-card-body strong{display:block;min-width:0;font-size:14px;line-height:1.35;color:#303249;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:8px}
+.file-card-meta{display:flex;gap:7px;align-items:center;color:#9497a7;font-size:11px;line-height:1.3}
+.file-card-actions{display:flex;gap:7px;margin-top:17px;padding-top:12px;border-top:1px solid #f0f0f5}
+.file-card-actions button{font:inherit;cursor:pointer;border:1px solid #e4e4ed;background:#fff;color:#6e7083;border-radius:8px;min-height:34px;transition:.15s ease}
+.file-card-actions button:hover{border-color:#d4d0fa;background:#f8f7ff;color:#5f59c9}
+.file-open-action{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:0 11px;flex:1;font-size:12px;font-weight:700!important;color:#625dc9!important;background:#f7f6ff!important;border-color:#e7e4ff!important}
+.file-open-action b{font-size:14px;font-weight:700}
+.file-icon-action{width:36px;font-size:16px;font-weight:700}
+.file-icon-action.danger:hover{border-color:#f0cdd2!important;background:#fff5f6!important;color:#c34c58!important}
+.files-empty{grid-column:1/-1;min-height:260px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:36px 20px;border:1px dashed #dcdbe9;border-radius:16px;background:linear-gradient(180deg,#fcfcff 0%,#fafaff 100%)}
+.files-empty-icon{width:50px;height:50px;display:flex;align-items:center;justify-content:center;border-radius:14px;background:#f0efff;color:#716bdd;font-size:25px;margin-bottom:13px}
+.files-empty h4{margin:0 0 6px;color:#303249;font-size:16px}.files-empty p{max-width:430px;margin:0 0 18px;color:#8b8ea0;font-size:12px;line-height:1.55}
+@media(max-width:760px){.files-toolbar{align-items:stretch;flex-direction:column;gap:14px}.files-toolbar-actions{width:100%}.file-upload-button,.files-refresh-button{flex:1}.files-grid{grid-template-columns:1fr}.file-card{min-height:185px}}

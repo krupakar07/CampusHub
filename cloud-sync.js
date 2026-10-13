@@ -71,8 +71,15 @@
       const {error}=await c.from('campus_user_data').upsert(record,{onConflict:'user_id,namespace'});
       if(error) throw error;
     };
-    if(opts.immediate){try{await run()}catch(error){console.warn(`CampusHub cloud save failed for ${namespace}`,error)}}
-    else { clearTimeout(state.timers.get(namespace)); state.timers.set(namespace,setTimeout(()=>run().catch(error=>console.warn(`CampusHub cloud save failed for ${namespace}`,error)),350)); }
+    if(opts.immediate){
+      try { await run(); return {ok:true}; }
+      catch(error){ console.warn(`CampusHub cloud save failed for ${namespace}`,error); return {ok:false,error}; }
+    }
+    else {
+      clearTimeout(state.timers.get(namespace));
+      state.timers.set(namespace,setTimeout(()=>run().catch(error=>console.warn(`CampusHub cloud save failed for ${namespace}`,error)),350));
+      return {ok:true,pending:true};
+    }
   }
   async function remove(namespace){const uid=userId(),c=client();localStorage.removeItem(key(namespace));if(!uid||!c)return;const {error}=await c.from('campus_user_data').delete().eq('user_id',uid).eq('namespace',namespace);if(error)console.warn(`CampusHub cloud delete failed for ${namespace}`,error);}
   async function broadcastNotesEdit(message){
