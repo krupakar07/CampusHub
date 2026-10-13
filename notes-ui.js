@@ -765,6 +765,7 @@
     $('notesSubjectOverview')?.classList.add('active');
     document.querySelectorAll('[data-subject-tab]').forEach(b=>b.classList.toggle('selected',b.dataset.subjectTab===tab));
     renderSubjectWorkspace(tab);
+    window.dispatchEvent(new CustomEvent('campushub-notes-workspace-rendered'));
     syncMobileNotesViews();
     if(!window.matchMedia('(max-width: 760px)').matches){workspace.scrollIntoView({behavior:'smooth',block:'start'});}
   }
@@ -1031,6 +1032,26 @@
     });
   }
 
+  function getExportSnapshot(){
+    const data=getData();
+    const subjects=Object.entries(data.subjects||{}).map(([name,subject])=>({
+      name,
+      topics:Object.entries(subject.topics||{}).map(([topic,entry])=>({
+        name:topic,
+        pages:Object.entries(entry.pages||{}).map(([page,content])=>({name:page,content:String(content||'')}))
+      }))
+    }));
+    // Capture the live editor so an immediate export never loses the last keystrokes.
+    const liveEditor=$('editor');
+    if(activeSubject && activeTopic && activePage && liveEditor){
+      const subject=subjects.find(x=>x.name===activeSubject);
+      const topic=subject?.topics.find(x=>x.name===activeTopic);
+      const page=topic?.pages.find(x=>x.name===activePage);
+      if(page) page.content=liveEditor.innerHTML;
+    }
+    return {activeSubject,activeTopic,activePage,subjects};
+  }
+
   function getStructure(){
     const data=getData();
     return Object.entries(data.subjects||{}).map(([name,subject])=>({
@@ -1073,6 +1094,6 @@
     return true;
   }
 
-  window.CampusNotes={activate,getStructure,openLocation,createPage};
+  window.CampusNotes={activate,getStructure,getExportSnapshot,openLocation,createPage};
   if(document.readyState!=='loading')setTimeout(activate,0);else document.addEventListener('DOMContentLoaded',()=>setTimeout(activate,0));
 })();
