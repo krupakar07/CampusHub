@@ -26,5 +26,5 @@
   function bind(){if(bound)return;bound=true;ensure();$('quickNoteAdd')?.addEventListener('click',newNote);$('quickNotesList')?.addEventListener('click',e=>{const n=e.target.closest('[data-qopen]');if(n)open(n.dataset.qopen);if(e.target.closest('[data-qnew]'))newNote()});document.querySelectorAll('.quick-filter').forEach(b=>b.addEventListener('click',()=>{filter=b.dataset.qfilter;document.querySelectorAll('.quick-filter').forEach(x=>x.classList.toggle('selected',x===b));activeId=null;renderList();empty()}));window.addEventListener('campushub-auth',e=>{activeId=null;ensure();renderList();empty();if(e.detail?.user)hydrateCloud()});
   window.addEventListener('campus-cloud-changed',e=>{if(e.detail?.namespace==='quick-notes'&&window.CampusHubAuth?.user){localStorage.setItem(userKey(),JSON.stringify(Array.isArray(e.detail.data)?e.detail.data:[]));activeId=null;renderList();empty();}});}
   function activate(){bind();renderList();if(activeId)open(activeId);else empty()}
-  window.CampusQuickNotes={activate,render:renderList};
+  window.CampusQuickNotes={activate,render:renderList,open};
 })();

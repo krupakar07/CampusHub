@@ -165,7 +165,7 @@
   async function openFile(id){const f=find(id);if(!f)return;const c=client();if(!c)return;const {data,error}=await c.storage.from('campushub-files').createSignedUrl(f.storagePath,3600);if(error){alert('Could not open this file.');return}window.open(data.signedUrl,'_blank','noopener')}
   async function downloadFile(id){const f=find(id);if(!f)return;const c=client();if(!c)return;const {data,error}=await c.storage.from('campushub-files').download(f.storagePath);if(error){alert('Could not download this file.');return}const url=URL.createObjectURL(data),a=document.createElement('a');a.href=url;a.download=f.name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)}
   async function deleteFile(id){const f=find(id);if(!f||!confirm(`Delete “${f.name}”?`))return;const c=client();if(c)await c.storage.from('campushub-files').remove([f.storagePath]);const next=getAll().filter(x=>x.id!==id);setAll(next);await syncMeta(next);render()}
-  window.CampusHubFiles={render,hydrate,refresh:render,currentSubjectChanged:render};
+  window.CampusHubFiles={render,hydrate,refresh:render,currentSubjectChanged:render,openFile,downloadFile,deleteFile};
   window.addEventListener('campushub-auth',()=>{ hydratedUid=null; hydrate(true); });
   window.addEventListener('campus-cloud-changed',e=>{
     if(e.detail?.namespace!=='files')return;
