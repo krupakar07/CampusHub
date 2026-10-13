@@ -351,3 +351,26 @@
 .export-shell{display:flex;flex-direction:column;max-height:min(86vh,760px)}
 .export-head{display:flex;justify-content:space-between;gap:18px;padding:22px 24px 18px;border-bottom:1px solid #ece9f1}.export-kicker{font-size:9px;letter-spacing:.14em;font-weight:800;color:#8177b8}.export-head h2{margin:5px 0 4px;font-size:22px}.export-head p{margin:0;font-size:11px;color:#918b9c}.export-close{border:0;background:#f5f3f8;width:34px;height:34px;border-radius:9px;font-size:21px;color:#777183;cursor:pointer}.export-body{padding:20px 24px;overflow:auto}.export-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.export-grid label{display:grid;gap:6px}.export-grid label>span{font-size:10px;font-weight:800;color:#676174}.export-grid select{height:40px;border:1px solid #dfdbe7;border-radius:9px;padding:0 10px;background:#fff;color:#3e394b}.export-toggles{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:18px 0}.export-toggles label{display:flex;align-items:center;gap:8px;padding:10px 11px;border:1px solid #e9e5ef;border-radius:9px;background:#faf9fc;font-size:10px;color:#595465}.export-page-picker{display:grid;gap:12px;padding:13px;border:1px solid #e7e3ed;border-radius:11px;background:#fbfaff;max-height:240px;overflow:auto}.export-page-picker.hidden{display:none}.export-topic-group{display:grid;gap:5px}.export-topic-group strong{font-size:10px;color:#65599a}.export-topic-group label{display:flex;gap:8px;align-items:center;padding:5px 6px;border-radius:6px;font-size:10px;color:#555061}.export-topic-group label:hover{background:#f0edf8}.export-summary{margin-top:14px;padding:10px 12px;border-radius:8px;background:#f2f0f8;color:#665d79;font-size:10px;font-weight:700}.export-empty{padding:18px;text-align:center;color:#9690a0;font-size:10px}.export-foot{display:flex;justify-content:flex-end;gap:8px;padding:14px 24px;border-top:1px solid #ece9f1;background:#fcfbfd}.export-foot button{min-height:38px}
 @media(max-width:620px){.campus-export-modal{width:calc(100vw - 16px);border-radius:13px}.export-head,.export-body,.export-foot{padding-left:15px;padding-right:15px}.export-grid,.export-toggles{grid-template-columns:1fr}.export-shell{max-height:92vh}}
+
+/* v48 — custom Topic/Page artwork: recognizable, colorful, still compact. */
+.campus-notes-page .notes-nav-icon{
+  display:block;
+  flex:none;
+  width:24px;
+  height:24px;
+  object-fit:cover;
+  border-radius:6px;
+  transition:transform .14s ease,filter .14s ease;
+}
+.campus-notes-page .notes-nav-icon.topic-icon{width:25px;height:25px;border-radius:7px}
+.campus-notes-page .notes-nav-icon.page-icon{width:22px;height:22px;border-radius:5px}
+.campus-notes-page .notes-topic-toggle:hover .notes-nav-icon,
+.campus-notes-page .notes-page-link:hover .notes-nav-icon{transform:scale(1.07);filter:saturate(1.06)}
+.campus-notes-page .notes-topic-toggle:active .notes-nav-icon,
+.campus-notes-page .notes-page-link:active .notes-nav-icon{transform:scale(.96)}
+.campus-notes-page .notes-tree-page .notes-page-link{gap:8px}
+.campus-notes-page .notes-topic-toggle{gap:7px}
+.campus-notes-page .subject-note-icon{display:grid;place-items:center;width:42px;height:42px;border-radius:10px;overflow:hidden;flex:none;background:#f5f3fa}
+.campus-notes-page .subject-note-icon .notes-nav-icon{width:100%;height:100%;border-radius:0;transition:transform .14s ease}
+.campus-notes-page .subject-note-card:hover .subject-note-icon .notes-nav-icon{transform:scale(1.05)}
+.campus-notes-page .subject-note-card:active .subject-note-icon .notes-nav-icon{transform:scale(.97)}

@@ -4,6 +4,8 @@
   const $ = (id) => document.getElementById(id);
   const STORE = 'campushub-notes-v2';
   const LEGACY_STORE = 'campushub-notes-v1';
+  const TOPIC_ICON = 'assets/icons/topic-icon.png';
+  const PAGE_ICON = 'assets/icons/page-icon.png';
   const defaultSubjects = [
     ['Academic Research & Writing', 'purple'],
     ['International Management', 'blue'],
@@ -82,6 +84,11 @@
 
   function escapeHtml(value) {
     return String(value).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  }
+
+  function navIcon(type, alt='') {
+    const src = type === 'topic' ? TOPIC_ICON : PAGE_ICON;
+    return `<img class="notes-nav-icon ${type}-icon" src="${src}" alt="${escapeHtml(alt)}" aria-hidden="true" loading="lazy">`;
   }
 
   function defaultContent(subject) {
@@ -195,8 +202,8 @@
     const topicHtml=topicNames.map(topicName=>{
       const pages=topics[topicName]?.pages||{};
       const open=topicName===activeTopic;
-      const pagesHtml=open?Object.keys(pages).map(p=>`<div class="notes-tree-page ${p===activePage?'active':''}"><button type="button" class="notes-page-link" data-note-page="${escapeHtml(p)}">📄 <span class="notes-list-label">${escapeHtml(p)}</span></button><button type="button" class="notes-delete-item" data-delete-page="${escapeHtml(p)}" aria-label="Delete page ${escapeHtml(p)}" title="Delete page">×</button></div>`).join(''):'';
-      return `<div class="notes-tree-topic ${open?'open':''}"><button type="button" class="notes-topic-toggle" data-topic="${escapeHtml(topicName)}"><span class="notes-topic-chevron">${open?'▾':'▸'}</span><span>📂</span><span class="notes-list-label">${escapeHtml(topicName)}</span><small>${Object.keys(pages).length}</small></button>${pagesHtml}</div>`;
+      const pagesHtml=open?Object.keys(pages).map(p=>`<div class="notes-tree-page ${p===activePage?'active':''}"><button type="button" class="notes-page-link" data-note-page="${escapeHtml(p)}">${navIcon('page','')}<span class="notes-list-label">${escapeHtml(p)}</span></button><button type="button" class="notes-delete-item" data-delete-page="${escapeHtml(p)}" aria-label="Delete page ${escapeHtml(p)}" title="Delete page">×</button></div>`).join(''):'';
+      return `<div class="notes-tree-topic ${open?'open':''}"><button type="button" class="notes-topic-toggle" data-topic="${escapeHtml(topicName)}"><span class="notes-topic-chevron">${open?'▾':'▸'}</span>${navIcon('topic','')}<span class="notes-list-label">${escapeHtml(topicName)}</span><small>${Object.keys(pages).length}</small></button>${pagesHtml}</div>`;
     }).join('');
     wrap.innerHTML=topicHtml;
   }
@@ -796,7 +803,7 @@
     const pages=subjectPageNames();
     content.innerHTML=`<div class="workspace-breadcrumb"><button type="button" class="secondary-button" data-back-subject="1">← ${escapeHtml(activeSubject)}</button></div>
       <div class="subject-section-intro"><div><span class="subject-panel-kicker">TOPIC</span><h3>${escapeHtml(activeTopic)}</h3><p>${pages.length} ${pages.length===1?'page':'pages'} in this topic.</p></div><div class="subject-workspace-actions"><button type="button" class="secondary-button" id="workspaceNewTopic">＋ New topic</button><button type="button" class="primary-button" id="workspaceCreatePage">＋ New page</button></div></div>
-      <div class="subject-notes-grid">${pages.map(p=>`<button type="button" class="subject-note-card" data-open-page="${escapeHtml(p)}"><span>📄</span><strong>${escapeHtml(p)}</strong><small>Open page</small></button>`).join('')||'<div class="subject-empty">No pages yet.</div>'}</div>`;
+      <div class="subject-notes-grid">${pages.map(p=>`<button type="button" class="subject-note-card" data-open-page="${escapeHtml(p)}"><span class="subject-note-icon page">${navIcon('page','')}</span><strong>${escapeHtml(p)}</strong><small>Open page</small></button>`).join('')||'<div class="subject-empty">No pages yet.</div>'}</div>`;
     content.querySelectorAll('[data-open-page]').forEach(b=>b.addEventListener('click',()=>{activePage=b.dataset.openPage;renderPages();restoreEditor();showNoteEditor();}));
     content.querySelectorAll('[data-back-subject]').forEach(b=>b.addEventListener('click',()=>showSubjectWorkspace('notes')));
     $('workspaceCreatePage')?.addEventListener('click',()=>addPage());
@@ -813,7 +820,7 @@
     const assignments=events.filter(e=>e.type==='assignment'||e.type==='deadline');
     const exams=events.filter(e=>e.type==='exam');
     if(tab==='overview' || tab==='notes'){
-      const cards=topics.map(t=>{const count=Object.keys(currentTopics(getData())[t]?.pages||{}).length;return `<button type="button" class="subject-note-card subject-topic-card" data-open-topic="${escapeHtml(t)}"><span>📂</span><strong>${escapeHtml(t)}</strong><small>${count} ${count===1?'page':'pages'} · Open topic ›</small></button>`}).join('');
+      const cards=topics.map(t=>{const count=Object.keys(currentTopics(getData())[t]?.pages||{}).length;return `<button type="button" class="subject-note-card subject-topic-card" data-open-topic="${escapeHtml(t)}"><span class="subject-note-icon topic">${navIcon('topic','')}</span><strong>${escapeHtml(t)}</strong><small>${count} ${count===1?'page':'pages'} · Open topic ›</small></button>`}).join('');
       content.innerHTML=`<div class="subject-section-intro"><div><span class="subject-panel-kicker">${tab==='notes'?'TOPICS':'SUBJECT NOTES'}</span><h3>${tab==='notes'?'Topics in '+escapeHtml(activeSubject):'Organize your notes by topic'}</h3><p>Each topic contains its own pages, so you always know exactly where you are.</p></div><div class="subject-workspace-actions"><button type="button" class="secondary-button" id="workspaceNewTopic">＋ New topic</button><button type="button" class="primary-button" id="workspaceCreatePage">＋ New page</button></div></div><div class="subject-notes-grid">${cards||'<div class="subject-empty">No topics yet. Create your first topic.</div>'}</div>`;
     } else if(tab==='overview-old') {
       content.innerHTML='';
