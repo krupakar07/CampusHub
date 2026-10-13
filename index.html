@@ -30,6 +30,7 @@
         <button class="nav-item" data-page="notes"><span class="nav-icon">▤</span>Notes</button>
         <button class="nav-item" data-page="quick-notes"><span class="nav-icon">✎</span>Quick Notes</button>
         <button class="nav-item" data-page="exams"><span class="nav-icon">◉</span>Exams</button>
+        <button class="nav-item" data-page="settings"><span class="nav-icon">⚙</span>Settings</button>
       </nav>
       <div class="side-label category-label">CATEGORIES <button class="tiny-plus" id="addCategory" aria-label="Add event">+</button></div>
       <div class="category-list" id="categoryList"></div>
@@ -65,6 +66,45 @@
         <section class="exam-layout"><article class="panel exam-list-panel"><div class="panel-heading"><div><h2>Your exams</h2><p>Open an exam to manage everything needed for it.</p></div></div><div id="examList"></div></article><aside class="panel exam-side-panel"><div class="panel-heading"><div><h2>Exam workflow</h2><p>A focused path from syllabus to readiness.</p></div></div><div class="exam-flow"><div><span>01</span><b>Understand</b><small>Capture syllabus, format, location and important topics.</small></div><div><span>02</span><b>Revise</b><small>Link your notes and create a revision checklist.</small></div><div><span>03</span><b>Practice</b><small>Keep practice questions and study sessions beside the exam.</small></div><div><span>04</span><b>Ready</b><small>Track progress and mark the exam ready when you are prepared.</small></div></div></aside></section>
       </div>
       <div class="content planner-content hidden" id="plannerPage"><section class="calendar-title-row"><div><div class="eyebrow"><span class="eyebrow-line"></span> PLAN YOUR STUDY TIME</div><h1>Study planner</h1><p class="subheading">Assignments, exam preparation, and the weeks ahead.</p></div><button class="primary-button" id="plannerAddTask">＋ Add task</button></section><section class="planner-columns"><article class="panel planner-task-panel"><div class="panel-heading"><div><h2>Upcoming tasks</h2><p>Assignments and deadlines from your calendar</p></div></div><div id="plannerTasks"></div></article><article class="panel planner-overview-panel"><div class="panel-heading"><div><h2>Semester at a glance</h2><p>Your next 12 weeks</p></div></div><div id="semesterOverview"></div></article></section></div>
+      <div class="content settings-page hidden" id="settingsPage">
+        <section class="settings-page-head"><div><div class="eyebrow"><span class="eyebrow-line"></span> CAMPUSHUB SETTINGS</div><h1>Settings</h1><p class="subheading">Manage your account, preferences and data.</p></div></section>
+        <div class="settings-layout">
+          <aside class="settings-menu panel">
+            <button class="settings-menu-item selected" data-settings-tab="profile">👤 <span>Profile</span></button>
+            <button class="settings-menu-item" data-settings-tab="preferences">⚙ <span>Preferences</span></button>
+            <button class="settings-menu-item" data-settings-tab="data">☁ <span>Data &amp; Backup</span></button>
+            <button class="settings-menu-item" data-settings-tab="account">🔒 <span>Account</span></button>
+          </aside>
+          <section class="settings-panel-area">
+            <div class="settings-section panel" data-settings-section="profile">
+              <div class="settings-section-head"><div><h2>Profile</h2><p>This information is shown across your private CampusHub.</p></div></div>
+              <div class="settings-form-grid"><label class="field">Full name<input id="profileSettingsName" maxlength="60"></label><label class="field">University<select id="profileSettingsUniversity"><option value="Hochschule Wismar">Hochschule Wismar</option><option value="Hochschule Worms">Hochschule Worms</option></select></label><label class="field full-field">Email address<input id="profileSettingsEmail" type="email" readonly></label></div>
+              <div class="settings-actions"><button class="primary-button" id="saveProfileSettings">Save profile</button></div>
+            </div>
+            <div class="settings-section panel hidden" data-settings-section="preferences">
+              <div class="settings-section-head"><div><h2>Preferences</h2><p>Control how CampusHub behaves on this device.</p></div></div>
+              <div class="settings-form-grid"><label class="field">Default calendar view<select id="prefSettingsView"><option value="day">Day</option><option value="week">Week</option><option value="month">Month</option></select></label><label class="field">Class reminder<select id="prefSettingsReminder"><option value="0">Off</option><option value="5">5 minutes before</option><option value="10">10 minutes before</option><option value="15">15 minutes before</option><option value="30">30 minutes before</option></select></label><label class="field">Travel buffer<select id="prefSettingsTravel"><option value="0">Off</option><option value="5">5 minutes</option><option value="10">10 minutes</option><option value="15">15 minutes</option><option value="20">20 minutes</option></select></label></div>
+              <div class="settings-info">Browser reminders work while CampusHub is open. You can change notification permission in your browser settings.</div>
+              <div class="settings-actions"><button class="primary-button" id="savePreferenceSettings">Save preferences</button></div>
+            </div>
+            <div class="settings-section panel hidden" data-settings-section="data">
+              <div class="settings-section-head"><div><h2>Data &amp; Backup</h2><p>Keep a portable copy of your CampusHub data.</p></div></div>
+              <div class="backup-cards">
+                <article class="backup-card"><span class="backup-icon">↓</span><div><h3>Full backup</h3><p>Export notes, assignments, exams, quick notes, calendar and file metadata to one JSON file.</p></div><button class="secondary-button" id="fullBackupButton">Download backup</button></article>
+                <article class="backup-card"><span class="backup-icon">↑</span><div><h3>Restore backup</h3><p>Restore structured CampusHub data from a backup file. Existing matching data will be replaced.</p></div><button class="secondary-button" id="fullRestoreButton">Choose backup</button></article>
+                <article class="backup-card"><span class="backup-icon">▣</span><div><h3>File manifest</h3><p>Download a list of your stored materials. File contents stay safely in Supabase Storage.</p></div><button class="secondary-button" id="fileManifestButton">Export manifest</button></article>
+              </div>
+              <input id="fullRestoreInput" type="file" accept=".json,application/json" hidden>
+              <div class="settings-info warning">Backups contain your private study data. Store the downloaded JSON somewhere secure. Uploaded file contents are not included in the JSON backup.</div>
+            </div>
+            <div class="settings-section panel hidden" data-settings-section="account">
+              <div class="settings-section-head"><div><h2>Account</h2><p>Manage your signed-in CampusHub account.</p></div></div>
+              <div class="account-card"><div class="account-avatar" id="settingsAccountAvatar">S</div><div><strong id="settingsAccountName">My studies</strong><span id="settingsAccountEmail">—</span></div></div>
+              <div class="danger-zone"><div><h3>Sign out</h3><p>Sign out of this device. Your cloud data remains in your account.</p></div><button class="cancel-button" id="settingsSignOut">Sign out</button></div>
+            </div>
+          </section>
+        </div>
+      </div>
       <div class="content campus-notes-page hidden" id="notesPage">
         <div class="notes-workspace">
           <div class="mobile-notes-header" id="mobileNotesHeader" aria-label="Mobile subject navigation">
@@ -155,6 +195,6 @@
       <div class="campus-table-dialog-foot"><span>Choose rows × columns</span><button type="button" data-table-cancel>Cancel</button></div>
     </div>
   </dialog>
-  <script src="assignments.js"></script><script src="exams.js"></script><script src="quick-notes.js"></script><script src="files.js"></script><script src="search.js"></script><script src="app.js"></script><script src="notes-ui.js"></script>
+  <script src="assignments.js"></script><script src="exams.js"></script><script src="quick-notes.js"></script><script src="files.js"></script><script src="search.js"></script><script src="settings.js"></script><script src="app.js"></script><script src="notes-ui.js"></script>
 </body>
 </html>
