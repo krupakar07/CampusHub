@@ -17,6 +17,7 @@
   const legacyEvents=events.slice();
   let dbClient=null,currentUser=null,currentUniversity='Hochschule Wismar',saveRevision=0,cloudQueue=Promise.resolve(),activeUserId=null,calendarQuery='',calendarType='all',travelBuffer=0,reminderMinutes=0,reminderShown=new Set();
   let weatherState={data:null,updatedAt:0,loading:false};
+  let selectedWeekDate=iso(today), selectedNext7Date=iso(today);
   function normalizeEventSources(list){return list.map(e=>e.source?e:(e.id?.startsWith('csv-intercultural-')||e.id?.startsWith('csv-')?{...e,source:'csv'}:e.id?.startsWith('ics-')?{...e,source:'ics'}:e))}
   function load(){try{const v=localStorage.getItem('campus-events-v2');return v?normalizeEventSources(JSON.parse(v)):defaultEvents.slice().map(e=>({...e,source:'csv'}))}catch{return defaultEvents.slice().map(e=>({...e,source:'csv'}))}}
   function userEventsKey(id){return `campus-calendar-user-${id}`}
@@ -67,10 +68,30 @@
     let tasks=events.filter(e=>['assignment','deadline','exam'].includes(e.type)&&!e.completed&&eventDate(e)>=today).sort((a,b)=>eventDate(a)-eventDate(b)||a.start.localeCompare(b.start)).slice(0,4);
     $('dashboardTasks').innerHTML=tasks.length?tasks.map(e=>{let d=Math.ceil((eventDate(e)-today)/86400000),urgent=d<=2;return `<button class="dashboard-task" data-edit="${e.id}"><span class="task-type-dot" style="background:${color(e.type).color}"></span><span class="dashboard-task-copy"><b>${esc(e.title)}</b><small>${TYPES[e.type].label}${e.subject?` · ${esc(e.subject)}`:''}</small></span><span class="task-due ${urgent?'urgent':''}">${d===0?'Today':d===1?'Tomorrow':`${d} days`}</span><span class="task-arrow">›</span></button>`}).join('')+'<button class="dashboard-task-more" data-open-planner>Open all tasks →</button>':'<div class="dashboard-empty"><span>✓</span><strong>Nothing urgent.</strong><small>Your planner is clear for now.</small></div>';
   }
+  function dashboardEventListHtml(list,emptyText='Nothing scheduled'){
+    if(!list.length)return `<div class="dashboard-inline-empty">${emptyText}</div>`;
+    return list.slice(0,5).map(e=>`<button class="dashboard-inline-event" data-edit="${e.id}" data-occurrence="${iso(e.instanceDate)}"><span class="inline-event-time">${e.start}</span><span class="inline-event-copy"><b>${esc(e.title)}</b><small>${esc(e.subject||TYPES[e.type]?.label||'Event')}${e.room?` · ${esc(e.room)}`:''}</small></span><span class="inline-event-arrow">›</span></button>`).join('');
+  }
+  function renderWeekDayDetails(dateKey=selectedWeekDate){
+    selectedWeekDate=dateKey;
+    let d=parseDate(dateKey),list=eventInstances(d,d).filter(e=>e.type!=='holiday').sort((a,b)=>a.start.localeCompare(b.start));
+    let details=$('weekDayDetails'); if(!details)return;
+    details.innerHTML=`<div class="week-detail-head"><div><b>${fmt(d,{weekday:'long',day:'numeric',month:'long'})}</b><span>${list.length?`${list.length} scheduled ${list.length===1?'event':'events'}`:'Free day'}</span></div><button class="text-button" data-open-calendar-date="${dateKey}">Open calendar ↗</button></div><div class="dashboard-inline-list">${dashboardEventListHtml(list,'No classes or events on this day.')}</div>`;
+    document.querySelectorAll('#weekChart .week-day').forEach(b=>b.classList.toggle('selected',b.dataset.date===dateKey));
+  }
+  function renderNext7Details(dateKey=selectedNext7Date){
+    selectedNext7Date=dateKey;
+    let d=parseDate(dateKey),list=eventInstances(d,d).filter(e=>e.type!=='holiday').sort((a,b)=>a.start.localeCompare(b.start));
+    let details=$('next7Details'); if(!details)return;
+    details.innerHTML=`<div class="next7-detail-head"><div><b>${fmt(d,{weekday:'long',day:'numeric',month:'long'})}</b><span>${list.length?`${list.length} scheduled ${list.length===1?'event':'events'}`:'No scheduled events'}</span></div><button class="text-button" data-open-calendar-date="${dateKey}">Open calendar ↗</button></div><div class="dashboard-inline-list">${dashboardEventListHtml(list,'Nothing scheduled — a good study block.')}</div>`;
+    document.querySelectorAll('#next7List .next7-day').forEach(b=>b.classList.toggle('selected',b.dataset.date===dateKey));
+  }
   function renderNext7(){
     let items=Array.from({length:7},(_,i)=>{let d=addDays(today,i),list=eventInstances(d,d).filter(e=>e.type!=='holiday');return {d,list}});
     $('next7Summary').textContent=`${items.reduce((n,x)=>n+x.list.length,0)} scheduled events across the next 7 days`;
-    $('next7List').innerHTML=items.map(x=>`<button class="next7-day ${iso(x.d)===iso(today)?'today':''}" data-date="${iso(x.d)}"><span>${fmt(x.d,{weekday:'short'}).toUpperCase()}</span><b>${x.d.getDate()}</b><small>${x.list.length?`${x.list.length} ${x.list.length===1?'event':'events'}`:'Free'}</small></button>`).join('');
+    if(!items.some(x=>iso(x.d)===selectedNext7Date))selectedNext7Date=iso(today);
+    $('next7List').innerHTML=items.map(x=>`<button class="next7-day ${iso(x.d)===iso(today)?'today':''} ${iso(x.d)===selectedNext7Date?'selected':''}" data-next7-date="${iso(x.d)}"><span>${fmt(x.d,{weekday:'short'}).toUpperCase()}</span><b>${x.d.getDate()}</b><small>${x.list.length?`${x.list.length} ${x.list.length===1?'event':'events'}`:'Free'}</small></button>`).join('');
+    renderNext7Details(selectedNext7Date);
   }
   function renderWeatherCard(){
     let card=$('weatherCard'); if(!card)return;
@@ -93,7 +114,7 @@
       weatherState.data=await response.json();weatherState.updatedAt=Date.now();
     }catch(error){console.warn('CampusHub weather unavailable',error)}finally{weatherState.loading=false;renderWeatherCard()}
   }
-  function renderWeekChart(){let monday=new Date(today);monday.setDate(today.getDate()-((today.getDay()+6)%7));$('weekChart').innerHTML=Array.from({length:7},(_,i)=>{let d=addDays(monday,i),list=eventInstances(d,d).filter(e=>!['holiday','deadline'].includes(e.type)),n=list.length,bars=Array.from({length:Math.min(n,4)},(_,j)=>`<i style="background:${color(list[j].type).color}"></i>`).join('');return `<button class="week-day ${iso(d)===iso(today)?'today':''}" data-date="${iso(d)}"><span class="weekday">${fmt(d,{weekday:'short'}).toUpperCase()}</span><span class="day-number">${d.getDate()}</span><span class="day-bars">${bars||'<i class="empty-bar"></i>'}</span><span class="class-number">${n?`${n} ${n===1?'class':'classes'}`:'Free'}</span></button>`}).join('')}
+  function renderWeekChart(){let monday=new Date(today);monday.setDate(today.getDate()-((today.getDay()+6)%7));let days=Array.from({length:7},(_,i)=>{let d=addDays(monday,i),list=eventInstances(d,d).filter(e=>!['holiday','deadline'].includes(e.type)),n=list.length,bars=Array.from({length:Math.min(n,4)},(_,j)=>`<i style="background:${color(list[j].type).color}"></i>`).join('');return {d,list,n,bars}});if(!days.some(x=>iso(x.d)===selectedWeekDate))selectedWeekDate=iso(today);$('weekChart').innerHTML=days.map(x=>`<button class="week-day ${iso(x.d)===iso(today)?'today':''} ${iso(x.d)===selectedWeekDate?'selected':''}" data-week-date="${iso(x.d)}"><span class="weekday">${fmt(x.d,{weekday:'short'}).toUpperCase()}</span><span class="day-number">${x.d.getDate()}</span><span class="day-bars">${x.bars||'<i class="empty-bar"></i>'}</span><span class="class-number">${x.n?`${x.n} ${x.n===1?'class':'classes'}`:'Free'}</span></button>`).join('');renderWeekDayDetails(selectedWeekDate)}
   function renderDashboard(){
     let hour=new Date().getHours(),greeting=hour<12?'Good morning':hour<17?'Good afternoon':'Good evening';
     let name=currentUser?.user_metadata?.full_name||currentUser?.email?.split('@')[0]||'student';
@@ -170,7 +191,9 @@
     let action=e.target.closest('[data-dashboard-action]');
     if(action){let a=action.dataset.dashboardAction;if(a==='event')showModal();else if(a==='assignment')showModal(null,iso(today),'assignment');else if(a==='calendar')openPage('calendar');else if(a==='planner')openPage('planner');else if(a==='notes')openPage('notes');else if(a==='exams')openPage('exams')}
     let planner=e.target.closest('[data-open-planner]');if(planner)openPage('planner');
-    let day=e.target.closest('[data-date]');if(day&&day.closest('#weekChart,.next7-list')){cursor=parseDate(day.dataset.date);openPage('calendar')}
+    let weekDay=e.target.closest('[data-week-date]');if(weekDay){renderWeekDayDetails(weekDay.dataset.weekDate);return}
+    let nextDay=e.target.closest('[data-next7-date]');if(nextDay){renderNext7Details(nextDay.dataset.next7Date);return}
+    let openDate=e.target.closest('[data-open-calendar-date]');if(openDate){cursor=parseDate(openDate.dataset.openCalendarDate);openPage('calendar');return}
   });
   $('weatherRefresh')?.addEventListener('click',e=>{e.stopPropagation();loadWeather(true);notify('Refreshing Wismar weather…')});
   $('weatherCard')?.addEventListener('click',e=>{if(e.target.closest('#weatherRefresh'))return;loadWeather(true);notify('Wismar weather refreshed')});
