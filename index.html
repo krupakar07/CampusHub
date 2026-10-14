@@ -37,25 +37,8 @@
       <div class="sidebar-bottom"><div class="semester-card"><div class="semester-top"><span class="semester-icon">✳</span><span class="semester-tag">PRIVATE</span></div><b id="semesterTitle">Your timetable</b><span id="semesterUniversity">University calendar</span><div class="semester-progress"><i></i></div><small>Synced to your account</small></div><div class="profile"><div class="avatar" id="profileAvatar">S</div><div class="profile-text"><b id="profileName">My studies</b><span id="profileUniversity">Personal calendar</span></div><button class="more" id="settingsButton" aria-label="Calendar settings" title="Calendar settings">⚙</button><button class="more signout-button" id="signOutButton" aria-label="Sign out" title="Sign out"><span class="signout-icon">↪</span><span class="signout-label">Sign out</span></button></div></div>
     </aside>
     <div class="mobile-drawer-backdrop" id="mobileDrawerBackdrop" aria-hidden="true"></div>
-    <aside class="mobile-system-drawer" id="mobileSystemDrawer" aria-hidden="true" aria-label="CampusHub mobile navigation">
-      <div class="mobile-system-head"><div class="mobile-system-brand"><span class="brand-mark">C</span><div><strong>campus<span class="brand-dot">.</span></strong><small>YOUR UNIVERSITY</small></div></div><button type="button" class="mobile-system-close" id="mobileSystemClose" aria-label="Close menu">×</button></div>
-      <div class="mobile-system-label">WORKSPACE</div>
-      <nav class="mobile-system-links" aria-label="Mobile workspace navigation">
-        <button type="button" data-mobile-page="dashboard"><span>▦</span>Overview</button>
-        <button type="button" data-mobile-page="calendar"><span>▣</span>Calendar</button>
-        <button type="button" data-mobile-page="planner"><span>✓</span>Study planner</button>
-        <button type="button" data-mobile-page="notes"><span>▤</span>Notes</button>
-        <button type="button" data-mobile-page="quick-notes"><span>✎</span>Quick Notes</button>
-        <button type="button" data-mobile-page="exams"><span>◉</span>Exams</button>
-      </nav>
-      <div class="mobile-system-divider"></div>
-      <div class="mobile-system-label">ACCOUNT</div>
-      <button type="button" class="mobile-system-action" id="mobileSystemSettings"><span>⚙</span>Settings</button>
-      <button type="button" class="mobile-system-action danger" id="mobileSystemSignOut"><span>↪</span>Sign out</button>
-      <div class="mobile-system-foot">Private to your CampusHub account</div>
-    </aside>
     <main class="main-area">
-      <header class="topbar"><button class="mobile-menu" id="mobileMenu" aria-label="Open menu" aria-expanded="false" aria-controls="sidebar">☰</button><button class="mobile-settings" id="mobileSettings" aria-label="Open settings" title="Settings">⚙</button><div class="breadcrumbs"><span>Workspace</span><span class="crumb-slash">/</span><b id="crumbCurrent">Overview</b></div><div class="top-actions"><button class="global-search-trigger" id="globalSearchButton" title="Search CampusHub (⌘K / Ctrl K)"><span>⌕</span><span class="search-trigger-text">Search</span><kbd>⌘ K</kbd></button><span class="today-pill"><i></i> YOUR PERSONAL CAMPUS</span><button class="icon-button" id="todayButton" title="Go to today">◷</button><button class="primary-button top-add" id="topAdd"><span>＋</span> Add event</button></div></header>
+      <header class="topbar"><button class="mobile-menu" id="mobileMenu" aria-label="Open navigation" aria-expanded="false" aria-controls="sidebar">☰</button><button class="mobile-settings" id="mobileSettings" aria-label="Open settings" title="Settings">⚙</button><div class="breadcrumbs"><span>Workspace</span><span class="crumb-slash">/</span><b id="crumbCurrent">Overview</b></div><div class="top-actions"><button class="global-search-trigger" id="globalSearchButton" title="Search CampusHub (⌘K / Ctrl K)"><span>⌕</span><span class="search-trigger-text">Search</span><kbd>⌘ K</kbd></button><span class="today-pill"><i></i> YOUR PERSONAL CAMPUS</span><button class="icon-button" id="todayButton" title="Go to today">◷</button><button class="primary-button top-add" id="topAdd"><span>＋</span> Add event</button></div></header>
       <div class="content" id="dashboardPage">
         <section class="welcome-row"><div><div class="eyebrow" id="todayEyebrow"><span class="eyebrow-line"></span> TODAY</div><h1><span id="timeGreeting">Good morning</span><span class="wave">✳</span></h1><p class="subheading">Here’s what’s happening with your studies.</p></div><button class="date-chip" id="dateChip"><span class="date-icon">▦</span><span><b>Your calendar</b><small id="semesterLabel">Private timetable</small></span><span class="chevron">⌄</span></button></section>
         <section class="stats-grid" id="statsGrid"></section>
@@ -191,16 +174,7 @@
       <button class="mobile-nav-item" data-page="notes"><span>▤</span><small>Notes</small></button>
       <button class="mobile-nav-item" data-page="planner"><span>✓</span><small>Planner</small></button>
       <button class="mobile-nav-item" data-page="exams"><span>◉</span><small>Exams</small></button>
-      <button type="button" class="mobile-nav-item mobile-nav-more" id="mobileMoreButton" aria-label="More options"><span>⋯</span><small>More</small></button>
     </nav>
-    <div class="mobile-more-sheet" id="mobileMoreSheet" aria-hidden="true">
-      <div class="mobile-more-card">
-        <div class="mobile-more-head"><strong>More</strong><button type="button" id="mobileMoreClose" aria-label="Close">×</button></div>
-        <button type="button" data-mobile-page="quick-notes"><span>✎</span>Quick Notes</button>
-        <button type="button" data-mobile-page="settings"><span>⚙</span>Settings</button>
-        <button type="button" id="mobileMoreSignOut" class="danger"><span>↪</span>Sign out</button>
-      </div>
-    </div>
   </div>
   <div class="modal-backdrop hidden" id="detailsModal" role="presentation"><section class="event-modal details-modal" role="dialog" aria-modal="true" aria-labelledby="detailsTitle"><div class="modal-header"><div><div class="eyebrow"><span class="eyebrow-line"></span> EVENT DETAILS</div><h2 id="detailsTitle"></h2></div><div class="details-menu-wrap"><button class="details-menu-button" id="detailsMenuButton" aria-label="Event actions" aria-expanded="false">⋯</button><div class="details-menu hidden" id="detailsMenu"><button id="detailsEdit">Edit event</button><button id="detailsEditOccurrence" class="hidden">Edit this occurrence</button><button id="detailsDelete">Delete event</button><button id="detailsDeleteSeries" class="hidden">Delete entire series</button></div><button class="close-button" id="closeDetails" aria-label="Close">×</button></div></div><div id="detailsBody" class="details-body"></div></section></div>
   <div class="modal-backdrop hidden" id="settingsModal" role="presentation"><section class="event-modal settings-modal" role="dialog" aria-modal="true" aria-labelledby="settingsTitle"><div class="modal-header"><div><div class="eyebrow"><span class="eyebrow-line"></span> PERSONAL PREFERENCES</div><h2 id="settingsTitle">Calendar settings</h2></div><button class="close-button" id="closeSettings" aria-label="Close">×</button></div><form id="settingsForm"><label class="field full-field">Your name<input id="settingsName" maxlength="60" required></label><label class="field full-field">Your university<select id="settingsUniversity"><option value="Hochschule Wismar">Hochschule Wismar</option><option value="Hochschule Worms">Hochschule Worms</option></select></label><label class="field full-field">Default calendar view<select id="settingsView"><option value="day">Day</option><option value="week">Week</option><option value="month">Month</option></select></label><label class="field full-field">Travel buffer between classes<select id="travelBuffer"><option value="0">Off</option><option value="5">5 minutes</option><option value="10">10 minutes</option><option value="15">15 minutes</option><option value="20">20 minutes</option></select></label><label class="field full-field">Class reminder<select id="reminderMinutes"><option value="0">Off</option><option value="5">5 minutes before</option><option value="10">10 minutes before</option><option value="15">15 minutes before</option><option value="30">30 minutes before</option></select></label><div class="settings-note">Browser reminders appear while this app is open. Allow notifications when your browser asks.</div><div class="modal-actions"><span class="form-spacer"></span><button type="button" class="cancel-button" id="cancelSettings">Cancel</button><button type="submit" class="primary-button save-button">Save settings <span>→</span></button></div></form></section></div>
