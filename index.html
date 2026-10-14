@@ -39,14 +39,45 @@
     <div class="mobile-drawer-backdrop" id="mobileDrawerBackdrop" aria-hidden="true"></div>
     <main class="main-area">
       <header class="topbar"><button class="mobile-menu" id="mobileMenu" aria-label="Open navigation" aria-expanded="false" aria-controls="sidebar">☰</button><div class="breadcrumbs"><span>Workspace</span><span class="crumb-slash">/</span><b id="crumbCurrent">Overview</b></div><div class="top-actions"><button class="global-search-trigger" id="globalSearchButton" title="Search CampusHub (⌘K / Ctrl K)"><span>⌕</span><span class="search-trigger-text">Search</span><kbd>⌘ K</kbd></button><span class="today-pill"><i></i> YOUR PERSONAL CAMPUS</span><button class="icon-button" id="todayButton" title="Go to today">◷</button><button class="primary-button top-add" id="topAdd"><span>＋</span> Add event</button></div></header>
-      <div class="content" id="dashboardPage">
-        <section class="welcome-row"><div><div class="eyebrow" id="todayEyebrow"><span class="eyebrow-line"></span> TODAY</div><h1><span id="timeGreeting">Good morning</span><span class="wave">✳</span></h1><p class="subheading">Here’s what’s happening with your studies.</p></div><button class="date-chip" id="dateChip"><span class="date-icon">▦</span><span><b>Your calendar</b><small id="semesterLabel">Private timetable</small></span><span class="chevron">⌄</span></button></section>
-        <section class="stats-grid" id="statsGrid"></section>
-        <section class="dashboard-grid">
-          <div class="panel schedule-panel"><div class="panel-heading"><div><h2>Today’s schedule <span class="heading-count" id="todayCount">0</span></h2><p>Your classes and events for today</p></div><button class="text-button" data-open-calendar>View calendar <span>↗</span></button></div><div id="todaySchedule" class="schedule-list"></div></div>
-          <div class="panel next-panel"><div class="panel-heading"><div><h2>Up next</h2><p>Your next class on campus</p></div><span class="live-dot"></span></div><div id="nextClass"></div><div class="next-footer"><span>✦ &nbsp;Stay on top of your semester</span><button id="upNextView">View calendar ↗</button></div></div>
+      <div class="content dashboard-content" id="dashboardPage">
+        <section class="dashboard-hero">
+          <div class="dashboard-hero-copy">
+            <div class="eyebrow"><span class="eyebrow-line"></span> YOUR PERSONAL CAMPUS</div>
+            <h1><span id="timeGreeting">Good morning</span>, <span id="dashboardName">student</span> <span class="wave">✦</span></h1>
+            <p class="subheading" id="todayEyebrow">Thursday, 15 October 2026</p>
+            <div class="hero-meta"><span>✦ <b id="heroClassCount">2</b> classes today</span><span>Stay consistent. 🚀</span></div>
+          </div>
+          <div class="weather-card" id="weatherCard" role="button" tabindex="0" aria-label="Open Wismar weather">
+            <div class="weather-top"><span class="weather-location">WISMAR</span><button class="weather-refresh" id="weatherRefresh" aria-label="Refresh weather">↻</button></div>
+            <div class="weather-main"><span class="weather-icon" id="weatherIcon">☁</span><div><strong id="weatherTemp">—°</strong><span id="weatherSummary">Loading weather…</span></div></div>
+            <div class="weather-meta"><span id="weatherFeels">Feels like —</span><span id="weatherWind">Wind —</span></div>
+          </div>
         </section>
-        <section class="bottom-grid"><div class="panel week-panel"><div class="panel-heading"><div><h2>This week</h2><p>Your schedule at a glance</p></div><button class="text-button" data-open-calendar>Full calendar <span>↗</span></button></div><div class="week-chart" id="weekChart"></div></div><div class="panel quick-panel"><div class="quick-decor decor-one"></div><div class="quick-decor decor-two"></div><div class="quick-content"><div class="quick-icon">✦</div><h2>Your semester,<br>all in one place.</h2><p>Keep classes, deadlines and everything in between organized.</p><button class="quick-button" id="quickAdd">＋ &nbsp; Add your first event</button></div></div></section>
+
+        <section class="stats-grid" id="statsGrid"></section>
+
+        <section class="dashboard-command-grid">
+          <div class="panel schedule-panel dashboard-schedule">
+            <div class="panel-heading"><div><h2>Today’s schedule <span class="heading-count" id="todayCount">0</span></h2><p>Your classes and events for today</p></div><button class="text-button" data-open-calendar>View full calendar <span>↗</span></button></div>
+            <div id="todaySchedule" class="schedule-list"></div>
+          </div>
+          <div class="dashboard-side-stack">
+            <div class="panel next-panel dashboard-next"><div class="panel-heading"><div><h2>Current / next class</h2><p id="nextSubtitle">Live timetable status</p></div><span class="live-pill" id="nextLivePill">● LIVE</span></div><div id="nextClass"></div><div class="next-footer"><span id="nextFooterText">Stay on top of your semester</span><button id="upNextView">View calendar ↗</button></div></div>
+            <div class="panel week-panel dashboard-week"><div class="panel-heading"><div><h2>This week</h2><p>Classes at a glance</p></div><button class="text-button" data-open-calendar>View week <span>↗</span></button></div><div class="week-chart" id="weekChart"></div></div>
+          </div>
+        </section>
+
+        <section class="dashboard-lower-grid">
+          <div class="panel dashboard-tasks"><div class="panel-heading"><div><h2>Study planner</h2><p>What needs your attention next</p></div><button class="text-button" data-open-planner>Open planner <span>↗</span></button></div><div id="dashboardTasks"></div></div>
+          <div class="panel dashboard-actions"><div class="panel-heading"><div><h2>Quick actions</h2><p>Get things done faster</p></div><span class="quick-action-icon">✦</span></div><div class="action-grid"><button data-dashboard-action="event"><span>＋</span><b>Add event</b><small>Schedule a class or deadline</small></button><button data-dashboard-action="notes"><span>▤</span><b>Create note</b><small>Open your notes workspace</small></button><button data-dashboard-action="assignment"><span>✓</span><b>Add assignment</b><small>Track work and due dates</small></button><button data-dashboard-action="exam"><span>◉</span><b>View exams</b><small>Check revision progress</small></button></div></div>
+        </section>
+
+        <section class="dashboard-bottom-strip">
+          <div><span class="strip-label">NEXT 7 DAYS</span><strong id="next7Summary">Your upcoming week</strong></div>
+          <div class="next7-list" id="next7List"></div>
+          <button class="text-button" data-open-calendar>Full calendar ↗</button>
+        </section>
+
         <footer class="app-footer"><span><i class="offline-dot"></i> <span id="storageStatus">Synced privately to your account</span></span><span>Made for your studies <b>✳</b></span></footer>
       </div>
       <div class="content calendar-content hidden" id="calendarPage">
