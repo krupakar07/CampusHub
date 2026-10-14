@@ -1,3 +1,5 @@
+CampusHub v51 — mobile logout accessibility fix.
+
 # CampusHub — University Workspace
 
 A responsive, installable university workspace combining the full private Campus calendar with a OneNote-style academic notes editor. It supports separate accounts for Hochschule Wismar and Hochschule Worms, with each account's schedule isolated from the other.
