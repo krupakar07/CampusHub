@@ -1,4 +1,4 @@
-CampusHub v56 — interactive Campus Command Center dashboard.
+CampusHub v59 — interactive Campus Command Center dashboard.
 
 
 
@@ -11,7 +11,7 @@ A responsive, installable university workspace combining the full private Campus
 Serve this folder from any static web server, then open its URL in a browser. A server is needed for PWA installation and offline caching; the app itself is plain HTML, CSS, and JavaScript.
 
 
-## CampusHub v57 — Interactive Overview
+## CampusHub v59 — Interactive Overview
 
 The Overview page is rebuilt as an interactive campus command center inspired by the approved dashboard direction.
 
@@ -21,8 +21,8 @@ The Overview page is rebuilt as an interactive campus command center inspired by
 - Clickable stats for Calendar, Planner, and Exams.
 - Study planner attention list with direct event details.
 - Quick actions for events, notes, assignments, and exams.
-- Interactive week day selector with inline schedule details.
-- Interactive next-seven-days selector with inline schedule details.
+- Interactive week day selector with inline schedule details; the full-width week panel is placed immediately after Today’s schedule.
+- Interactive next-seven-days selector with inline schedule details; the panel is directly below This week.
 - Responsive mobile layout.
 - Weather is fetched client-side from Wismar coordinates and does not require storing a weather credential.
 

@@ -77,20 +77,20 @@
     let d=parseDate(dateKey),list=eventInstances(d,d).filter(e=>e.type!=='holiday').sort((a,b)=>a.start.localeCompare(b.start));
     let details=$('weekDayDetails'); if(!details)return;
     details.innerHTML=`<div class="week-detail-head"><div><b>${fmt(d,{weekday:'long',day:'numeric',month:'long'})}</b><span>${list.length?`${list.length} scheduled ${list.length===1?'event':'events'}`:'Free day'}</span></div><button class="text-button" data-open-calendar-date="${dateKey}">Open calendar ↗</button></div><div class="dashboard-inline-list">${dashboardEventListHtml(list,'No classes or events on this day.')}</div>`;
-    document.querySelectorAll('#weekChart .week-day').forEach(b=>b.classList.toggle('selected',b.dataset.date===dateKey));
+    document.querySelectorAll('#weekChart .week-day').forEach(b=>{let selected=b.dataset.weekDate===dateKey;b.classList.toggle('selected',selected);b.setAttribute('aria-pressed',String(selected))});
   }
   function renderNext7Details(dateKey=selectedNext7Date){
     selectedNext7Date=dateKey;
     let d=parseDate(dateKey),list=eventInstances(d,d).filter(e=>e.type!=='holiday').sort((a,b)=>a.start.localeCompare(b.start));
     let details=$('next7Details'); if(!details)return;
     details.innerHTML=`<div class="next7-detail-head"><div><b>${fmt(d,{weekday:'long',day:'numeric',month:'long'})}</b><span>${list.length?`${list.length} scheduled ${list.length===1?'event':'events'}`:'No scheduled events'}</span></div><button class="text-button" data-open-calendar-date="${dateKey}">Open calendar ↗</button></div><div class="dashboard-inline-list">${dashboardEventListHtml(list,'Nothing scheduled — a good study block.')}</div>`;
-    document.querySelectorAll('#next7List .next7-day').forEach(b=>b.classList.toggle('selected',b.dataset.date===dateKey));
+    document.querySelectorAll('#next7List .next7-day').forEach(b=>b.classList.toggle('selected',b.dataset.weekDate===dateKey));
   }
   function renderNext7(){
     let items=Array.from({length:7},(_,i)=>{let d=addDays(today,i),list=eventInstances(d,d).filter(e=>e.type!=='holiday');return {d,list}});
     $('next7Summary').textContent=`${items.reduce((n,x)=>n+x.list.length,0)} scheduled events across the next 7 days`;
     if(!items.some(x=>iso(x.d)===selectedNext7Date))selectedNext7Date=iso(today);
-    $('next7List').innerHTML=items.map(x=>`<button class="next7-day ${iso(x.d)===iso(today)?'today':''} ${iso(x.d)===selectedNext7Date?'selected':''}" data-next7-date="${iso(x.d)}"><span>${fmt(x.d,{weekday:'short'}).toUpperCase()}</span><b>${x.d.getDate()}</b><small>${x.list.length?`${x.list.length} ${x.list.length===1?'event':'events'}`:'Free'}</small></button>`).join('');
+    $('next7List').innerHTML=items.map(x=>`<button class="next7-day ${iso(x.d)===iso(today)?'today':''} ${iso(x.d)===selectedNext7Date?'selected':''}" data-next7-date="${iso(x.d)}" aria-pressed="${iso(x.d)===selectedNext7Date?'true':'false'}"><span>${fmt(x.d,{weekday:'short'}).toUpperCase()}</span><b>${x.d.getDate()}</b><small>${x.list.length?`${x.list.length} ${x.list.length===1?'event':'events'}`:'Free'}</small></button>`).join('');
     renderNext7Details(selectedNext7Date);
   }
   function renderWeatherCard(){
@@ -114,7 +114,7 @@
       weatherState.data=await response.json();weatherState.updatedAt=Date.now();
     }catch(error){console.warn('CampusHub weather unavailable',error)}finally{weatherState.loading=false;renderWeatherCard()}
   }
-  function renderWeekChart(){let monday=new Date(today);monday.setDate(today.getDate()-((today.getDay()+6)%7));let days=Array.from({length:7},(_,i)=>{let d=addDays(monday,i),list=eventInstances(d,d).filter(e=>!['holiday','deadline'].includes(e.type)),n=list.length,bars=Array.from({length:Math.min(n,4)},(_,j)=>`<i style="background:${color(list[j].type).color}"></i>`).join('');return {d,list,n,bars}});if(!days.some(x=>iso(x.d)===selectedWeekDate))selectedWeekDate=iso(today);$('weekChart').innerHTML=days.map(x=>`<button class="week-day ${iso(x.d)===iso(today)?'today':''} ${iso(x.d)===selectedWeekDate?'selected':''}" data-week-date="${iso(x.d)}"><span class="weekday">${fmt(x.d,{weekday:'short'}).toUpperCase()}</span><span class="day-number">${x.d.getDate()}</span><span class="day-bars">${x.bars||'<i class="empty-bar"></i>'}</span><span class="class-number">${x.n?`${x.n} ${x.n===1?'class':'classes'}`:'Free'}</span></button>`).join('');renderWeekDayDetails(selectedWeekDate)}
+  function renderWeekChart(){let monday=new Date(today);monday.setDate(today.getDate()-((today.getDay()+6)%7));let days=Array.from({length:7},(_,i)=>{let d=addDays(monday,i),list=eventInstances(d,d).filter(e=>!['holiday','deadline'].includes(e.type)),n=list.length,bars=Array.from({length:Math.min(n,4)},(_,j)=>`<i style="background:${color(list[j].type).color}"></i>`).join('');return {d,list,n,bars}});if(!days.some(x=>iso(x.d)===selectedWeekDate))selectedWeekDate=iso(today);$('weekChart').innerHTML=days.map(x=>`<button class="week-day ${iso(x.d)===iso(today)?'today':''} ${iso(x.d)===selectedWeekDate?'selected':''}" data-week-date="${iso(x.d)}" aria-pressed="${iso(x.d)===selectedWeekDate?'true':'false'}"><span class="weekday">${fmt(x.d,{weekday:'short'}).toUpperCase()}</span><span class="day-number">${x.d.getDate()}</span><span class="day-bars">${x.bars||'<i class="empty-bar"></i>'}</span><span class="class-number">${x.n?`${x.n} ${x.n===1?'class':'classes'}`:'Free'}</span></button>`).join('');renderWeekDayDetails(selectedWeekDate)}
   function renderDashboard(){
     let hour=new Date().getHours(),greeting=hour<12?'Good morning':hour<17?'Good afternoon':'Good evening';
     let name=currentUser?.user_metadata?.full_name||currentUser?.email?.split('@')[0]||'student';
