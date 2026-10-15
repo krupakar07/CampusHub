@@ -47,14 +47,23 @@
             <p class="subheading" id="todayEyebrow">Thursday, 15 October 2026</p>
             <div class="hero-meta"><span>✦ <b id="heroClassCount">2</b> classes today</span><span>Stay consistent. 🚀</span></div>
           </div>
-          <div class="weather-card" id="weatherCard" role="button" tabindex="0" aria-label="Open Wismar weather">
-            <div class="weather-top"><span class="weather-location">WISMAR</span><button class="weather-refresh" id="weatherRefresh" aria-label="Refresh weather">↻</button></div>
+          <div class="weather-card" id="weatherCard" role="button" tabindex="0" aria-label="Open campus weather">
+            <div class="weather-top"><span class="weather-location" id="weatherLocation">CAMPUS</span><button class="weather-refresh" id="weatherRefresh" aria-label="Refresh weather">↻</button></div>
             <div class="weather-main"><span class="weather-icon" id="weatherIcon">☁</span><div><strong id="weatherTemp">—°</strong><span id="weatherSummary">Loading weather…</span></div></div>
             <div class="weather-meta"><span id="weatherFeels">Feels like —</span><span id="weatherWind">Wind —</span></div>
           </div>
         </section>
 
         <section class="stats-grid" id="statsGrid"></section>
+
+        <section class="panel dashboard-weather-week" id="weatherWeekPanel">
+          <div class="panel-heading">
+            <div><h2><span id="weatherWeekTitle">7-day weather</span> <span class="interactive-badge">CLICK A DAY</span></h2><p id="weatherWeekSubtitle">Campus forecast for your university</p></div>
+            <button class="text-button" id="weatherRefreshWeek">Refresh <span>↻</span></button>
+          </div>
+          <div class="weather-week-list" id="weatherWeekList"></div>
+          <div class="weather-day-details" id="weatherDayDetails" aria-live="polite"></div>
+        </section>
 
         <section class="dashboard-command-grid">
           <div class="panel schedule-panel dashboard-schedule">

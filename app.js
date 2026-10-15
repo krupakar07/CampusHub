@@ -16,7 +16,8 @@
   let events=load(), page='dashboard', view='week', cursor=new Date(today); cursor.setDate(cursor.getDate()-((cursor.getDay()+6)%7)); let toastTimer, pendingImport=[],pendingImportSource='csv';
   const legacyEvents=events.slice();
   let dbClient=null,currentUser=null,currentUniversity='Hochschule Wismar',saveRevision=0,cloudQueue=Promise.resolve(),activeUserId=null,calendarQuery='',calendarType='all',travelBuffer=0,reminderMinutes=0,reminderShown=new Set();
-  let weatherState={data:null,updatedAt:0,loading:false};
+  let weatherState={data:null,updatedAt:0,loading:false,locationKey:''};
+  let selectedWeatherDate='';
   let selectedWeekDate=iso(today), selectedNext7Date=iso(today);
   function normalizeEventSources(list){return list.map(e=>e.source?e:(e.id?.startsWith('csv-intercultural-')||e.id?.startsWith('csv-')?{...e,source:'csv'}:e.id?.startsWith('ics-')?{...e,source:'ics'}:e))}
   function load(){try{const v=localStorage.getItem('campus-events-v2');return v?normalizeEventSources(JSON.parse(v)):defaultEvents.slice().map(e=>({...e,source:'csv'}))}catch{return defaultEvents.slice().map(e=>({...e,source:'csv'}))}}
@@ -93,26 +94,49 @@
     $('next7List').innerHTML=items.map(x=>`<button class="next7-day ${iso(x.d)===iso(today)?'today':''} ${iso(x.d)===selectedNext7Date?'selected':''}" data-next7-date="${iso(x.d)}" aria-pressed="${iso(x.d)===selectedNext7Date?'true':'false'}"><span>${fmt(x.d,{weekday:'short'}).toUpperCase()}</span><b>${x.d.getDate()}</b><small>${x.list.length?`${x.list.length} ${x.list.length===1?'event':'events'}`:'Free'}</small></button>`).join('');
     renderNext7Details(selectedNext7Date);
   }
+  function weatherLocation(){
+    return currentUniversity==='Hochschule Worms'
+      ? {name:'Worms',latitude:49.6320,longitude:8.3592}
+      : {name:'Wismar',latitude:53.8970,longitude:11.4658};
+  }
   function renderWeatherCard(){
     let card=$('weatherCard'); if(!card)return;
-    if(weatherState.loading&&!weatherState.data){$('weatherSummary').textContent='Loading Wismar weather…';return}
+    let loc=weatherLocation();
+    $('weatherLocation').textContent=loc.name.toUpperCase();
+    if(weatherState.loading&&!weatherState.data){$('weatherSummary').textContent=`Loading ${loc.name} weather…`;return}
     if(!weatherState.data){$('weatherSummary').textContent='Weather unavailable';return}
     let c=weatherState.data.current,code=Number(c.weather_code),w=weatherDescription(code);
     $('weatherIcon').textContent=w.icon;$('weatherTemp').textContent=`${Math.round(c.temperature_2m)}°C`;$('weatherSummary').textContent=w.label;$('weatherFeels').textContent=`Feels like ${Math.round(c.apparent_temperature)}°C`;$('weatherWind').textContent=`Wind ${Math.round(c.wind_speed_10m)} km/h`;
-    card.title=`Wismar · ${w.label} · updated ${new Date(weatherState.updatedAt).toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'})}`;
+    card.title=`${loc.name} · ${w.label} · updated ${new Date(weatherState.updatedAt).toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'})}`;
   }
   function weatherDescription(code){
     const map={0:['Clear sky','☀'],1:['Mainly clear','🌤'],2:['Partly cloudy','⛅'],3:['Overcast','☁'],45:['Fog','🌫'],48:['Rime fog','🌫'],51:['Light drizzle','🌦'],53:['Drizzle','🌦'],55:['Heavy drizzle','🌧'],61:['Light rain','🌦'],63:['Rain','🌧'],65:['Heavy rain','🌧'],71:['Light snow','🌨'],73:['Snow','🌨'],75:['Heavy snow','❄'],80:['Rain showers','🌦'],81:['Rain showers','🌧'],82:['Heavy showers','⛈'],95:['Thunderstorm','⛈'],96:['Storm + hail','⛈'],99:['Storm + hail','⛈']};let v=map[code]||['Mixed weather','🌤'];return {label:v[0],icon:v[1]};
   }
+  function renderWeatherDetails(dateKey=selectedWeatherDate){
+    let root=$('weatherDayDetails'),daily=weatherState.data?.daily;if(!root||!daily?.time?.length)return;
+    selectedWeatherDate=dateKey||daily.time[0];
+    let i=daily.time.indexOf(selectedWeatherDate);if(i<0)i=0;selectedWeatherDate=daily.time[i];
+    let d=parseDate(selectedWeatherDate),w=weatherDescription(Number(daily.weather_code[i]));
+    root.innerHTML=`<div class="weather-detail-head"><div><b>${fmt(d,{weekday:'long',day:'numeric',month:'long'})}</b><span>${w.icon} ${w.label}</span></div><div class="weather-detail-metrics"><span><b>${Math.round(daily.temperature_2m_max[i])}°</b> high</span><span><b>${Math.round(daily.temperature_2m_min[i])}°</b> low</span><span><b>${Math.round(daily.precipitation_probability_max[i]||0)}%</b> rain</span><span><b>${Math.round(daily.wind_speed_10m_max?.[i]||0)}</b> km/h wind</span></div></div>`;
+    document.querySelectorAll('#weatherWeekList .weather-day').forEach(b=>b.classList.toggle('selected',b.dataset.weatherDate===selectedWeatherDate));
+  }
+  function renderWeatherWeek(){
+    let root=$('weatherWeekList'),daily=weatherState.data?.daily;if(!root||!daily?.time?.length)return;
+    let loc=weatherLocation();$('weatherWeekTitle').textContent=`${loc.name} · 7-day weather`;$('weatherWeekSubtitle').textContent=`Forecast for ${currentUniversity}`;
+    if(!daily.time.includes(selectedWeatherDate))selectedWeatherDate=daily.time[0];
+    root.innerHTML=daily.time.map((dateKey,i)=>{let d=parseDate(dateKey),w=weatherDescription(Number(daily.weather_code[i]));return `<button class="weather-day ${dateKey===iso(today)?'today':''} ${dateKey===selectedWeatherDate?'selected':''}" data-weather-date="${dateKey}" aria-pressed="${dateKey===selectedWeatherDate?'true':'false'}"><span>${fmt(d,{weekday:'short'}).toUpperCase()}</span><b>${d.getDate()}</b><i>${w.icon}</i><strong>${Math.round(daily.temperature_2m_max[i])}°</strong><small>${Math.round(daily.temperature_2m_min[i])}° · ${Math.round(daily.precipitation_probability_max[i]||0)}%</small></button>`}).join('');
+    renderWeatherDetails(selectedWeatherDate);
+  }
   async function loadWeather(force=false){
     if(weatherState.loading)return;
-    if(!force&&weatherState.data&&Date.now()-weatherState.updatedAt<20*60*1000){renderWeatherCard();return}
-    weatherState.loading=true;renderWeatherCard();
+    let loc=weatherLocation(),locationKey=`${loc.name}:${loc.latitude}:${loc.longitude}`;
+    if(!force&&weatherState.data&&weatherState.locationKey===locationKey&&Date.now()-weatherState.updatedAt<20*60*1000){renderWeatherCard();renderWeatherWeek();return}
+    weatherState.loading=true;weatherState.data=null;weatherState.locationKey=locationKey;renderWeatherCard();
     try{
-      const url='https://api.open-meteo.com/v1/forecast?latitude=53.8970&longitude=11.4658&current=temperature_2m,apparent_temperature,weather_code,wind_speed_10m&hourly=temperature_2m,precipitation_probability,weather_code&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max&timezone=Europe%2FBerlin&forecast_days=7';
+      const url=`https://api.open-meteo.com/v1/forecast?latitude=${loc.latitude}&longitude=${loc.longitude}&current=temperature_2m,apparent_temperature,weather_code,wind_speed_10m&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,wind_speed_10m_max&timezone=Europe%2FBerlin&forecast_days=7`;
       const response=await fetch(url,{headers:{Accept:'application/json'}}); if(!response.ok)throw Error('Weather request failed');
-      weatherState.data=await response.json();weatherState.updatedAt=Date.now();
-    }catch(error){console.warn('CampusHub weather unavailable',error)}finally{weatherState.loading=false;renderWeatherCard()}
+      weatherState.data=await response.json();weatherState.updatedAt=Date.now();selectedWeatherDate=weatherState.data.daily.time[0];
+    }catch(error){console.warn('CampusHub weather unavailable',error)}finally{weatherState.loading=false;renderWeatherCard();renderWeatherWeek()}
   }
   function renderWeekChart(){let monday=new Date(today);monday.setDate(today.getDate()-((today.getDay()+6)%7));let days=Array.from({length:7},(_,i)=>{let d=addDays(monday,i),list=eventInstances(d,d).filter(e=>!['holiday','deadline'].includes(e.type)),n=list.length,bars=Array.from({length:Math.min(n,4)},(_,j)=>`<i style="background:${color(list[j].type).color}"></i>`).join('');return {d,list,n,bars}});if(!days.some(x=>iso(x.d)===selectedWeekDate))selectedWeekDate=iso(today);$('weekChart').innerHTML=days.map(x=>`<button class="week-day ${iso(x.d)===iso(today)?'today':''} ${iso(x.d)===selectedWeekDate?'selected':''}" data-week-date="${iso(x.d)}" aria-pressed="${iso(x.d)===selectedWeekDate?'true':'false'}"><span class="weekday">${fmt(x.d,{weekday:'short'}).toUpperCase()}</span><span class="day-number">${x.d.getDate()}</span><span class="day-bars">${x.bars||'<i class="empty-bar"></i>'}</span><span class="class-number">${x.n?`${x.n} ${x.n===1?'class':'classes'}`:'Free'}</span></button>`).join('');renderWeekDayDetails(selectedWeekDate)}
   function renderDashboard(){
@@ -195,8 +219,10 @@
     let nextDay=e.target.closest('[data-next7-date]');if(nextDay){renderNext7Details(nextDay.dataset.next7Date);return}
     let openDate=e.target.closest('[data-open-calendar-date]');if(openDate){cursor=parseDate(openDate.dataset.openCalendarDate);openPage('calendar');return}
   });
-  $('weatherRefresh')?.addEventListener('click',e=>{e.stopPropagation();loadWeather(true);notify('Refreshing Wismar weather…')});
-  $('weatherCard')?.addEventListener('click',e=>{if(e.target.closest('#weatherRefresh'))return;loadWeather(true);notify('Wismar weather refreshed')});
+  $('weatherRefresh')?.addEventListener('click',e=>{e.stopPropagation();loadWeather(true);notify(`Refreshing ${weatherLocation().name} weather…`)});
+  $('weatherRefreshWeek')?.addEventListener('click',e=>{e.stopPropagation();loadWeather(true);notify(`Refreshing ${weatherLocation().name} 7-day forecast…`)});
+  $('weatherCard')?.addEventListener('click',e=>{if(e.target.closest('#weatherRefresh'))return;loadWeather(true);notify(`${weatherLocation().name} weather refreshed`)});
+  $('weatherWeekList')?.addEventListener('click',e=>{let day=e.target.closest('[data-weather-date]');if(day){renderWeatherDetails(day.dataset.weatherDate);return}});
   $('weatherCard')?.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();loadWeather(true)}});
   setInterval(()=>{renderToday();renderNext()},60000);
 $('todayButton').addEventListener('click',()=>{cursor=new Date(today);openPage('calendar')});$('calendarToday').addEventListener('click',()=>{cursor=new Date(today);if(view==='week')cursor.setDate(cursor.getDate()-((cursor.getDay()+6)%7));renderCalendar()});$('dateChip')?.addEventListener('click',()=>{cursor=new Date(today);openPage('calendar')});$('prevPeriod').addEventListener('click',()=>changePeriod(-1));$('nextPeriod').addEventListener('click',()=>changePeriod(1));
