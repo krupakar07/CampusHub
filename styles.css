@@ -490,3 +490,112 @@ button,input,select,textarea{touch-action:manipulation;}
   .dashboard-week-featured .week-day{min-width:64px;flex-basis:64px}
   .action-grid{grid-template-columns:1fr 1fr}
 }
+
+/* v66 — CampusHub glassmorphism visual system */
+:root{
+  --canvas:#eef0f8;
+  --surface:rgba(255,255,255,.62);
+  --glass:rgba(255,255,255,.58);
+  --glass-strong:rgba(255,255,255,.72);
+  --glass-border:rgba(255,255,255,.78);
+  --glass-shadow:0 18px 45px rgba(43,48,91,.09), inset 0 1px 0 rgba(255,255,255,.8);
+  --shadow:var(--glass-shadow);
+}
+body{
+  background:
+    radial-gradient(circle at 8% 8%,rgba(128,119,239,.15),transparent 28%),
+    radial-gradient(circle at 92% 16%,rgba(102,178,232,.12),transparent 26%),
+    radial-gradient(circle at 55% 95%,rgba(178,132,245,.10),transparent 30%),
+    linear-gradient(135deg,#eef0f8 0%,#f5f4fb 48%,#edf3fb 100%);
+  background-attachment:fixed;
+}
+body:before,body:after{
+  content:'';position:fixed;z-index:-1;border-radius:50%;filter:blur(70px);pointer-events:none;opacity:.45;
+}
+body:before{width:260px;height:260px;left:-100px;top:22%;background:#a89ff8}
+body:after{width:300px;height:300px;right:-130px;bottom:8%;background:#9ed4ef}
+.sidebar,.topbar{
+  background:rgba(255,255,255,.58);
+  border-color:rgba(255,255,255,.78);
+  backdrop-filter:blur(24px) saturate(145%);
+  -webkit-backdrop-filter:blur(24px) saturate(145%);
+  box-shadow:0 10px 35px rgba(44,48,88,.055);
+}
+.sidebar{box-shadow:8px 0 35px rgba(44,48,88,.055)}
+.topbar{box-shadow:0 8px 28px rgba(44,48,88,.045)}
+.brand-mark,.primary-button{
+  box-shadow:0 9px 22px rgba(119,112,233,.28),inset 0 1px 0 rgba(255,255,255,.3)
+}
+.panel,.stat-card,.date-chip,.backup-card,.account-card,.semester-card,.settings-menu,.settings-section,.assignment-card,.exam-card,.quick-notes-list-panel,.quick-note-editor-panel,.files-panel,.subject-workspace,.notes-sidebar,.notes-editor,.calendar-shell,.calendar-panel{
+  background:var(--glass);
+  border-color:var(--glass-border);
+  box-shadow:var(--glass-shadow);
+  backdrop-filter:blur(20px) saturate(135%);
+  -webkit-backdrop-filter:blur(20px) saturate(135%);
+}
+.panel:hover,.stat-card:hover,.backup-card:hover,.account-card:hover,.assignment-card:hover,.exam-card:hover{
+  border-color:rgba(255,255,255,.92);
+  box-shadow:0 22px 48px rgba(43,48,91,.11),inset 0 1px 0 rgba(255,255,255,.9);
+}
+.nav-item.active,.mobile-nav-item.active,.settings-menu-item.selected{
+  background:rgba(125,116,239,.13);
+  border:1px solid rgba(255,255,255,.72);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.72),0 7px 18px rgba(119,112,233,.08);
+}
+.icon-button,.secondary-button,.text-button,.weather-refresh,.next-nav-button,.quick-filter,.mini-button,.toolbar-button{
+  background:rgba(255,255,255,.58);
+  border-color:rgba(255,255,255,.82);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.82),0 5px 14px rgba(43,48,91,.045);
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+}
+.dashboard-hero{
+  background:
+    radial-gradient(circle at 78% 10%,rgba(255,255,255,.72),transparent 27%),
+    linear-gradient(120deg,rgba(255,255,255,.62),rgba(229,227,255,.48) 58%,rgba(222,241,252,.5));
+  border-color:rgba(255,255,255,.82);
+  box-shadow:0 24px 55px rgba(43,48,91,.10),inset 0 1px 0 rgba(255,255,255,.85);
+  backdrop-filter:blur(24px) saturate(145%);
+  -webkit-backdrop-filter:blur(24px) saturate(145%);
+}
+.weather-card,.next-class-card,.weather-day,.week-day,.next7-day,.schedule-row.is-live,.interactive-stat{
+  background:rgba(255,255,255,.52);
+  border-color:rgba(255,255,255,.76);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.72),0 8px 22px rgba(43,48,91,.055);
+  backdrop-filter:blur(16px) saturate(135%);
+  -webkit-backdrop-filter:blur(16px) saturate(135%);
+}
+.weather-day.selected,.week-day.selected,.next7-day.selected{
+  background:linear-gradient(145deg,rgba(244,242,255,.78),rgba(255,255,255,.48));
+  box-shadow:0 10px 24px rgba(104,96,205,.12),inset 0 1px 0 rgba(255,255,255,.9);
+}
+.dashboard-inline-event,.next7-details,.week-day-details,.weather-day-details{
+  background:rgba(255,255,255,.28);
+  border-color:rgba(255,255,255,.64);
+}
+.profile{border-top-color:rgba(255,255,255,.7)}
+.semester-card{background:rgba(247,247,255,.46)}
+.dashboard-hero:after{background:rgba(255,255,255,.28);box-shadow:0 0 0 1px rgba(255,255,255,.38)}
+.modal-backdrop,.global-search-modal,.mobile-drawer-backdrop{backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.modal,.global-search-dialog,.export-modal,.assignment-workspace-modal,.exam-workspace-modal{
+  background:rgba(250,250,255,.76)!important;
+  border-color:rgba(255,255,255,.86)!important;
+  box-shadow:0 30px 80px rgba(25,29,62,.18),inset 0 1px 0 rgba(255,255,255,.9)!important;
+  backdrop-filter:blur(26px) saturate(145%);
+  -webkit-backdrop-filter:blur(26px) saturate(145%);
+}
+input,select,textarea,.editor-surface,.quick-editor,.exam-editor{
+  background:rgba(255,255,255,.58)!important;
+  border-color:rgba(255,255,255,.82)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.7);
+}
+@media(max-width:760px){
+  body{background-attachment:scroll}
+  .sidebar{background:rgba(247,248,255,.82)}
+  .topbar{background:rgba(255,255,255,.72)}
+  .panel,.stat-card,.dashboard-hero,.weather-card{backdrop-filter:blur(18px) saturate(135%);-webkit-backdrop-filter:blur(18px) saturate(135%)}
+  .mobile-bottom-nav{background:rgba(255,255,255,.72)!important;border-color:rgba(255,255,255,.82)!important;box-shadow:0 -10px 30px rgba(43,48,91,.08)!important;backdrop-filter:blur(20px) saturate(145%);-webkit-backdrop-filter:blur(20px) saturate(145%)}
+}
+@media(prefers-reduced-transparency:reduce){
+  .sidebar,.topbar,.panel,.stat-card,.dashboard-hero,.weather-card,.next-class-card,.weather-day,.week-day,.next7-day,.mobile-bottom-nav{backdrop-filter:none!important;-webkit-backdrop-filter:none!important;background:#fff!important}
+}
