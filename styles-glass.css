@@ -684,3 +684,39 @@ body.glass-theme::after{
   .glass-theme .sidebar .brand{margin:0 9px 30px!important}
   .glass-theme .sidebar .nav-item{height:45px!important}
 }
+
+/* CampusHub v74 — use the approved Wismar photograph as the actual background.
+   No dark color tint; glass surfaces provide readability instead. */
+body.glass-theme{
+  background:#17294f url("assets/background/campushub-wismar-dusk.png") center center / cover fixed no-repeat !important;
+  isolation:isolate;
+}
+body.glass-theme::before{
+  display:none!important;
+}
+body.glass-theme::after{
+  display:none!important;
+}
+.glass-theme .app-shell,
+.glass-theme .main-area,
+.glass-theme .content,
+.glass-theme .dashboard-content{
+  background:transparent!important;
+}
+.glass-theme .sidebar{
+  background:rgba(30,42,76,.28)!important;
+  backdrop-filter:blur(24px) saturate(120%)!important;
+  -webkit-backdrop-filter:blur(24px) saturate(120%)!important;
+}
+.glass-theme .topbar{
+  background:rgba(24,36,70,.20)!important;
+  backdrop-filter:blur(18px) saturate(115%)!important;
+  -webkit-backdrop-filter:blur(18px) saturate(115%)!important;
+}
+@media(max-width:760px){
+  body.glass-theme{
+    background:#17294f url("assets/background/campushub-wismar-dusk.png") center center / cover fixed no-repeat !important;
+  }
+  .glass-theme .sidebar{background:rgba(25,37,72,.30)!important;}
+  .glass-theme .topbar{background:rgba(24,36,70,.20)!important;}
+}
