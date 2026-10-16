@@ -1,4 +1,4 @@
-/* CampusHub v68 — Glass application shell and visual system */
+/* CampusHub v73 — Wismar dusk background + glass application shell */
 :root{
   --glass-bg:rgba(24,34,67,.36);
   --glass-bg-strong:rgba(28,39,76,.50);
@@ -25,24 +25,19 @@ body.glass-theme::before{
   position:fixed;
   inset:0;
   z-index:-4;
+  pointer-events:none;
   background:
-    radial-gradient(circle at 78% 17%, rgba(132,119,255,.42), transparent 30%),
-    radial-gradient(circle at 18% 82%, rgba(51,126,201,.38), transparent 32%),
-    radial-gradient(circle at 60% 68%, rgba(234,127,82,.20), transparent 28%),
-    linear-gradient(135deg,#243d70 0%,#18274f 46%,#13203e 100%);
+    linear-gradient(180deg,rgba(15,24,58,.24),rgba(12,22,52,.40)),
+    url("assets/background/campushub-wismar-dusk.png") center center / cover no-repeat;
+  transform:translateZ(0);
 }
 body.glass-theme::after{
   content:"";
   position:fixed;
-  inset:-12%;
+  inset:0;
   z-index:-3;
   pointer-events:none;
-  background:
-    radial-gradient(ellipse at 50% 32%, rgba(255,187,145,.18) 0 8%, transparent 28%),
-    radial-gradient(ellipse at 76% 62%, rgba(110,93,255,.22) 0 7%, transparent 30%),
-    radial-gradient(ellipse at 22% 58%, rgba(76,168,232,.18) 0 8%, transparent 30%);
-  filter:blur(38px);
-  transform:scale(1.05);
+  background:linear-gradient(135deg,rgba(67,53,126,.12),rgba(28,95,164,.10) 48%,rgba(236,139,153,.08));
 }
 
 .glass-theme .app-shell{background:transparent}
