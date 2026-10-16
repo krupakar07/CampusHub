@@ -1,5 +1,5 @@
-const CACHE='campushub-shell-v70';
-const CORE=['./','./index.html','./styles.css','./styles-glass.css?v=70','./styles-notes.css','./supabase-config.js','./cloud-sync.js','./assignments.js','./exams.js','./quick-notes.js','./app.js','./manifest.webmanifest','./icon.svg','./files.js','./search.js','./settings.js','./export.js','./notes-ui.js'];
+const CACHE='campushub-shell-v71';
+const CORE=['./','./index.html','./styles.css','./styles-glass.css?v=71','./styles-notes.css','./supabase-config.js','./cloud-sync.js','./assignments.js','./exams.js','./quick-notes.js','./app.js','./manifest.webmanifest','./icon.svg','./files.js','./search.js','./settings.js','./export.js','./notes-ui.js'];
 self.addEventListener('install',event=>event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(CORE)).then(()=>self.skipWaiting())));
 self.addEventListener('activate',event=>event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key.startsWith('campushub-shell-')&&key!==CACHE).map(key=>caches.delete(key)))).then(()=>self.clients.claim())));
 self.addEventListener('fetch',event=>{
