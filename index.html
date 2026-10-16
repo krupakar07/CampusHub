@@ -22,20 +22,20 @@
   </section>
   <div class="app-shell hidden" id="appShell">
     <aside class="sidebar" id="sidebar">
-      <a class="brand" href="#" aria-label="Campus home"><span class="brand-mark">C</span><span>campus<span class="brand-dot">.</span><small id="brandUniversity">PRIVATE STUDENT CALENDAR</small></span></a>
+      <a class="brand" href="#" aria-label="Campus home"><span class="brand-mark">C</span><span>campus<span class="brand-dot">.</span><small id="brandUniversity">HOCHSCHULE WISMAR</small></span></a>
       <div class="side-label">WORKSPACE</div>
       <nav class="main-nav" aria-label="Main navigation">
-        <button class="nav-item active" data-page="dashboard"><span class="nav-icon">▦</span>Overview</button>
-        <button class="nav-item" data-page="calendar"><span class="nav-icon">▣</span>Calendar</button>
-        <button class="nav-item" data-page="planner"><span class="nav-icon">✓</span>Study planner</button>
-        <button class="nav-item" data-page="notes"><span class="nav-icon">▤</span>Notes</button>
-        <button class="nav-item" data-page="quick-notes"><span class="nav-icon">✎</span>Quick Notes</button>
-        <button class="nav-item" data-page="exams"><span class="nav-icon">◉</span>Exams</button>
-        <button class="nav-item" data-page="settings"><span class="nav-icon">⚙</span>Settings</button>
+        <button class="nav-item active" data-page="dashboard"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z"/></svg></span><span>Overview</span></button>
+        <button class="nav-item" data-page="calendar"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M8 3v4M16 3v4M4 9h16M8 13h3M13 13h3M8 17h3"/></svg></span><span>Calendar</span></button>
+        <button class="nav-item" data-page="notes"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="5" y="3.5" width="14" height="17" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg></span><span>Notes</span></button>
+        <button class="nav-item" data-page="planner"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 19c3-1 5-3 6-6l2-6 2 5 4-3"/><path d="M5 20h14"/></svg></span><span>Study planner</span></button>
+        <button class="nav-item" data-page="assignments"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 7h12v13H6z"/><path d="M9 7V5h6v2M9 11h6M9 15h4"/></svg></span><span>Assignments</span></button>
+        <button class="nav-item" data-page="exams"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/><path d="M12 4V2M20 12h2"/></svg></span><span>Exams</span></button>
+        <button class="nav-item" data-page="files"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 7.5A2.5 2.5 0 0 1 6.5 5H10l2 2h5.5A2.5 2.5 0 0 1 20 9.5v8A2.5 2.5 0 0 1 17.5 20h-11A2.5 2.5 0 0 1 4 17.5z"/></svg></span><span>Files</span></button>
+        <button class="nav-item" data-page="settings"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1-1.8 1.8-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.6v.1h-2.6V20a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1-1.8-1.8.1-.1A1.7 1.7 0 0 0 8 15a1.7 1.7 0 0 0-1.6-1H6.3v-2.6h.1A1.7 1.7 0 0 0 8 10a1.7 1.7 0 0 0-.3-1.9l-.1-.1 1.8-1.8.1.1a1.7 1.7 0 0 0 1.9.3 1.7 1.7 0 0 0 1-1.6v-.1H15V5a1.7 1.7 0 0 0 1 1.6 1.7 1.7 0 0 0 1.9-.3l.1-.1 1.8 1.8-.1.1a1.7 1.7 0 0 0-.3 1.9 1.7 1.7 0 0 0 1.6 1h.1v2.6H21a1.7 1.7 0 0 0-1.6 1.4z"/></svg></span><span>Settings</span></button>
       </nav>
-      <div class="side-label category-label">CATEGORIES <button class="tiny-plus" id="addCategory" aria-label="Add event">+</button></div>
-      <div class="category-list" id="categoryList"></div>
-      <div class="sidebar-bottom"><div class="semester-card"><div class="semester-top"><span class="semester-icon">✳</span><span class="semester-tag">PRIVATE</span></div><b id="semesterTitle">Your timetable</b><span id="semesterUniversity">University calendar</span><div class="semester-progress"><i></i></div><small>Synced to your account</small></div><div class="profile"><div class="avatar" id="profileAvatar">S</div><div class="profile-text"><b id="profileName">My studies</b><span id="profileUniversity">Personal calendar</span></div><button class="more" id="settingsButton" aria-label="Calendar settings" title="Calendar settings">⚙</button><button class="more signout-button" id="signOutButton" aria-label="Sign out" title="Sign out"><span class="signout-icon">↪</span><span class="signout-label">Sign out</span></button></div></div>
+      <div class="category-list" id="categoryList" aria-hidden="true"></div>
+      <div class="sidebar-bottom"><div class="profile"><div class="avatar" id="profileAvatar">K</div><div class="profile-text"><b id="profileName">Krupakar</b><span id="profileUniversity">Student · Wismar</span></div><button class="more signout-button" id="signOutButton" aria-label="Sign out" title="Sign out"><span class="signout-icon">↪</span><span class="signout-label">Sign out</span></button></div></div>
     </aside>
     <div class="mobile-drawer-backdrop" id="mobileDrawerBackdrop" aria-hidden="true"></div>
     <main class="main-area">

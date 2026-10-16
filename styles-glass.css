@@ -565,3 +565,127 @@ body.glass-theme::after{
     box-shadow:0 10px 28px rgba(8,14,48,.14),inset 0 1px 0 rgba(255,255,255,.14)!important;
   }
 }
+
+/* CampusHub v72 — reference-matched floating glass navigation */
+.glass-theme .sidebar{
+  position:fixed!important;
+  left:28px!important;
+  top:28px!important;
+  bottom:28px!important;
+  inset-right:auto!important;
+  width:300px!important;
+  height:auto!important;
+  padding:25px 16px 17px!important;
+  border:1px solid rgba(255,255,255,.28)!important;
+  border-radius:24px!important;
+  background:linear-gradient(180deg,rgba(52,54,105,.38),rgba(20,34,79,.48))!important;
+  box-shadow:0 24px 65px rgba(5,11,38,.24),inset 0 1px 0 rgba(255,255,255,.17)!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+  overflow:hidden!important;
+}
+.glass-theme .main-area{margin-left:348px!important}
+.glass-theme .sidebar .brand{
+  height:50px!important;
+  margin:0 10px 34px!important;
+  gap:11px!important;
+}
+.glass-theme .sidebar .brand-mark{
+  width:35px!important;height:35px!important;border-radius:11px!important;
+  background:linear-gradient(145deg,#b38dff,#7662f2)!important;
+  box-shadow:0 9px 28px rgba(119,91,239,.40)!important;
+}
+.glass-theme .sidebar .brand small{
+  color:rgba(240,243,255,.56)!important;
+  font-size:7.5px!important;
+  letter-spacing:1.35px!important;
+}
+.glass-theme .sidebar .side-label{
+  padding:0 13px!important;
+  margin-bottom:12px!important;
+  color:rgba(240,244,255,.48)!important;
+}
+.glass-theme .sidebar .main-nav{gap:4px!important}
+.glass-theme .sidebar .nav-item{
+  width:100%!important;
+  height:46px!important;
+  padding:0 13px!important;
+  border-radius:13px!important;
+  gap:13px!important;
+  font-size:13px!important;
+  font-weight:600!important;
+  color:rgba(247,249,255,.72)!important;
+}
+.glass-theme .sidebar .nav-item:hover{
+  background:rgba(255,255,255,.08)!important;
+  border-color:rgba(255,255,255,.10)!important;
+  color:#fff!important;
+}
+.glass-theme .sidebar .nav-item.active{
+  background:linear-gradient(100deg,rgba(255,255,255,.20),rgba(255,255,255,.09))!important;
+  border-color:rgba(255,255,255,.22)!important;
+  color:#fff!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.19),0 8px 25px rgba(10,16,52,.10)!important;
+}
+.glass-theme .sidebar .nav-icon{
+  width:22px!important;
+  height:22px!important;
+  flex:0 0 22px!important;
+  display:grid!important;
+  place-items:center!important;
+  color:rgba(255,255,255,.90)!important;
+  font-size:0!important;
+}
+.glass-theme .sidebar .nav-icon svg{
+  width:19px!important;
+  height:19px!important;
+  fill:none!important;
+  stroke:currentColor!important;
+  stroke-width:1.75!important;
+  stroke-linecap:round!important;
+  stroke-linejoin:round!important;
+}
+.glass-theme .sidebar .nav-item[data-page="dashboard"] .nav-icon svg path{fill:none!important}
+.glass-theme .sidebar .category-list{display:none!important}
+.glass-theme .sidebar .sidebar-bottom{margin-top:auto!important}
+.glass-theme .sidebar .semester-card{display:none!important}
+.glass-theme .sidebar .profile{
+  border-top:1px solid rgba(255,255,255,.14)!important;
+  padding:16px 7px 1px!important;
+  gap:10px!important;
+}
+.glass-theme .sidebar .profile-text{min-width:0!important}
+.glass-theme .sidebar .profile b{
+  font-size:11px!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  max-width:180px!important;
+}
+.glass-theme .sidebar .profile span{font-size:9px!important;color:rgba(239,243,255,.58)!important}
+.glass-theme .sidebar .avatar{
+  width:36px!important;height:36px!important;border-radius:12px!important;
+  background:rgba(255,255,255,.18)!important;
+  border:1px solid rgba(255,255,255,.24)!important;
+  color:#fff!important;
+  font-size:13px!important;
+}
+.glass-theme .sidebar .signout-button{display:none!important}
+.glass-theme .sidebar .more{display:none!important}
+
+@media(max-width:760px){
+  .glass-theme .sidebar{
+    left:20px!important;
+    top:18px!important;
+    bottom:18px!important;
+    width:min(306px,calc(100vw - 40px))!important;
+    border-radius:22px!important;
+    padding:23px 14px 16px!important;
+    transform:translateX(calc(-100% - 28px))!important;
+    transition:transform .22s ease!important;
+  }
+  .glass-theme .sidebar.open{transform:translateX(0)!important;box-shadow:0 26px 70px rgba(3,9,32,.34),inset 0 1px 0 rgba(255,255,255,.18)!important}
+  .glass-theme .main-area{margin-left:0!important}
+  .glass-theme .sidebar .brand{margin:0 9px 30px!important}
+  .glass-theme .sidebar .nav-item{height:45px!important}
+}

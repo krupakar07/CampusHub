@@ -1,4 +1,4 @@
-CampusHub v64 — interactive Campus Command Center dashboard.
+CampusHub v72 — reference-matched floating glass navigation.
 
 
 
@@ -101,3 +101,13 @@ The existing local data is retained as a cache. When an account signs in, Campus
 ### Security model
 
 All cloud rows are protected with Row Level Security and are keyed to `auth.users.id`. A signed-in user can only read/write their own data. The private `campushub-files` Storage bucket and its object policies are included for future large attachment uploads.
+
+
+## CampusHub v72 — Floating Glass Sidebar
+
+- Sidebar rebuilt to match the approved reference: floating rounded glass surface, translucent background, compact line icons, and clean vertical navigation.
+- Navigation order: Overview, Calendar, Notes, Study planner, Assignments, Exams, Files, Settings.
+- Removed the visual Categories and timetable blocks from the sidebar; underlying category data remains available to the calendar.
+- Profile is reduced to avatar, name, and student/university context.
+- Assignments routes to the existing Study Planner workflow; Files routes to the Notes Files workspace.
+- Mobile uses the same floating drawer treatment instead of a full-height solid sidebar.
