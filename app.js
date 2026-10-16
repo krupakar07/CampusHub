@@ -149,7 +149,7 @@
   function renderNext(){
     let now=new Date(),todayList=eventInstances(today,today).filter(e=>e.type!=='holiday').sort((a,b)=>getStart(a.instanceDate,a)-getStart(b.instanceDate,b));
     let live=todayList.find(e=>{let s=getStart(e.instanceDate,e),end=getStart(e.instanceDate,{start:e.end});return now>=s&&now<end});
-    let candidates=eventInstances(today,addDays(today,70)).filter(e=>e.type!=='holiday'&&getStart(e.instanceDate,e)>=now).sort((a,b)=>getStart(a.instanceDate,a)-getStart(b.instanceDate,b));
+    let candidates=todayList.filter(e=>getStart(e.instanceDate,e)>=now).sort((a,b)=>getStart(a.instanceDate,a)-getStart(b.instanceDate,b));
     let list=live?[live,...candidates.filter(x=>!(x.id===live.id&&iso(x.instanceDate)===iso(live.instanceDate)))]:candidates;
     let target=$('nextClass');
     if(!list.length){
@@ -159,15 +159,15 @@
     if(idx<0){idx=0;nextClassSelectionKey=`${list[0].id}|${iso(list[0].instanceDate)}`}
     let e=list[idx];
     let startTime=getStart(e.instanceDate,e),endTime=getStart(e.instanceDate,{start:e.end}),isLive=now>=startTime&&now<endTime,diff=Math.max(0,startTime-now),mins=Math.floor(diff/60000),hours=Math.floor(mins/60),days=Math.floor(hours/24);let countdown=isLive?'Happening now':days?`In ${days}d ${hours%24}h`:hours?`In ${hours}h ${mins%60}m`:`In ${mins} min`;
-    $('nextSubtitle').textContent=isLive?'Your current class':idx===0?'Your next scheduled class':'Upcoming class';$('nextLivePill').classList.toggle('active',isLive);$('nextLivePill').textContent=isLive?'● LIVE':'UP NEXT';
+    $('nextSubtitle').textContent=isLive?'Your current class':idx===0?'Your next scheduled class':'Later today';$('nextLivePill').classList.toggle('active',isLive);$('nextLivePill').textContent=isLive?'● LIVE':'UP NEXT';
     $('nextClassPosition').textContent=`${idx+1} / ${list.length}`;$('nextClassPrev').disabled=idx===0;$('nextClassNext').disabled=idx===list.length-1;
     let progress=isLive?Math.round(Math.max(0,Math.min(100,(now-startTime)/(endTime-startTime)*100))):0;
     target.innerHTML=`<button class="next-class-card ${isLive?'live-card':''}" data-edit="${e.id}" data-occurrence="${iso(e.instanceDate)}"><div class="next-top"><span class="next-label">${isLive?'CURRENT CLASS':e.instanceDate.getTime()===today.getTime()?'UP NEXT TODAY':dateLabel(e.instanceDate,{weekday:'long',day:'numeric',month:'long'}).toUpperCase()}</span><span class="countdown">${countdown}</span></div><h3>${esc(e.title)}</h3><span class="module">${esc(e.subject||TYPES[e.type].label)}</span><div class="next-details"><span><i>◷</i>${e.start} – ${e.end}</span>${e.room?`<span><i>⌖</i>${esc(e.room)}</span>`:''}</div>${isLive?`<div class="next-progress"><span>Class progress</span><b>${progress}%</b><i><em style="width:${progress}%"></em></i></div>`:`<div class="next-cta">Open event details <span>→</span></div>`}</button>`;
     $('nextFooterText').textContent=isLive?'You are in your current class':e.room?`Next: ${e.room}`:'Ready for your next class';
   }
   function moveNextClass(direction){
-    let now=new Date(),live=eventInstances(today,today).filter(e=>e.type!=='holiday').find(e=>{let s=getStart(e.instanceDate,e),end=getStart(e.instanceDate,{start:e.end});return now>=s&&now<end});
-    let candidates=eventInstances(today,addDays(today,70)).filter(e=>e.type!=='holiday'&&getStart(e.instanceDate,e)>=now).sort((a,b)=>getStart(a.instanceDate,a)-getStart(b.instanceDate,b));
+    let now=new Date(),todayList=eventInstances(today,today).filter(e=>e.type!=='holiday').sort((a,b)=>getStart(a.instanceDate,a)-getStart(b.instanceDate,b)),live=todayList.find(e=>{let s=getStart(e.instanceDate,e),end=getStart(e.instanceDate,{start:e.end});return now>=s&&now<end});
+    let candidates=todayList.filter(e=>getStart(e.instanceDate,e)>=now).sort((a,b)=>getStart(a.instanceDate,a)-getStart(b.instanceDate,b));
     let list=live?[live,...candidates.filter(x=>!(x.id===live.id&&iso(x.instanceDate)===iso(live.instanceDate)))]:candidates;
     if(!list.length)return;
     let idx=list.findIndex(x=>`${x.id}|${iso(x.instanceDate)}`===nextClassSelectionKey);if(idx<0)idx=0;
