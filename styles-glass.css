@@ -836,3 +836,22 @@ body.glass-theme::after{
     -webkit-backdrop-filter:blur(10px) saturate(120%)!important;
   }
 }
+
+/* v76 background fix: use the Wismar image as the actual page background.
+   The previous performance override replaced it with gradients. */
+body.glass-theme{
+  background-color:#17294f !important;
+  background-image:url("assets/background/campushub-wismar-dusk.png") !important;
+  background-position:center center !important;
+  background-size:cover !important;
+  background-repeat:no-repeat !important;
+  background-attachment:fixed !important;
+}
+body.glass-theme::before{
+  background:rgba(8,16,40,.08) !important;
+  z-index:-1 !important;
+}
+body.glass-theme::after{
+  background:transparent !important;
+  z-index:-1 !important;
+}
