@@ -366,3 +366,127 @@ button,input,select,textarea{touch-action:manipulation;}
 .weather-detail-metrics span{font-size:7px;color:#9a9dac}
 .weather-detail-metrics b{color:#666a7d}
 @media(max-width:760px){.dashboard-weather-week{padding:15px;margin-bottom:10px}.weather-week-list{display:flex;overflow-x:auto;gap:7px;padding-bottom:2px}.weather-day{min-width:78px;flex:0 0 78px}.weather-detail-head{align-items:flex-start;flex-direction:column}.weather-detail-metrics{gap:9px}}
+
+
+/* v65 — mobile dashboard rebuilt as a touch-first layout */
+@media(max-width:760px){
+  .dashboard-content{padding:12px 8px calc(var(--mobile-nav-height) + env(safe-area-inset-bottom) + 12px)}
+  .dashboard-hero{margin-bottom:10px;padding:15px;border-radius:14px;gap:9px}
+  .dashboard-hero-copy{min-height:0}
+  .dashboard-hero h1{font-size:24px;letter-spacing:-1px;margin:7px 0 3px}
+  .dashboard-hero .subheading{font-size:10px}
+  .hero-meta{font-size:8px;gap:9px;margin-top:10px}
+  .weather-card{min-height:92px;padding:12px 13px;border-radius:13px}
+  .weather-main{margin:8px 0;gap:8px}
+  .weather-icon{font-size:28px}
+  .weather-main strong{font-size:22px}
+  .weather-meta{font-size:7px;gap:8px}
+
+  .stats-grid{gap:7px;margin-bottom:10px}
+  .stat-card{height:82px;padding:11px 12px;border-radius:10px}
+  .stat-label{font-size:8px}
+  .stat-value{font-size:20px;margin-top:7px}
+  .stat-meta{font-size:7px}
+  .stat-icon{width:24px;height:24px;right:10px;top:10px;font-size:12px}
+
+  /* Mobile order: current/next first, then the complete day schedule. */
+  .dashboard-command-grid{display:flex;flex-direction:column;gap:9px;margin-bottom:10px}
+  .dashboard-side-stack{display:contents}
+  .dashboard-next{order:1;min-height:0;padding:12px;border-radius:12px}
+  .dashboard-schedule{order:2;min-height:0;padding:12px;border-radius:12px}
+  .dashboard-next .panel-heading,.dashboard-schedule .panel-heading{align-items:center}
+  .dashboard-next .panel-heading h2,.dashboard-schedule .panel-heading h2{font-size:12px}
+  .dashboard-next .panel-heading p,.dashboard-schedule .panel-heading p{font-size:8px;margin-top:3px}
+  .dashboard-next .text-button,.dashboard-schedule .text-button{font-size:8px}
+  .next-navigation{gap:3px}
+  .next-nav-button{width:27px;height:27px;border-radius:8px;font-size:16px}
+  .next-position{font-size:7px;min-width:29px}
+  .live-pill{font-size:6px;padding:4px 6px}
+  .next-class-card{margin-top:9px;padding:12px;border-radius:10px}
+  .next-class-card h3{font-size:13px;line-height:1.2;margin:9px 0 3px;max-width:82%}
+  .next-class-card .module{font-size:8px;line-height:1.25;display:block;max-width:85%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .next-details{gap:9px;margin-top:10px;font-size:8px;flex-wrap:wrap}
+  .next-footer{margin-top:8px;padding-top:8px;font-size:7px}
+  .next-footer button{font-size:7px}
+  .next-cta{font-size:7px;margin-top:8px;padding-top:7px}
+  .next-progress{margin-top:10px}
+  .next-progress span,.next-progress b{font-size:7px}
+
+  .schedule-list{margin-top:9px}
+  .schedule-row{min-height:46px;gap:7px;padding:7px 0}
+  .schedule-time{width:38px;font-size:8px}
+  .schedule-time small{font-size:6px}
+  .schedule-bar{height:25px;width:2px}
+  .schedule-description{padding-right:2px}
+  .schedule-description b{font-size:8px;line-height:1.2;white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .schedule-description span{font-size:6.5px;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .schedule-room{display:none}
+  .schedule-status{font-size:6.5px}
+  .schedule-arrow{font-size:15px}
+  .schedule-progress{margin-top:5px;height:2px}
+
+  /* Seven-day weather remains horizontal; never squeeze seven cards into one row. */
+  .dashboard-weather-week{padding:12px;margin-bottom:10px;border-radius:12px}
+  .dashboard-weather-week .panel-heading h2{font-size:12px}
+  .dashboard-weather-week .panel-heading p{font-size:8px}
+  .weather-week-list{gap:6px;margin-top:9px;padding-bottom:3px}
+  .weather-day{min-width:72px;flex:0 0 72px;padding:8px 5px;border-radius:9px;gap:3px}
+  .weather-day span{font-size:6px}
+  .weather-day b{font-size:9px}
+  .weather-day i{font-size:19px}
+  .weather-day strong{font-size:10px}
+  .weather-day small{font-size:6px}
+  .weather-day-details{margin-top:9px;padding-top:9px}
+  .weather-detail-head>b,.weather-detail-head div>b{font-size:8px}
+  .weather-detail-head div>span{font-size:7px}
+  .weather-detail-metrics{gap:7px}
+  .weather-detail-metrics span{font-size:6.5px}
+
+  /* This week is the single mobile seven-day schedule navigator. */
+  .dashboard-week-featured{padding:12px;margin-bottom:10px;border-radius:12px;min-height:0}
+  .dashboard-week-featured .panel-heading h2{font-size:12px}
+  .dashboard-week-featured .panel-heading p{font-size:8px}
+  .dashboard-week-featured .week-chart{display:flex;overflow-x:auto;gap:6px;margin-top:9px;padding-bottom:3px}
+  .dashboard-week-featured .week-day{min-width:68px;flex:0 0 68px;min-height:74px;padding:8px 4px;border-radius:8px}
+  .dashboard-week-featured .week-day .weekday{font-size:7px}
+  .dashboard-week-featured .week-day .day-number{width:25px;height:25px;font-size:9px;margin:6px auto}
+  .dashboard-week-featured .week-day .day-bars{height:18px}
+  .dashboard-week-featured .week-day .class-number{font-size:7px;margin-top:4px}
+  .dashboard-week-featured .week-day-details{margin-top:9px;padding-top:9px}
+  .dashboard-week-featured .week-detail-head{margin-bottom:3px}
+  .dashboard-week-featured .week-detail-head b{font-size:9px}
+  .dashboard-week-featured .week-detail-head span{font-size:7px}
+  .dashboard-week-featured .dashboard-inline-event{padding:7px 2px;grid-template-columns:38px minmax(0,1fr) 13px;gap:5px}
+  .dashboard-week-featured .inline-event-time{font-size:7px}
+  .dashboard-week-featured .inline-event-copy b{font-size:7px}
+  .dashboard-week-featured .inline-event-copy small{font-size:6px}
+  .dashboard-week-featured .inline-event-arrow{font-size:13px}
+
+  /* This week replaces the duplicate Next 7 days schedule on phones. */
+  #overviewNext7Panel{display:none!important}
+
+  .dashboard-lower-grid{display:grid;grid-template-columns:1fr;gap:9px;margin-bottom:10px}
+  .dashboard-tasks,.dashboard-actions{padding:12px;border-radius:12px}
+  .dashboard-tasks .panel-heading h2,.dashboard-actions .panel-heading h2{font-size:12px}
+  .dashboard-tasks .panel-heading p,.dashboard-actions .panel-heading p{font-size:8px}
+  .dashboard-empty{min-height:120px}
+  .dashboard-empty strong{font-size:10px}
+  .dashboard-empty small{font-size:7px}
+  .action-grid{grid-template-columns:1fr 1fr;gap:6px;margin-top:9px}
+  .action-grid button{min-height:52px;padding:8px;border-radius:8px}
+  .action-grid button b{font-size:8px}
+  .action-grid button small{font-size:6.5px}
+  .action-grid button>span{width:24px;height:24px;font-size:12px}
+
+  .app-footer{padding:10px 2px;font-size:7px;gap:7px;flex-wrap:wrap}
+}
+
+@media(max-width:390px){
+  .dashboard-content{padding-left:7px;padding-right:7px}
+  .dashboard-hero h1{font-size:22px}
+  .stat-card{height:78px;padding:10px}
+  .stat-value{font-size:19px}
+  .next-class-card h3{font-size:12px}
+  .dashboard-week-featured .week-day{min-width:64px;flex-basis:64px}
+  .action-grid{grid-template-columns:1fr 1fr}
+}
