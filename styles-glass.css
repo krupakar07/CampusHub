@@ -855,3 +855,39 @@ body.glass-theme::after{
   background:transparent !important;
   z-index:-1 !important;
 }
+
+/* v77 — force the Wismar photograph to be the real page background.
+   Earlier glass layers used negative z-index pseudo-elements, which can sit
+   behind the isolated body stacking context and therefore disappear. */
+html, body.glass-theme{
+  min-height:100%;
+  background-color:#17294f !important;
+  background-image:url("assets/background/campushub-wismar-dusk.png") !important;
+  background-position:center center !important;
+  background-repeat:no-repeat !important;
+  background-size:cover !important;
+  background-attachment:fixed !important;
+}
+body.glass-theme::before{
+  z-index:0 !important;
+  background:linear-gradient(180deg,rgba(15,24,58,.06),rgba(12,22,52,.10)) !important;
+  pointer-events:none !important;
+}
+body.glass-theme::after{
+  z-index:0 !important;
+  background:transparent !important;
+  pointer-events:none !important;
+}
+body.glass-theme > .app-shell,
+body.glass-theme > *:not(.app-shell){
+  position:relative;
+  z-index:1;
+}
+@media(max-width:760px){
+  html, body.glass-theme{
+    background-image:url("assets/background/campushub-wismar-dusk.png") !important;
+    background-position:center center !important;
+    background-size:cover !important;
+    background-attachment:scroll !important;
+  }
+}
