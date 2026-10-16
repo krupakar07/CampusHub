@@ -323,3 +323,149 @@ body.glass-theme::after{
   body.glass-theme::before,body.glass-theme::after{filter:none!important}
   .glass-theme .sidebar,.glass-theme .topbar,.glass-theme .panel,.glass-theme .stat-card,.glass-theme .dashboard-command-grid > *, .glass-theme .dashboard-lower-grid > *,.glass-theme .weather-card,.glass-theme .mobile-bottom-nav{backdrop-filter:none!important;-webkit-backdrop-filter:none!important;background:rgba(18,30,62,.96)!important}
 }
+
+/* CampusHub v70 — luminous prism glass system, based on the approved reference */
+:root{
+  --v70-navy:#18265b;
+  --v70-indigo:#463a83;
+  --v70-violet:#7b55b6;
+  --v70-cyan:#2f9fca;
+  --v70-pink:#c879b7;
+  --v70-purple:#9a7cff;
+  --v70-cyan-accent:#72d5e8;
+  --v70-glass:rgba(255,255,255,.105);
+  --v70-glass-strong:rgba(255,255,255,.145);
+  --v70-line:rgba(255,255,255,.29);
+  --v70-line-soft:rgba(255,255,255,.16);
+  --v70-text:#fbfbff;
+  --v70-muted:rgba(245,247,255,.68);
+  --v70-shadow:0 24px 70px rgba(8,14,48,.22),inset 0 1px 0 rgba(255,255,255,.16);
+}
+
+body.glass-theme{
+  color:var(--v70-text)!important;
+  background:#1b2b62!important;
+}
+body.glass-theme::before{
+  content:"";
+  position:fixed!important;
+  inset:-10%!important;
+  z-index:-5!important;
+  pointer-events:none!important;
+  background:
+    radial-gradient(ellipse 46% 54% at 17% 17%,rgba(214,118,238,.70) 0%,rgba(150,91,205,.43) 34%,transparent 68%),
+    radial-gradient(ellipse 48% 52% at 78% 16%,rgba(45,193,225,.72) 0%,rgba(47,142,198,.42) 35%,transparent 68%),
+    radial-gradient(ellipse 52% 50% at 83% 78%,rgba(227,120,186,.64) 0%,rgba(153,85,174,.35) 34%,transparent 69%),
+    radial-gradient(ellipse 48% 55% at 22% 83%,rgba(48,78,171,.74) 0%,rgba(38,53,122,.50) 40%,transparent 72%),
+    linear-gradient(125deg,#23347a 0%,#463b87 28%,#245f91 57%,#514185 79%,#9b5e9b 100%)!important;
+  filter:blur(22px) saturate(125%)!important;
+  transform:scale(1.08)!important;
+}
+body.glass-theme::after{
+  content:"";
+  position:fixed!important;
+  inset:-18%!important;
+  z-index:-4!important;
+  pointer-events:none!important;
+  background:
+    radial-gradient(circle at 35% 38%,rgba(255,255,255,.09),transparent 22%),
+    radial-gradient(circle at 66% 30%,rgba(255,255,255,.08),transparent 19%),
+    radial-gradient(circle at 51% 72%,rgba(255,177,225,.10),transparent 23%)!important;
+  filter:blur(55px)!important;
+}
+
+.glass-theme .app-shell,.glass-theme .main-area,.glass-theme .content,.glass-theme .dashboard-content{background:transparent!important}
+.glass-theme .sidebar{
+  width:236px!important;
+  padding:22px 16px 16px!important;
+  background:linear-gradient(180deg,rgba(40,39,90,.38),rgba(17,32,78,.43))!important;
+  border:1px solid var(--v70-line)!important;
+  border-left:0!important;
+  border-radius:0 22px 22px 0!important;
+  box-shadow:var(--v70-shadow)!important;
+  backdrop-filter:blur(32px) saturate(150%)!important;
+  -webkit-backdrop-filter:blur(32px) saturate(150%)!important;
+}
+.glass-theme .main-area{margin-left:236px!important}
+.glass-theme .brand{color:#fff!important}
+.glass-theme .brand-mark{background:linear-gradient(145deg,#b28cff,#7161f4)!important;box-shadow:0 9px 30px rgba(135,105,255,.45)!important}
+.glass-theme .brand small,.glass-theme .side-label{color:rgba(244,246,255,.56)!important}
+.glass-theme .nav-item{color:rgba(250,250,255,.74)!important;border:1px solid transparent!important;background:transparent!important}
+.glass-theme .nav-item:hover{background:rgba(255,255,255,.09)!important;color:#fff!important}
+.glass-theme .nav-item.active{background:linear-gradient(100deg,rgba(255,255,255,.19),rgba(255,255,255,.09))!important;border-color:rgba(255,255,255,.20)!important;color:#fff!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.20),0 8px 25px rgba(26,20,76,.12)!important}
+.glass-theme .nav-icon{color:#fff!important}
+.glass-theme .category-item{color:rgba(245,247,255,.68)!important}
+.glass-theme .category-item:hover{background:rgba(255,255,255,.07)!important;color:#fff!important}
+.glass-theme .category-count{color:rgba(240,244,255,.44)!important}
+.glass-theme .semester-card,.glass-theme .profile{border-color:var(--v70-line-soft)!important}
+.glass-theme .semester-card{background:rgba(255,255,255,.09)!important;border:1px solid var(--v70-line-soft)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.13)!important}
+.glass-theme .semester-tag{background:rgba(164,133,255,.23)!important;color:#ded5ff!important}
+.glass-theme .semester-card b,.glass-theme .profile b{color:#fff!important}
+.glass-theme .semester-card>span,.glass-theme .semester-card small,.glass-theme .profile span{color:rgba(240,243,255,.60)!important}
+.glass-theme .semester-progress{background:rgba(255,255,255,.12)!important}.glass-theme .semester-progress i{background:linear-gradient(90deg,#9c7dff,#6dd8e9)!important}
+.glass-theme .avatar{background:rgba(255,255,255,.15)!important;border-color:rgba(255,255,255,.22)!important;color:#fff!important}
+
+.glass-theme .topbar{
+  height:70px!important;
+  background:rgba(25,38,82,.25)!important;
+  border-bottom:1px solid rgba(255,255,255,.19)!important;
+  box-shadow:0 10px 35px rgba(7,12,42,.12),inset 0 1px 0 rgba(255,255,255,.08)!important;
+  backdrop-filter:blur(30px) saturate(145%)!important;
+  -webkit-backdrop-filter:blur(30px) saturate(145%)!important;
+}
+.glass-theme .breadcrumbs{color:rgba(244,247,255,.57)!important}.glass-theme .breadcrumbs b{color:#fff!important}.glass-theme .crumb-slash{color:rgba(255,255,255,.28)!important}
+.glass-theme .global-search-trigger,.glass-theme .icon-button{background:rgba(255,255,255,.10)!important;border:1px solid rgba(255,255,255,.25)!important;color:#fff!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.14)!important;backdrop-filter:blur(18px)!important}
+.glass-theme .global-search-trigger:hover,.glass-theme .icon-button:hover{background:rgba(255,255,255,.17)!important}.glass-theme .global-search-trigger kbd{background:rgba(255,255,255,.10)!important;color:rgba(255,255,255,.72)!important;border-color:rgba(255,255,255,.15)!important}.glass-theme .today-pill{color:rgba(245,247,255,.70)!important}
+.glass-theme .primary-button{background:linear-gradient(135deg,#a184ff,#765ce9)!important;border:1px solid rgba(255,255,255,.28)!important;box-shadow:0 12px 30px rgba(107,73,220,.30),inset 0 1px 0 rgba(255,255,255,.20)!important}
+
+.glass-theme .dashboard-content{padding:25px 38px 24px!important;max-width:none!important}
+.glass-theme .dashboard-hero,.glass-theme .panel,.glass-theme .stat-card,.glass-theme .dashboard-command-grid > *,.glass-theme .dashboard-lower-grid > *,.glass-theme .dashboard-next7{
+  background:linear-gradient(135deg,rgba(255,255,255,.12),rgba(255,255,255,.065))!important;
+  border:1px solid var(--v70-line)!important;
+  box-shadow:var(--v70-shadow)!important;
+  backdrop-filter:blur(30px) saturate(150%)!important;
+  -webkit-backdrop-filter:blur(30px) saturate(150%)!important;
+}
+.glass-theme .dashboard-hero{
+  min-height:185px!important;
+  border-radius:21px!important;
+  overflow:hidden!important;
+  background:
+    radial-gradient(circle at 84% 24%,rgba(111,222,235,.24),transparent 27%),
+    radial-gradient(circle at 35% 76%,rgba(232,135,218,.22),transparent 32%),
+    linear-gradient(115deg,rgba(255,255,255,.16),rgba(113,85,186,.12))!important;
+}
+.glass-theme .dashboard-hero::after{background:radial-gradient(circle at 80% 42%,rgba(255,255,255,.13),transparent 35%)!important;filter:blur(25px)!important}
+.glass-theme .dashboard-hero h1{font-size:31px!important;color:#fff!important;letter-spacing:-1.5px!important}.glass-theme .hero-meta,.glass-theme .hero-meta span,.glass-theme .subheading{color:rgba(246,248,255,.72)!important}.glass-theme .eyebrow{color:rgba(246,248,255,.60)!important}
+.glass-theme .weather-card{background:linear-gradient(135deg,rgba(255,255,255,.17),rgba(255,255,255,.07))!important;border:1px solid rgba(255,255,255,.30)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.20),0 18px 40px rgba(8,14,48,.16)!important;backdrop-filter:blur(28px) saturate(145%)!important;-webkit-backdrop-filter:blur(28px) saturate(145%)!important}
+.glass-theme .weather-card strong,.glass-theme .weather-card span,.glass-theme .weather-meta{color:#fff!important}.glass-theme .weather-card .weather-summary,.glass-theme .weather-card .weather-meta{color:rgba(245,247,255,.67)!important}
+
+.glass-theme .stats-grid{gap:14px!important;margin-bottom:14px!important}.glass-theme .stat-card{min-height:102px!important;border-radius:15px!important;background:linear-gradient(135deg,rgba(255,255,255,.15),rgba(255,255,255,.065))!important}.glass-theme .stat-card:nth-child(1){background:linear-gradient(135deg,rgba(190,140,255,.19),rgba(255,255,255,.065))!important}.glass-theme .stat-card:nth-child(2){background:linear-gradient(135deg,rgba(117,218,188,.15),rgba(255,255,255,.065))!important}.glass-theme .stat-card:nth-child(3){background:linear-gradient(135deg,rgba(255,165,110,.15),rgba(255,255,255,.065))!important}.glass-theme .stat-card:nth-child(4){background:linear-gradient(135deg,rgba(112,178,255,.17),rgba(255,255,255,.065))!important}.glass-theme .stat-label,.glass-theme .stat-meta{color:rgba(246,248,255,.67)!important}.glass-theme .stat-value{color:#fff!important}.glass-theme .stat-icon{background:rgba(255,255,255,.13)!important;border:1px solid rgba(255,255,255,.20)!important;color:#fff!important}
+
+.glass-theme .dashboard-weather-week{border-radius:17px!important;margin-bottom:14px!important;padding:18px 20px!important}.glass-theme .weather-day{background:rgba(255,255,255,.075)!important;border:1px solid rgba(255,255,255,.22)!important;border-radius:12px!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.13),0 10px 24px rgba(8,14,48,.10)!important}.glass-theme .weather-day:hover{background:rgba(255,255,255,.14)!important}.glass-theme .weather-day.selected{background:linear-gradient(145deg,rgba(155,124,255,.35),rgba(76,191,216,.13))!important;border-color:rgba(215,207,255,.48)!important;box-shadow:0 0 28px rgba(139,112,255,.20),inset 0 1px 0 rgba(255,255,255,.22)!important}.glass-theme .weather-day span,.glass-theme .weather-day small{color:rgba(244,247,255,.58)!important}.glass-theme .weather-day b,.glass-theme .weather-day strong{color:#fff!important}
+
+.glass-theme .dashboard-command-grid{gap:14px!important}.glass-theme .dashboard-schedule,.glass-theme .dashboard-next{border-radius:17px!important}.glass-theme .panel-heading h2{color:#fff!important}.glass-theme .panel-heading p{color:rgba(244,247,255,.58)!important}.glass-theme .text-button{color:#c8baff!important}.glass-theme .text-button:hover{color:#fff!important}.glass-theme .schedule-row{border-color:rgba(255,255,255,.10)!important}.glass-theme .schedule-row:hover{background:rgba(255,255,255,.07)!important}.glass-theme .schedule-description b{color:#fff!important}.glass-theme .schedule-description span,.glass-theme .schedule-time small{color:rgba(242,245,255,.56)!important}.glass-theme .schedule-time{color:#bca9ff!important}.glass-theme .schedule-row.current,.glass-theme .schedule-row.is-live{background:linear-gradient(90deg,rgba(154,124,255,.28),rgba(71,199,217,.06))!important;border-color:rgba(182,162,255,.25)!important}
+.glass-theme .next-class-card{background:linear-gradient(135deg,rgba(157,125,255,.28),rgba(82,207,224,.08))!important;border:1px solid rgba(220,213,255,.30)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.19),0 16px 38px rgba(10,14,52,.16)!important}.glass-theme .next-class-card h3{color:#fff!important}.glass-theme .next-class-card .module,.glass-theme .next-details,.glass-theme .next-footer{color:rgba(244,247,255,.63)!important}.glass-theme .next-nav-button{background:rgba(255,255,255,.12)!important;border-color:rgba(255,255,255,.20)!important;color:#fff!important}.glass-theme .next-nav-button:hover{background:rgba(255,255,255,.20)!important}.glass-theme .next-progress{background:rgba(255,255,255,.14)!important}.glass-theme .next-progress i{background:linear-gradient(90deg,#a17dff,#72d6e8)!important}
+.glass-theme .week-day,.glass-theme .next7-day{background:rgba(255,255,255,.075)!important;border-color:rgba(255,255,255,.19)!important;border-radius:11px!important}.glass-theme .week-day.selected,.glass-theme .next7-day.selected{background:linear-gradient(145deg,rgba(157,124,255,.33),rgba(72,193,219,.08))!important;border-color:rgba(214,207,255,.42)!important;box-shadow:0 12px 28px rgba(83,65,175,.16),inset 0 1px 0 rgba(255,255,255,.18)!important}.glass-theme .week-day .weekday,.glass-theme .week-day .class-number,.glass-theme .next7-day span,.glass-theme .next7-day small{color:rgba(243,246,255,.59)!important}.glass-theme .week-day .day-number,.glass-theme .next7-day b{color:#fff!important}.glass-theme .week-day.selected .day-number{background:linear-gradient(145deg,#a181ff,#7564ef)!important;box-shadow:0 7px 22px rgba(133,104,255,.42)!important}
+.glass-theme .week-day-details,.glass-theme .next7-details,.glass-theme .weather-day-details{border-color:rgba(255,255,255,.11)!important}.glass-theme .week-detail-head b,.glass-theme .next7-detail-head b,.glass-theme .inline-event-copy b{color:#fff!important}.glass-theme .week-detail-head span,.glass-theme .next7-detail-head span,.glass-theme .inline-event-copy small{color:rgba(241,245,255,.55)!important}.glass-theme .dashboard-inline-event{border-color:rgba(255,255,255,.10)!important}.glass-theme .dashboard-inline-event:hover{background:rgba(255,255,255,.06)!important}.glass-theme .inline-event-time{color:#c0adff!important}
+.glass-theme .dashboard-lower-grid{gap:14px!important}.glass-theme .dashboard-tasks,.glass-theme .dashboard-actions{border-radius:17px!important}.glass-theme .dashboard-task{background:transparent!important;border-color:rgba(255,255,255,.10)!important}.glass-theme .dashboard-task:hover{background:rgba(255,255,255,.06)!important}.glass-theme .dashboard-task-copy b{color:#fff!important}.glass-theme .dashboard-task-copy small,.glass-theme .task-due{color:rgba(241,245,255,.57)!important}.glass-theme .action-grid button{background:rgba(255,255,255,.08)!important;border:1px solid rgba(255,255,255,.18)!important;color:#fff!important;border-radius:12px!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.10)!important}.glass-theme .action-grid button:hover{background:rgba(255,255,255,.14)!important;transform:translateY(-1px)}.glass-theme .action-grid button span{background:linear-gradient(145deg,#9d7fff,#6bcbdf)!important;color:#fff!important;box-shadow:0 6px 18px rgba(111,99,235,.28)!important}.glass-theme .action-grid button b{color:#fff!important}.glass-theme .action-grid button small{color:rgba(241,245,255,.56)!important}
+.glass-theme .app-footer{color:rgba(241,245,255,.55)!important}.glass-theme .app-footer b{color:#a98cff!important}
+
+.glass-theme .modal-backdrop{background:rgba(10,17,44,.50)!important;backdrop-filter:blur(12px)!important}.glass-theme .event-modal,.glass-theme .search-modal,.glass-theme .settings-card,.glass-theme .subject-card,.glass-theme .topic-card,.glass-theme .file-card,.glass-theme .assignment-card,.glass-theme .exam-card,.glass-theme .quick-note-card{background:rgba(31,42,83,.72)!important;color:#fff!important;border:1px solid rgba(255,255,255,.25)!important;box-shadow:0 28px 80px rgba(5,10,35,.34),inset 0 1px 0 rgba(255,255,255,.15)!important;backdrop-filter:blur(30px) saturate(145%)!important;-webkit-backdrop-filter:blur(30px) saturate(145%)!important}.glass-theme .field input,.glass-theme .field select,.glass-theme .field textarea{background:rgba(255,255,255,.08)!important;border-color:rgba(255,255,255,.18)!important;color:#fff!important}.glass-theme .field,.glass-theme .field small{color:rgba(244,247,255,.70)!important}.glass-theme .field input::placeholder,.glass-theme .field textarea::placeholder{color:rgba(244,247,255,.42)!important}
+.glass-theme .mobile-bottom-nav{background:rgba(20,29,69,.56)!important;border-top:1px solid rgba(255,255,255,.25)!important;backdrop-filter:blur(28px) saturate(150%)!important;-webkit-backdrop-filter:blur(28px) saturate(150%)!important;box-shadow:0 -15px 45px rgba(4,9,35,.28)!important}.glass-theme .mobile-nav-item{color:rgba(244,247,255,.60)!important}.glass-theme .mobile-nav-item.active{background:rgba(161,126,255,.24)!important;border-color:rgba(255,255,255,.17)!important;color:#fff!important}
+
+@media(max-width:760px){
+  .glass-theme .sidebar{width:276px!important;border-radius:0 22px 22px 0!important}
+  .glass-theme .main-area{margin-left:0!important}
+  .glass-theme .topbar{height:62px!important;padding:0 12px!important;background:rgba(23,33,76,.32)!important}
+  .glass-theme .dashboard-content{padding:12px 9px calc(var(--mobile-nav-height) + env(safe-area-inset-bottom) + 14px)!important}
+  .glass-theme .dashboard-hero{min-height:260px!important;border-radius:18px!important;padding:18px!important}.glass-theme .dashboard-hero h1{font-size:26px!important;line-height:1.08!important}.glass-theme .weather-card{margin-top:15px!important;width:100%!important}
+  .glass-theme .stats-grid{gap:8px!important}.glass-theme .stat-card{min-height:91px!important;border-radius:13px!important;padding:12px!important}.glass-theme .stat-value{font-size:22px!important}
+  .glass-theme .dashboard-weather-week,.glass-theme .dashboard-schedule,.glass-theme .dashboard-next,.glass-theme .dashboard-week-featured,.glass-theme .dashboard-next7,.glass-theme .dashboard-tasks,.glass-theme .dashboard-actions{border-radius:16px!important}
+  .glass-theme .dashboard-weather-week{padding:15px 12px!important}.glass-theme .weather-week-list{display:flex!important;overflow-x:auto!important;gap:7px!important;padding-bottom:3px!important;scrollbar-width:none!important}.glass-theme .weather-week-list::-webkit-scrollbar{display:none}.glass-theme .weather-day{min-width:76px!important;flex:0 0 76px!important}
+  .glass-theme .dashboard-command-grid{display:grid!important;grid-template-columns:1fr!important;gap:10px!important}.glass-theme .dashboard-command-grid .dashboard-schedule{min-height:0!important}.glass-theme .dashboard-next{order:-1!important}
+  .glass-theme .dashboard-lower-grid{grid-template-columns:1fr!important;gap:10px!important}
+  .glass-theme .week-chart,.glass-theme .next7-list{display:flex!important;overflow-x:auto!important;gap:7px!important;scrollbar-width:none!important}.glass-theme .week-chart::-webkit-scrollbar,.glass-theme .next7-list::-webkit-scrollbar{display:none}.glass-theme .week-day,.glass-theme .next7-day{min-width:88px!important;flex:0 0 88px!important}
+}
+
+@media(prefers-reduced-transparency:reduce){body.glass-theme::before,body.glass-theme::after{filter:none!important}.glass-theme .sidebar,.glass-theme .topbar,.glass-theme .panel,.glass-theme .stat-card,.glass-theme .dashboard-command-grid>*{backdrop-filter:none!important;-webkit-backdrop-filter:none!important;background:#27386c!important}}
