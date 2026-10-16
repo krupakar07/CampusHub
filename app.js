@@ -19,6 +19,7 @@
   let weatherState={data:null,updatedAt:0,loading:false,locationKey:''};
   let selectedWeatherDate='';
   let selectedWeekDate=iso(today), selectedNext7Date=iso(today);
+  let nextClassSelectionKey='';
   function normalizeEventSources(list){return list.map(e=>e.source?e:(e.id?.startsWith('csv-intercultural-')||e.id?.startsWith('csv-')?{...e,source:'csv'}:e.id?.startsWith('ics-')?{...e,source:'ics'}:e))}
   function load(){try{const v=localStorage.getItem('campus-events-v2');return v?normalizeEventSources(JSON.parse(v)):defaultEvents.slice().map(e=>({...e,source:'csv'}))}catch{return defaultEvents.slice().map(e=>({...e,source:'csv'}))}}
   function userEventsKey(id){return `campus-calendar-user-${id}`}
@@ -146,16 +147,32 @@
   }
   function renderTravelAdvice(){document.querySelector('.travel-advice')?.remove();if(!travelBuffer)return;let list=eventInstances(today,today).filter(e=>e.type!=='holiday').sort((a,b)=>a.start.localeCompare(b.start)),notices=[];for(let i=1;i<list.length;i++){let prev=list[i-1],next=list[i],end=Number(prev.end.slice(0,2))*60+Number(prev.end.slice(3,5)),start=Number(next.start.slice(0,2))*60+Number(next.start.slice(3,5)),gap=start-end;if(gap>=0&&gap<travelBuffer)notices.push(`${esc(prev.title)} → ${esc(next.title)}: ${gap} min gap (buffer ${travelBuffer} min)`)}if(notices.length)$('todaySchedule').insertAdjacentHTML('beforeend',`<div class="travel-advice">🚶 Tight changeover: ${notices.join(' · ')}</div>`)}
   function renderNext(){
-    let now=new Date(),todayList=eventInstances(today,today).filter(e=>e.type!=='holiday').sort((a,b)=>a.start.localeCompare(b.start));
+    let now=new Date(),todayList=eventInstances(today,today).filter(e=>e.type!=='holiday').sort((a,b)=>getStart(a.instanceDate,a)-getStart(b.instanceDate,b));
     let live=todayList.find(e=>{let s=getStart(e.instanceDate,e),end=getStart(e.instanceDate,{start:e.end});return now>=s&&now<end});
     let candidates=eventInstances(today,addDays(today,70)).filter(e=>e.type!=='holiday'&&getStart(e.instanceDate,e)>=now).sort((a,b)=>getStart(a.instanceDate,a)-getStart(b.instanceDate,b));
-    let e=live||candidates[0],target=$('nextClass');
-    if(!e){$('nextSubtitle').textContent='Nothing scheduled next';$('nextLivePill').classList.remove('active');target.innerHTML='<div class="empty-state"><strong>Your calendar is clear.</strong>Add an event and CampusHub will keep the next step visible here.</div>';return}
+    let list=live?[live,...candidates.filter(x=>!(x.id===live.id&&iso(x.instanceDate)===iso(live.instanceDate)))]:candidates;
+    let target=$('nextClass');
+    if(!list.length){
+      nextClassSelectionKey='';$('nextSubtitle').textContent='Nothing scheduled next';$('nextLivePill').classList.remove('active');$('nextLivePill').textContent='UP NEXT';$('nextClassPosition').textContent='—';$('nextClassPrev').disabled=true;$('nextClassNext').disabled=true;target.innerHTML='<div class="empty-state"><strong>Your calendar is clear.</strong>Add an event and CampusHub will keep the next step visible here.</div>';return
+    }
+    let idx=list.findIndex(x=>`${x.id}|${iso(x.instanceDate)}`===nextClassSelectionKey);
+    if(idx<0){idx=0;nextClassSelectionKey=`${list[0].id}|${iso(list[0].instanceDate)}`}
+    let e=list[idx];
     let startTime=getStart(e.instanceDate,e),endTime=getStart(e.instanceDate,{start:e.end}),isLive=now>=startTime&&now<endTime,diff=Math.max(0,startTime-now),mins=Math.floor(diff/60000),hours=Math.floor(mins/60),days=Math.floor(hours/24);let countdown=isLive?'Happening now':days?`In ${days}d ${hours%24}h`:hours?`In ${hours}h ${mins%60}m`:`In ${mins} min`;
-    $('nextSubtitle').textContent=isLive?'Your current class':'Your next scheduled class';$('nextLivePill').classList.toggle('active',isLive);$('nextLivePill').textContent=isLive?'● LIVE':'UP NEXT';
+    $('nextSubtitle').textContent=isLive?'Your current class':idx===0?'Your next scheduled class':'Upcoming class';$('nextLivePill').classList.toggle('active',isLive);$('nextLivePill').textContent=isLive?'● LIVE':'UP NEXT';
+    $('nextClassPosition').textContent=`${idx+1} / ${list.length}`;$('nextClassPrev').disabled=idx===0;$('nextClassNext').disabled=idx===list.length-1;
     let progress=isLive?Math.round(Math.max(0,Math.min(100,(now-startTime)/(endTime-startTime)*100))):0;
     target.innerHTML=`<button class="next-class-card ${isLive?'live-card':''}" data-edit="${e.id}" data-occurrence="${iso(e.instanceDate)}"><div class="next-top"><span class="next-label">${isLive?'CURRENT CLASS':e.instanceDate.getTime()===today.getTime()?'UP NEXT TODAY':dateLabel(e.instanceDate,{weekday:'long',day:'numeric',month:'long'}).toUpperCase()}</span><span class="countdown">${countdown}</span></div><h3>${esc(e.title)}</h3><span class="module">${esc(e.subject||TYPES[e.type].label)}</span><div class="next-details"><span><i>◷</i>${e.start} – ${e.end}</span>${e.room?`<span><i>⌖</i>${esc(e.room)}</span>`:''}</div>${isLive?`<div class="next-progress"><span>Class progress</span><b>${progress}%</b><i><em style="width:${progress}%"></em></i></div>`:`<div class="next-cta">Open event details <span>→</span></div>`}</button>`;
     $('nextFooterText').textContent=isLive?'You are in your current class':e.room?`Next: ${e.room}`:'Ready for your next class';
+  }
+  function moveNextClass(direction){
+    let now=new Date(),live=eventInstances(today,today).filter(e=>e.type!=='holiday').find(e=>{let s=getStart(e.instanceDate,e),end=getStart(e.instanceDate,{start:e.end});return now>=s&&now<end});
+    let candidates=eventInstances(today,addDays(today,70)).filter(e=>e.type!=='holiday'&&getStart(e.instanceDate,e)>=now).sort((a,b)=>getStart(a.instanceDate,a)-getStart(b.instanceDate,b));
+    let list=live?[live,...candidates.filter(x=>!(x.id===live.id&&iso(x.instanceDate)===iso(live.instanceDate)))]:candidates;
+    if(!list.length)return;
+    let idx=list.findIndex(x=>`${x.id}|${iso(x.instanceDate)}`===nextClassSelectionKey);if(idx<0)idx=0;
+    idx=Math.max(0,Math.min(list.length-1,idx+direction));
+    nextClassSelectionKey=`${list[idx].id}|${iso(list[idx].instanceDate)}`;renderNext();
   }
   function openPage(p){page=p;$('dashboardPage').classList.toggle('hidden',p!=='dashboard');$('calendarPage').classList.toggle('hidden',p!=='calendar');$('plannerPage').classList.toggle('hidden',p!=='planner');$('notesPage').classList.toggle('hidden',p!=='notes');$('quickNotesPage').classList.toggle('hidden',p!=='quick-notes');$('examsPage').classList.toggle('hidden',p!=='exams');$('settingsPage')?.classList.toggle('hidden',p!=='settings');document.querySelectorAll('.nav-item,.mobile-nav-item').forEach(n=>n.classList.toggle('active',n.dataset.page===p));$('crumbCurrent').textContent=p==='dashboard'?'Overview':p==='calendar'?'Calendar':p==='planner'?'Study planner':p==='quick-notes'?'Quick Notes':p==='exams'?'Exams':p==='settings'?'Settings':'Notes';$('sidebar').classList.remove('open');$('mobileDrawerBackdrop')?.classList.remove('open');$('mobileMenu')?.setAttribute('aria-expanded','false');document.body.classList.remove('mobile-drawer-open');if(p==='calendar')renderCalendar();if(p==='planner')renderPlanner();if(p==='exams')window.CampusExams?.activate?.();if(p==='quick-notes')window.CampusQuickNotes?.activate?.();if(p==='notes')window.CampusNotes?.activate?.();if(p==='settings')window.CampusHubSettings?.activate?.()}
   function renderCalendar(){document.querySelectorAll('.view-switch button').forEach(b=>b.classList.toggle('selected',b.dataset.view===view));let grid=$('calendarGrid');if(view==='week')renderWeek(grid);else if(view==='day')renderDay(grid);else renderMonth(grid);$('calendarLegend').innerHTML=Object.entries(TYPES).map(([k,v])=>`<span class="legend-item"><i class="legend-dot" style="background:${v.color}"></i>${v.label}</span>`).join('');document.querySelectorAll('#calendarGrid [data-edit]').forEach(item=>{let e=events.find(x=>x.id===item.dataset.edit);item.classList.toggle('filtered-out',!!e&&!calendarPass(e))});renderCalendarTravelAdvice()}
@@ -210,7 +227,7 @@
   document.addEventListener('click',e=>{if(e.target.closest('.main-area') && window.innerWidth<=760) $('sidebar').classList.remove('open')});
   document.querySelectorAll('[data-open-calendar]').forEach(b=>b.addEventListener('click',()=>openPage('calendar')));
   ['topAdd','calendarAdd','addCategory'].forEach(id=>$(id)?.addEventListener('click',()=>showModal()));$('plannerAddTask')?.addEventListener('click',()=>showModal(null,iso(today),'assignment'));$('settingsButton')?.addEventListener('click',()=>openPage('settings'));$('closeSettings').addEventListener('click',closeSettings);$('cancelSettings').addEventListener('click',closeSettings);$('settingsModal').addEventListener('click',e=>{if(e.target===$('settingsModal'))closeSettings()});$('settingsForm').addEventListener('submit',saveSettings);$('calendarSearch').addEventListener('input',e=>{calendarQuery=e.target.value;renderCalendar()});$('calendarFilter').addEventListener('change',e=>{calendarType=e.target.value;renderCalendar()});$('plannerPage').addEventListener('click',e=>{let done=e.target.closest('[data-task-done]'),plan=e.target.closest('[data-task-plan]');if(done){let task=events.find(x=>x.id===done.dataset.taskDone);if(task){task.completed=true;save();update()}}if(plan){let task=events.find(x=>x.id===plan.dataset.taskPlan);if(task){let due=eventDate(task),created=0;for(const days of [7,3,1]){let d=addDays(due,-days);if(d<today)continue;let id=`plan-${hash(`${task.id}-${iso(d)}`)}`;if(events.some(x=>x.id===id))continue;events.push({id,title:`Study: ${task.title}`,subject:task.subject||task.title,date:iso(d),start:'18:00',end:'19:15',room:'',professor:'',type:'lecture',notes:`Preparation session for ${task.title}`,repeat:'none',source:'planner'});created++}save();update();notify(created?`${created} study sessions added before ${task.title}`:'There is not enough time to add study sessions before this deadline')}}});
-  $('upNextView').addEventListener('click',()=>openPage('calendar'));
+  $('upNextView').addEventListener('click',()=>openPage('calendar'));$('nextClassPrev').addEventListener('click',e=>{e.preventDefault();e.stopPropagation();moveNextClass(-1)});$('nextClassNext').addEventListener('click',e=>{e.preventDefault();e.stopPropagation();moveNextClass(1)});
   document.addEventListener('click',e=>{
     let action=e.target.closest('[data-dashboard-action]');
     if(action){let a=action.dataset.dashboardAction;if(a==='event')showModal();else if(a==='assignment')showModal(null,iso(today),'assignment');else if(a==='calendar')openPage('calendar');else if(a==='planner')openPage('planner');else if(a==='notes')openPage('notes');else if(a==='exams')openPage('exams')}
