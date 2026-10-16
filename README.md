@@ -111,3 +111,7 @@ All cloud rows are protected with Row Level Security and are keyed to `auth.user
 - Profile is reduced to avatar, name, and student/university context.
 - Assignments routes to the existing Study Planner workflow; Files routes to the Notes Files workspace.
 - Mobile uses the same floating drawer treatment instead of a full-height solid sidebar.
+
+
+## v75 visual update
+The approved Wismar dusk photograph is now a dedicated fixed DOM background layer behind the glass UI. The previous dark blue pseudo-background stack is disabled so the photograph remains visible through the translucent surfaces.
