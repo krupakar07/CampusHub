@@ -374,3 +374,25 @@
 .campus-notes-page .subject-note-icon .notes-nav-icon{width:100%;height:100%;border-radius:0;transition:transform .14s ease}
 .campus-notes-page .subject-note-card:hover .subject-note-icon .notes-nav-icon{transform:scale(1.05)}
 .campus-notes-page .subject-note-card:active .subject-note-icon .notes-nav-icon{transform:scale(.97)}
+
+/* Subject management: one consistent overflow menu for rename/delete. */
+.campus-notes-page .notes-subject-menu{width:28px;height:28px;flex:none;border:0;border-radius:6px;background:transparent;color:#9893a2;font-size:17px;line-height:1;cursor:pointer;opacity:0;transition:opacity .12s ease,background .12s ease,color .12s ease;letter-spacing:1px}
+.campus-notes-page .notes-list-row:hover .notes-subject-menu,.campus-notes-page .notes-subject-menu:focus-visible{opacity:1}
+.campus-notes-page .notes-subject-menu:hover{background:#e7e3f1;color:#51439a}
+.subject-action-menu{position:fixed;z-index:10000;width:180px;padding:5px;background:#fff;border:1px solid #ded9e8;border-radius:9px;box-shadow:0 12px 30px rgba(38,32,60,.16)}
+.subject-action-menu button{display:block;width:100%;border:0;background:transparent;border-radius:6px;padding:9px 10px;text-align:left;font-size:12px;color:#45414f;cursor:pointer}
+.subject-action-menu button:hover{background:#f2eff8;color:#4f419d}
+.subject-action-menu button.danger{color:#b42318}
+.subject-action-menu button.danger:hover{background:#fff0ef;color:#a11d14}
+.notes-subject-rename-form{display:flex;align-items:center;gap:4px;width:100%;padding:3px 4px}
+.notes-subject-rename-input{flex:1;min-width:0;height:30px;border:1px solid #b9afe0;border-radius:6px;background:#fff;padding:0 8px;font:inherit;font-size:12px;color:#3e3a49;outline:none;box-shadow:0 0 0 2px rgba(118,97,201,.08)}
+.notes-subject-rename-save,.notes-subject-rename-cancel{width:28px;height:28px;border:0;border-radius:6px;background:#f0edf8;color:#5b4aa9;cursor:pointer;font-size:14px;line-height:1}
+.notes-subject-rename-cancel{background:#f5f3f7;color:#77727f}
+.notes-subject-rename-save:hover{background:#e3def5}.notes-subject-rename-cancel:hover{background:#ebe7ee}
+.mobile-notes-header-actions{display:flex;align-items:center;gap:4px}
+.mobile-notes-manage{width:38px;height:38px;border:0;border-radius:8px;background:#f1eef9;color:#5c4caf;font-size:19px;line-height:1;cursor:pointer}
+.mobile-notes-manage:hover{background:#e7e2f6}
+@media(max-width:760px){
+  .campus-notes-page .notes-subject-menu{opacity:1;width:30px;height:34px}
+  .campus-notes-page .notes-list-row{min-width:max-content}
+}

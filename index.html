@@ -88,7 +88,7 @@
           <div class="panel dashboard-actions"><div class="panel-heading"><div><h2>Quick actions</h2><p>Get things done faster</p></div><span class="quick-action-icon">✦</span></div><div class="action-grid"><button data-dashboard-action="event"><span>＋</span><b>Add event</b><small>Schedule a class or deadline</small></button><button data-dashboard-action="notes"><span>▤</span><b>Create note</b><small>Open your notes workspace</small></button><button data-dashboard-action="assignment"><span>✓</span><b>Add assignment</b><small>Track work and due dates</small></button><button data-dashboard-action="exam"><span>◉</span><b>View exams</b><small>Check revision progress</small></button></div></div>
         </section>
 
-        <footer class="app-footer"><span><i class="offline-dot"></i> <span id="storageStatus">Synced privately to your account</span></span><span>CampusHub v59 · Made for your studies <b>✳</b></span></footer>
+        <footer class="app-footer"><span><i class="offline-dot"></i> <span id="storageStatus">Synced privately to your account</span></span><span>CampusHub v63 · Made for your studies <b>✳</b></span></footer>
       </div>
       <div class="content calendar-content hidden" id="calendarPage">
         <section class="calendar-title-row"><div><div class="eyebrow"><span class="eyebrow-line"></span> YOUR PERSONAL TIMETABLE</div><h1>Calendar</h1><p class="subheading">Plan your semester, one day at a time.</p></div><div class="calendar-actions"><details class="tools-menu"><summary>⇩ &nbsp; Export / backup</summary><div class="tools-popover"><button id="exportIcs">Export calendar (.ics)</button><button id="downloadBackup">Download backup (.json)</button><button id="restoreBackup">Restore backup (.json)</button></div></details><input id="backupFileInput" type="file" accept=".json,application/json" hidden><button class="secondary-button" id="importCsvButton">⇧ &nbsp; Import timetable</button><input id="csvFileInput" type="file" accept=".csv,.ics,text/csv,text/calendar" hidden><button class="primary-button" id="calendarAdd">＋ &nbsp; Add event</button></div></section>
@@ -154,7 +154,7 @@
               <span class="mobile-notes-header-label">SUBJECT</span>
               <select id="mobileSubjectSelect" aria-label="Select subject"></select>
             </div>
-            <button type="button" class="mobile-notes-add" id="mobileNotesAddSubject" aria-label="Add subject">＋</button>
+            <div class="mobile-notes-header-actions"><button type="button" class="mobile-notes-manage" id="mobileNotesSubjectMenu" aria-label="Manage current subject" title="Manage current subject">⋯</button><button type="button" class="mobile-notes-add" id="mobileNotesAddSubject" aria-label="Add subject">＋</button></div>
           </div>
           <aside class="notes-sidebar">
             <div class="notes-sidebar-title">MY NOTES</div>

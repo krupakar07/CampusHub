@@ -176,15 +176,75 @@
     return topics[activeTopic].pages;
   }
 
+  let subjectMenuAnchor = null;
+
+  function closeSubjectMenu(){
+    const menu=document.querySelector('.subject-action-menu');
+    if(menu)menu.remove();
+    subjectMenuAnchor=null;
+  }
+
+  function openSubjectMenu(name, anchor){
+    closeSubjectMenu();
+    const menu=document.createElement('div');
+    menu.className='subject-action-menu';
+    menu.setAttribute('role','menu');
+    menu.innerHTML=`<button type="button" role="menuitem" data-subject-action="rename">Rename subject</button><button type="button" role="menuitem" class="danger" data-subject-action="delete">Delete subject</button>`;
+    document.body.appendChild(menu);
+    subjectMenuAnchor=anchor;
+    const rect=anchor.getBoundingClientRect();
+    const menuWidth=180;
+    const left=Math.min(Math.max(8,rect.right-menuWidth),window.innerWidth-menuWidth-8);
+    const top=Math.min(rect.bottom+6,window.innerHeight-menu.offsetHeight-8);
+    menu.style.left=`${left}px`;
+    menu.style.top=`${Math.max(8,top)}px`;
+    menu.addEventListener('click',e=>{
+      const action=e.target.closest('[data-subject-action]')?.dataset.subjectAction;
+      if(!action)return;
+      closeSubjectMenu();
+      if(action==='rename')beginSubjectRename(name);
+      if(action==='delete')deleteSubject(name);
+    });
+  }
+
+  function beginSubjectRename(name){
+    const wrap=$('notesSubjectList');
+    const row=[...(wrap?.querySelectorAll('[data-subject-row]')||[])].find(el=>el.dataset.subjectRow===name);
+    if(!row)return;
+    const data=getData();
+    if(!data.subjects?.[name])return;
+    row.innerHTML=`<form class="notes-subject-rename-form" data-subject-rename-form="${escapeHtml(name)}"><input class="notes-subject-rename-input" aria-label="Rename subject" value="${escapeHtml(name)}" maxlength="120" autocomplete="off"><button type="submit" class="notes-subject-rename-save" aria-label="Save subject name" title="Save">✓</button><button type="button" class="notes-subject-rename-cancel" aria-label="Cancel rename" title="Cancel">×</button></form>`;
+    const form=row.querySelector('form'),input=row.querySelector('input');
+    input?.focus(); input?.select();
+    form?.addEventListener('submit',e=>{e.preventDefault();renameSubject(name,input.value);});
+    row.querySelector('.notes-subject-rename-cancel')?.addEventListener('click',()=>renderSubjects());
+    input?.addEventListener('keydown',e=>{if(e.key==='Escape'){e.preventDefault();renderSubjects();}});
+  }
+
+  function renameSubject(oldName,newName){
+    const clean=String(newName||'').trim();
+    if(!clean){notify('Subject name cannot be empty.');return;}
+    if(clean===oldName){renderSubjects();return;}
+    const data=getData();
+    if(!data.subjects?.[oldName])return;
+    if(data.subjects[clean]){notify('That subject already exists.');return;}
+    data.subjects[clean]=data.subjects[oldName];
+    delete data.subjects[oldName];
+    if(activeSubject===oldName)activeSubject=clean;
+    saveData(data);
+    renderSubjects(); renderPages(); restoreEditor(); showSubjectWorkspace('overview');
+    notify(`Subject renamed to “${clean}”`);
+  }
+
   function renderSubjects() {
     const wrap = $('notesSubjectList'); if (!wrap) return;
     const data = getData();
     const names = Object.keys(data.subjects || {});
     wrap.innerHTML = names.map((name,i) => {
       const color = defaultSubjects.find(x=>x[0]===name)?.[1] || ['purple','blue','green','orange'][i%4];
-      return `<div class="notes-list-row ${name===activeSubject?'active':''}">` +
+      return `<div class="notes-list-row ${name===activeSubject?'active':''}" data-subject-row="${escapeHtml(name)}">` +
         `<button type="button" class="notes-subject ${name===activeSubject?'active':''}" data-subject="${escapeHtml(name)}"><span class="notes-dot ${color}"></span><span class="notes-list-label">${escapeHtml(name)}</span><span class="notes-subject-open" aria-hidden="true">›</span></button>` +
-        `<button type="button" class="notes-delete-item" data-delete-subject="${escapeHtml(name)}" aria-label="Delete subject ${escapeHtml(name)}" title="Delete subject">×</button>` +
+        `<button type="button" class="notes-subject-menu" data-subject-menu="${escapeHtml(name)}" aria-label="Manage ${escapeHtml(name)}" title="Manage subject">⋯</button>` +
       `</div>`;
     }).join('');
     const mobileSelect = $('mobileSubjectSelect');
@@ -930,10 +990,21 @@
       if(name) switchSubject(name);
     });
     $('notesSubjectList')?.addEventListener('click',e=>{
-      const del=e.target.closest('[data-delete-subject]');
-      if(del){e.preventDefault();e.stopPropagation();deleteSubject(del.dataset.deleteSubject);return;}
-      const b=e.target.closest('[data-subject]');if(b)switchSubject(b.dataset.subject);
+      const menu=e.target.closest('[data-subject-menu]');
+      if(menu){e.preventDefault();e.stopPropagation();openSubjectMenu(menu.dataset.subjectMenu,menu);return;}
+      const b=e.target.closest('[data-subject]');if(b){closeSubjectMenu();switchSubject(b.dataset.subject);}
     });
+    $('mobileNotesSubjectMenu')?.addEventListener('click',e=>{
+      const current=activeSubject;
+      if(current)openSubjectMenu(current,e.currentTarget);
+    });
+    document.addEventListener('click',e=>{
+      const menu=document.querySelector('.subject-action-menu');
+      if(!menu)return;
+      if(menu.contains(e.target)||e.target.closest('[data-subject-menu]')||e.target.closest('#mobileNotesSubjectMenu'))return;
+      closeSubjectMenu();
+    });
+    window.addEventListener('resize',closeSubjectMenu);
     $('notesPageList')?.addEventListener('click',e=>{
       const del=e.target.closest('[data-delete-page]');
       if(del){e.preventDefault();e.stopPropagation();deletePage(del.dataset.deletePage);return;}
