@@ -207,6 +207,33 @@
     });
   }
 
+  function openNotesItemMenu(type,name,anchor){
+    closeSubjectMenu();
+    const menu=document.createElement('div');
+    menu.className='subject-action-menu notes-item-action-menu';
+    menu.setAttribute('role','menu');
+    const label=type==='topic'?'topic':'page';
+    menu.innerHTML=`<button type="button" role="menuitem" data-notes-item-action="rename">Rename ${label}</button>${type==='topic'?'<button type="button" role="menuitem" data-notes-item-action="new-page">New page</button>':''}<button type="button" role="menuitem" class="danger" data-notes-item-action="delete">Delete ${label}</button>`;
+    document.body.appendChild(menu);
+    subjectMenuAnchor=anchor;
+    const rect=anchor.getBoundingClientRect();
+    const menuWidth=170;
+    const left=Math.min(Math.max(8,rect.right-menuWidth),window.innerWidth-menuWidth-8);
+    const top=Math.min(rect.bottom+6,window.innerHeight-menu.offsetHeight-8);
+    menu.style.left=`${left}px`;
+    menu.style.top=`${Math.max(8,top)}px`;
+    menu.addEventListener('click',e=>{
+      const action=e.target.closest('[data-notes-item-action]')?.dataset.notesItemAction;
+      if(!action)return;
+      closeSubjectMenu();
+      if(action==='rename'){
+        const next=prompt(`Rename ${label}:`,name);
+        if(next!==null) (type==='topic'?renameTopic:renamePage)(name,next);
+      } else if(action==='new-page') addPage();
+      else if(action==='delete') (type==='topic'?deleteTopic:deletePage)(name);
+    });
+  }
+
   function beginSubjectRename(name){
     const wrap=$('notesSubjectList');
     const row=[...(wrap?.querySelectorAll('[data-subject-row]')||[])].find(el=>el.dataset.subjectRow===name);
@@ -262,8 +289,8 @@
     const topicHtml=topicNames.map(topicName=>{
       const pages=topics[topicName]?.pages||{};
       const open=topicName===activeTopic;
-      const pagesHtml=open?Object.keys(pages).map(p=>`<div class="notes-tree-page ${p===activePage?'active':''}"><button type="button" class="notes-page-link" data-note-page="${escapeHtml(p)}">${navIcon('page','')}<span class="notes-list-label">${escapeHtml(p)}</span></button><button type="button" class="notes-delete-item" data-delete-page="${escapeHtml(p)}" aria-label="Delete page ${escapeHtml(p)}" title="Delete page">×</button></div>`).join(''):'';
-      return `<div class="notes-tree-topic ${open?'open':''}"><button type="button" class="notes-topic-toggle" data-topic="${escapeHtml(topicName)}"><span class="notes-topic-chevron">${open?'▾':'▸'}</span>${navIcon('topic','')}<span class="notes-list-label">${escapeHtml(topicName)}</span><small>${Object.keys(pages).length}</small></button>${pagesHtml}</div>`;
+      const pagesHtml=open?Object.keys(pages).map(p=>`<div class="notes-tree-page ${p===activePage?'active':''}"><button type="button" class="notes-page-link" data-note-page="${escapeHtml(p)}">${navIcon('page','')}<span class="notes-list-label">${escapeHtml(p)}</span></button><button type="button" class="notes-item-menu" data-page-menu="${escapeHtml(p)}" aria-label="Manage ${escapeHtml(p)}" title="Manage page">⋯</button></div>`).join(''):'';
+      return `<div class="notes-tree-topic ${open?'open':''}"><div class="notes-topic-row"><button type="button" class="notes-topic-toggle" data-topic="${escapeHtml(topicName)}"><span class="notes-topic-chevron">${open?'▾':'▸'}</span>${navIcon('topic','')}<span class="notes-list-label">${escapeHtml(topicName)}</span><small>${Object.keys(pages).length}</small></button><button type="button" class="notes-item-menu" data-topic-menu="${escapeHtml(topicName)}" aria-label="Manage ${escapeHtml(topicName)}" title="Manage topic">⋯</button></div>${pagesHtml}</div>`;
     }).join('');
     wrap.innerHTML=topicHtml;
   }
@@ -918,6 +945,44 @@
   function addTopic(){const name=prompt('Topic name:');if(!name?.trim())return;const clean=name.trim();const data=getData();const topics=currentTopics(data);if(topics[clean]){notify('That topic already exists.');return;}topics[clean]={pages:{'Lecture Notes':defaultContent(activeSubject)}};saveData(data);activeTopic=clean;activePage='Lecture Notes';renderPages();restoreEditor();showTopicWorkspace(clean);notify(`Topic “${clean}” created`);}
   function addPage(){const name=prompt('Page name:','Lecture Notes');if(!name?.trim())return;const clean=name.trim();const data=getData();const pages=currentPages(data);if(pages[clean]){notify('That page already exists.');return;}pages[clean]=defaultContent(activeSubject);saveData(data);activePage=clean;renderPages();restoreEditor();showNoteEditor();}
 
+  function renameTopic(oldName,newName){
+    const clean=String(newName||'').trim();
+    if(!clean){notify('Topic name cannot be empty.');return;}
+    if(clean===oldName){renderPages();return;}
+    const data=getData(), topics=currentTopics(data);
+    if(!topics[oldName])return;
+    if(topics[clean]){notify('That topic already exists.');return;}
+    topics[clean]=topics[oldName];
+    delete topics[oldName];
+    if(activeTopic===oldName)activeTopic=clean;
+    saveData(data); renderPages(); restoreEditor(); showTopicWorkspace(activeTopic); notify(`Topic renamed to “${clean}”`);
+  }
+
+  function deleteTopic(name){
+    if(!name)return;
+    const data=getData(), topics=currentTopics(data), names=Object.keys(topics);
+    if(names.length<=1){notify('Keep at least one topic in this subject.');return;}
+    if(!topics[name])return;
+    const pageCount=Object.keys(topics[name].pages||{}).length;
+    if(!confirm(`Delete the topic “${name}” and its ${pageCount} ${pageCount===1?'page':'pages'}? This cannot be undone.`))return;
+    scheduleSave(); delete topics[name];
+    if(activeTopic===name){activeTopic=Object.keys(topics)[0]||'';activePage=Object.keys(topics[activeTopic]?.pages||{})[0]||'';}
+    saveData(data); renderPages(); restoreEditor(); showSubjectWorkspace('notes'); notify(`Topic “${name}” deleted`);
+  }
+
+  function renamePage(oldName,newName){
+    const clean=String(newName||'').trim();
+    if(!clean){notify('Page name cannot be empty.');return;}
+    if(clean===oldName){renderPages();return;}
+    const data=getData(), pages=currentPages(data);
+    if(!pages[oldName])return;
+    if(pages[clean]){notify('That page already exists.');return;}
+    pages[clean]=pages[oldName];
+    delete pages[oldName];
+    if(activePage===oldName)activePage=clean;
+    saveData(data); renderPages(); restoreEditor(); notify(`Page renamed to “${clean}”`);
+  }
+
   function deletePage(name){
     if(!name)return;
     const data=getData(), pages=currentPages(data), names=Object.keys(pages);
@@ -1006,8 +1071,10 @@
     });
     window.addEventListener('resize',closeSubjectMenu);
     $('notesPageList')?.addEventListener('click',e=>{
-      const del=e.target.closest('[data-delete-page]');
-      if(del){e.preventDefault();e.stopPropagation();deletePage(del.dataset.deletePage);return;}
+      const topicMenu=e.target.closest('[data-topic-menu]');
+      if(topicMenu){e.preventDefault();e.stopPropagation();openNotesItemMenu('topic',topicMenu.dataset.topicMenu,topicMenu);return;}
+      const pageMenu=e.target.closest('[data-page-menu]');
+      if(pageMenu){e.preventDefault();e.stopPropagation();openNotesItemMenu('page',pageMenu.dataset.pageMenu,pageMenu);return;}
       const page=e.target.closest('[data-note-page]');if(page){switchPage(page.dataset.notePage);return;}
       const topic=e.target.closest('[data-topic]');if(topic){switchTopic(topic.dataset.topic);return;}
     });

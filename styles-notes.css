@@ -396,3 +396,19 @@
   .campus-notes-page .notes-subject-menu{opacity:1;width:30px;height:34px}
   .campus-notes-page .notes-list-row{min-width:max-content}
 }
+
+/* v64: consistent Topic + Page management controls */
+.campus-notes-page .notes-topic-row{display:flex;align-items:center;gap:2px;width:100%;border-radius:7px}
+.campus-notes-page .notes-topic-row:hover,.campus-notes-page .notes-tree-topic.open .notes-topic-row{background:#f0edf7}
+.campus-notes-page .notes-topic-row .notes-topic-toggle{flex:1;min-width:0;background:transparent}
+.campus-notes-page .notes-topic-row .notes-topic-toggle:hover{background:transparent}
+.campus-notes-page .notes-item-menu{width:28px;height:28px;flex:none;border:0;border-radius:6px;background:transparent;color:#9893a2;font-size:17px;line-height:1;cursor:pointer;opacity:0;transition:opacity .12s ease,background .12s ease,color .12s ease;letter-spacing:1px}
+.campus-notes-page .notes-topic-row:hover .notes-item-menu,
+.campus-notes-page .notes-tree-page:hover .notes-item-menu,
+.campus-notes-page .notes-item-menu:focus-visible{opacity:1}
+.campus-notes-page .notes-item-menu:hover{background:#e7e3f1;color:#51439a}
+.campus-notes-page .notes-tree-page .notes-item-menu{margin-right:2px}
+.campus-notes-page .notes-tree-page .notes-page-link{min-width:0}
+@media(max-width:760px){
+  .campus-notes-page .notes-item-menu{opacity:1;width:30px;height:32px}
+}

@@ -1,4 +1,4 @@
-CampusHub v63 — interactive Campus Command Center dashboard.
+CampusHub v64 — interactive Campus Command Center dashboard.
 
 
 
@@ -11,7 +11,7 @@ A responsive, installable university workspace combining the full private Campus
 Serve this folder from any static web server, then open its URL in a browser. A server is needed for PWA installation and offline caching; the app itself is plain HTML, CSS, and JavaScript.
 
 
-## CampusHub v63 — Subject Management
+## CampusHub v64 — Subject Management
 
 The Overview page is rebuilt as an interactive campus command center inspired by the approved dashboard direction.
 
