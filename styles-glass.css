@@ -226,3 +226,100 @@ body.glass-theme::after{
   body.glass-theme::before,body.glass-theme::after{filter:none}
   .glass-theme .sidebar,.glass-theme .topbar,.glass-theme .panel,.glass-theme .dashboard-hero,.glass-theme .stat-card,.glass-theme .dashboard-command-grid > *, .glass-theme .dashboard-lower-grid > *, .glass-theme .weather-card,.glass-theme .mobile-nav-item{backdrop-filter:none;-webkit-backdrop-filter:none;background:rgba(24,34,67,.96)}
 }
+
+
+/* CampusHub v69 — reference-grade glass composition */
+:root{
+  --glass-surface:rgba(21,32,68,.42);
+  --glass-surface-strong:rgba(28,41,82,.56);
+  --glass-surface-soft:rgba(255,255,255,.10);
+  --glass-line:rgba(255,255,255,.22);
+  --glass-line-strong:rgba(255,255,255,.32);
+  --glass-shadow-deep:0 24px 70px rgba(2,8,28,.34), inset 0 1px 0 rgba(255,255,255,.16);
+}
+body.glass-theme{
+  background:#0d1730!important;
+  color:#f7f8ff!important;
+  isolation:isolate;
+}
+body.glass-theme::before{
+  background:
+    radial-gradient(900px 600px at 74% 8%,rgba(122,106,255,.32),transparent 62%),
+    radial-gradient(700px 500px at 8% 78%,rgba(39,137,212,.30),transparent 64%),
+    radial-gradient(620px 480px at 62% 72%,rgba(232,112,76,.18),transparent 58%),
+    linear-gradient(135deg,#203867 0%,#15264c 42%,#0d1833 100%) !important;
+  z-index:-4;
+}
+body.glass-theme::after{
+  background:
+    radial-gradient(ellipse at 48% 30%,rgba(255,196,160,.20) 0 7%,transparent 30%),
+    radial-gradient(ellipse at 78% 58%,rgba(100,88,255,.22) 0 8%,transparent 32%),
+    radial-gradient(ellipse at 22% 62%,rgba(74,159,224,.20) 0 8%,transparent 30%) !important;
+  filter:blur(48px)!important;
+  z-index:-3;
+}
+.glass-theme .app-shell,.glass-theme .main-area,.glass-theme .content,.glass-theme .dashboard-content{background:transparent!important}
+.glass-theme .sidebar{
+  background:linear-gradient(180deg,rgba(19,30,63,.70),rgba(13,24,52,.54))!important;
+  border:1px solid var(--glass-line)!important;
+  border-left:0!important;
+  box-shadow:var(--glass-shadow-deep)!important;
+  backdrop-filter:blur(30px) saturate(150%)!important;
+  -webkit-backdrop-filter:blur(30px) saturate(150%)!important;
+}
+.glass-theme .topbar{
+  background:rgba(14,25,55,.48)!important;
+  border-bottom:1px solid var(--glass-line)!important;
+  box-shadow:0 10px 35px rgba(4,10,30,.16),inset 0 1px 0 rgba(255,255,255,.10)!important;
+  backdrop-filter:blur(26px) saturate(145%)!important;
+  -webkit-backdrop-filter:blur(26px) saturate(145%)!important;
+}
+.glass-theme .panel,.glass-theme .stat-card,.glass-theme .dashboard-command-grid > *, .glass-theme .dashboard-lower-grid > *{
+  background:linear-gradient(145deg,rgba(31,45,84,.48),rgba(20,31,66,.34))!important;
+  border:1px solid var(--glass-line)!important;
+  box-shadow:var(--glass-shadow-deep)!important;
+  backdrop-filter:blur(26px) saturate(145%)!important;
+  -webkit-backdrop-filter:blur(26px) saturate(145%)!important;
+}
+.glass-theme .dashboard-hero{
+  background:
+    radial-gradient(circle at 78% 25%,rgba(255,255,255,.15),transparent 25%),
+    linear-gradient(110deg,rgba(83,108,177,.48),rgba(112,84,163,.38))!important;
+  border-color:rgba(255,255,255,.27)!important;
+  box-shadow:0 28px 80px rgba(3,10,34,.28),inset 0 1px 0 rgba(255,255,255,.20)!important;
+}
+.glass-theme .dashboard-hero::before{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(circle at 84% 18%,rgba(255,202,166,.16),transparent 26%);
+}
+.glass-theme .weather-card,.glass-theme .next-class-card,.glass-theme .weather-day,.glass-theme .week-day,.glass-theme .next7-day{
+  background:rgba(255,255,255,.095)!important;
+  border-color:rgba(255,255,255,.20)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.14),0 12px 30px rgba(3,10,34,.12)!important;
+  backdrop-filter:blur(20px) saturate(140%)!important;
+  -webkit-backdrop-filter:blur(20px) saturate(140%)!important;
+}
+.glass-theme .weather-card{background:rgba(255,255,255,.12)!important}
+.glass-theme .stat-card{min-height:100px}
+.glass-theme .stat-card .stat-value,.glass-theme .stat-card .stat-label,.glass-theme .stat-card .stat-meta{color:#fff!important}
+.glass-theme .schedule-row{border-color:rgba(255,255,255,.10)!important}
+.glass-theme .schedule-row.is-live,.glass-theme .schedule-row.current{background:linear-gradient(90deg,rgba(130,113,255,.30),rgba(130,113,255,.07))!important}
+.glass-theme .action-grid button{background:rgba(255,255,255,.075)!important;border-color:rgba(255,255,255,.17)!important}
+.glass-theme .mobile-bottom-nav{
+  background:rgba(13,24,51,.70)!important;
+  border-top:1px solid rgba(255,255,255,.20)!important;
+  backdrop-filter:blur(26px) saturate(150%)!important;
+  -webkit-backdrop-filter:blur(26px) saturate(150%)!important;
+  box-shadow:0 -15px 40px rgba(2,8,28,.30)!important;
+}
+.glass-theme .mobile-nav-item{color:rgba(240,244,255,.62)!important}
+.glass-theme .mobile-nav-item.active{background:rgba(132,117,247,.26)!important;color:#fff!important;border-color:rgba(255,255,255,.18)!important}
+@media(max-width:760px){
+  body.glass-theme::before{background:linear-gradient(160deg,#1d3564 0%,#14264d 48%,#0c1833 100%)!important}
+  .glass-theme .dashboard-hero{box-shadow:0 18px 45px rgba(2,8,28,.28),inset 0 1px 0 rgba(255,255,255,.18)!important}
+  .glass-theme .panel,.glass-theme .stat-card,.glass-theme .dashboard-command-grid > *, .glass-theme .dashboard-lower-grid > *{backdrop-filter:blur(20px) saturate(140%)!important;-webkit-backdrop-filter:blur(20px) saturate(140%)!important}
+}
+@media(prefers-reduced-transparency:reduce){
+  body.glass-theme::before,body.glass-theme::after{filter:none!important}
+  .glass-theme .sidebar,.glass-theme .topbar,.glass-theme .panel,.glass-theme .stat-card,.glass-theme .dashboard-command-grid > *, .glass-theme .dashboard-lower-grid > *,.glass-theme .weather-card,.glass-theme .mobile-bottom-nav{backdrop-filter:none!important;-webkit-backdrop-filter:none!important;background:rgba(18,30,62,.96)!important}
+}
