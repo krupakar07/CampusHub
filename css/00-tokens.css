@@ -2,8 +2,8 @@
    EDIT THIS FILE FIRST when you want to change the global visual language.
    Page CSS should consume these tokens instead of inventing new colors. */
 :root {
-  --ds-font-ui: 'DM Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  --ds-font-display: 'Manrope', var(--ds-font-ui);
+  --ds-font-ui: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --ds-font-display: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 
   --ds-photo: 1;
   --ds-page-bg: #08122d;
@@ -17,8 +17,8 @@
   --ds-glass-border-strong: rgba(255,255,255,.29);
 
   --ds-text-1: #ffffff;
-  --ds-text-2: rgba(245,247,255,.74);
-  --ds-text-3: rgba(235,239,255,.52);
+  --ds-text-2: rgba(245,247,255,.84);
+  --ds-text-3: rgba(235,239,255,.64);
   --ds-text-dark: #252944;
   --ds-text-dark-2: #62677e;
 

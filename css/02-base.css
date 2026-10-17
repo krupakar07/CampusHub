@@ -1,6 +1,5 @@
 /* CampusHub base — typography and shared primitives. */
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap');
-:root{--ink:#20243c;--muted:#85899e;--line:#eceef4;--surface:#fff;--canvas:#f8f9fc;--purple:#7770e9;--lav:#f0efff;--shadow:0 8px 26px rgba(40,45,87,.045);--lecture:#7871e8;--exam:#f2787f;--assignment:#eba849;--university:#4eafaa;--holiday:#70b991;--deadline:#e5a34d}
-body{font-family:var(--ds-font-ui,'DM Sans',sans-serif);font-size:14px;color:var(--ink);background:var(--canvas)}
+:root{--ink:#20243c;--type-11:11px;--type-12:12px;--type-14:14px;--type-16:16px;--type-20:20px;--type-28:28px;--type-40:40px;--muted:#85899e;--line:#eceef4;--surface:#fff;--canvas:#f8f9fc;--purple:#7770e9;--lav:#f0efff;--shadow:0 8px 26px rgba(40,45,87,.045);--lecture:#7871e8;--exam:#f2787f;--assignment:#eba849;--university:#4eafaa;--holiday:#70b991;--deadline:#e5a34d}
+body{font-family:var(--ds-font-ui);font-size:14px;color:var(--ink);background:var(--canvas)}
 a{color:inherit}button,input,select,textarea{color:inherit}button:disabled{cursor:not-allowed}
 .hidden{display:none!important}
