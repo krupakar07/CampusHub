@@ -1,7 +1,7 @@
 const CACHE = 'campushub-shell-v95';
 const CORE = [
-  './','./index.html','./manifest.webmanifest','./assets/icons/icon.svg','./assets/icons/page.png','./assets/icons/topic.png','./assets/background/wismar-dusk.webp',
-  ...Array.from({length:14},(_,i)=>`./css/${String(i).padStart(2,'0')}-${['tokens','reset','base','shell','components','pages','notes','files','calendar','exams','planner','settings','responsive','accessibility'][i]}.css?v=95`),
+  './','./index.html','./manifest.webmanifest','./assets/icons/icon.svg','./assets/icons/page.png','./assets/icons/topic.png',
+  ...Array.from({length:15},(_,i)=>`./css/${String(i).padStart(2,'0')}-${['tokens','reset','base','shell','components','pages','notes','files','calendar','exams','planner','settings','responsive','accessibility','light-glass'][i]}.css?v=95`),
   './js/core/state.js','./js/core/events.js','./js/core/dom.js','./js/core/router.js','./js/core/app.js',
   './js/services/supabase.js','./js/services/auth.js','./js/services/storage.js','./js/services/sync.js','./js/services/weather.js',
   './js/ui/modal.js','./js/ui/toast.js','./js/ui/dropdown.js','./js/ui/tabs.js','./js/ui/icons.js',

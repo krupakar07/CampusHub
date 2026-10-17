@@ -1,0 +1,214 @@
+/* ==========================================================================
+   CampusHub — Light Glass polish layer
+   Loaded last. Applies only to the light theme (the default); the Dark option
+   keeps its own look. Recipe used everywhere:
+     surface  = white frosted glass + 1px white edge + big soft shadow
+     text     = deep navy on light, never grey-on-grey
+     accent   = violet, used for the active item, links and the main action
+   ========================================================================== */
+html:not([data-campushub-theme='dark']) body.glass-theme{
+  background:var(--ds-page-bg);
+  --lg-inner:rgba(255,255,255,.74);
+  --lg-inner-edge:rgba(255,255,255,.96);
+  --lg-line:rgba(31,36,51,.08);
+  --lg-tile-shadow:0 6px 18px rgba(60,72,120,.08);
+
+  /* ---------- type ---------- */
+  & :is(h1,h2,h3,h4){font-family:var(--ds-font-display)!important;letter-spacing:-.015em;color:var(--ds-text-1)}
+  & :is(.eyebrow,.side-label,.subject-panel-kicker,.notes-section-label,.notes-pages-heading,.weather-location,.today-pill){
+    color:var(--ds-text-3)!important;font-size:11px!important;letter-spacing:.09em;font-weight:700}
+  & .eyebrow-line{background:var(--ds-accent)!important;opacity:.6}
+  & :is(.subheading,.panel-heading p,.panel p,.section-sub){color:var(--ds-text-2)!important}
+  & :is(.interactive-badge,.heading-count,.next-position,.live-pill,.exam-status,.exam-countdown,.legend-item,.time-label,.calendar-day-head,.field-help){font-size:11px!important}
+  & small{font-size:11px}
+
+  /* ---------- icons (were solid black) ---------- */
+  & :is(.nav-icon,.mobile-nav-item .nav-icon) svg{
+    width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+
+  /* ---------- sidebar ---------- */
+  & .sidebar{background:var(--ds-glass-2)!important;border:1px solid var(--ds-card-border)!important;border-radius:28px;box-shadow:var(--ds-shadow-float)!important}
+  & .sidebar .brand{color:var(--ds-text-1)}
+  & .sidebar .brand small{font-size:10px;color:var(--ds-text-3)}
+  & .sidebar .nav-item{color:var(--ds-text-2);font-weight:600;font-size:14px;border-radius:16px}
+  & .sidebar .nav-item .nav-icon{color:var(--ds-text-3)}
+  & .sidebar .nav-item:hover{background:rgba(122,92,240,.08)!important;color:var(--ds-text-1)}
+  & .sidebar .nav-item.active{
+    background:linear-gradient(135deg,#8f78ff,#6a4de6)!important;border-color:transparent!important;color:#fff!important;
+    box-shadow:0 12px 26px rgba(106,77,230,.30)!important}
+  & .sidebar .nav-item.active .nav-icon{color:#fff}
+  & .sidebar .profile b{font-size:13px}
+  & .sidebar .profile span{font-size:11px}
+  & .sidebar .avatar{background:#fff;color:var(--ds-text-1)}
+
+  /* ---------- top bar (floating pill) ---------- */
+  & .topbar{
+    top:14px;margin:14px 18px 0 0;height:60px;border-radius:22px;
+    background:var(--ds-glass-2)!important;border:1px solid var(--ds-card-border)!important;box-shadow:var(--ds-shadow-soft)!important}
+  & .breadcrumbs{font-size:13px}
+  & :is(.global-search-trigger,.icon-button){background:rgba(255,255,255,.85)!important;border:1px solid var(--ds-glass-border)!important;color:var(--ds-text-1)!important;border-radius:14px}
+  & .global-search-trigger kbd{background:var(--ds-glass-soft);color:var(--ds-text-3);border-radius:8px}
+
+  /* ---------- buttons & fields ---------- */
+  & .primary-button{background:linear-gradient(135deg,#8f78ff,#6a4de6)!important;color:#fff!important;border:0!important;border-radius:14px;box-shadow:0 10px 24px rgba(106,77,230,.28)!important}
+  & .primary-button *{color:#fff!important}
+  & .secondary-button,& .today-control,& .calendar-nav button,& .tools-menu summary{
+    background:rgba(255,255,255,.85)!important;color:var(--ds-text-1)!important;border:1px solid var(--ds-glass-border)!important;border-radius:14px;box-shadow:0 2px 8px rgba(60,72,120,.06)!important}
+  & .secondary-button:hover,& .today-control:hover,& .calendar-nav button:hover{background:#fff!important}
+  & :is(input,select,textarea){background:rgba(255,255,255,.8);border:1px solid var(--ds-glass-border);color:var(--ds-text-1);border-radius:12px}
+  & :is(input,textarea)::placeholder{color:var(--ds-text-3)}
+  & :is(.text-button,.panel-link,a){color:var(--ds-accent-strong)}
+  & .text-button{font-size:12px;font-weight:600}
+  & .tools-popover,& .ribbon-dropdown,& .dropdown-menu{background:var(--ds-glass-3)!important;border:1px solid var(--ds-glass-border)!important;border-radius:16px;box-shadow:var(--ds-shadow-float)!important}
+  & .tools-popover button{background:transparent!important;color:var(--ds-text-1)!important;border:0!important}
+  & .tools-popover button:hover{background:rgba(122,92,240,.09)!important}
+
+  /* ---------- surfaces ---------- */
+  & :is(.panel,.stat-card,.dashboard-hero,.exam-summary-card,.notes-workspace,.calendar-panel){
+    background:var(--ds-glass-2)!important;border:1px solid var(--ds-card-border)!important;
+    border-radius:var(--ds-radius-xl)!important;box-shadow:var(--ds-shadow-panel)!important;color:var(--ds-text-1)}
+  & .dashboard-hero{background:linear-gradient(120deg,rgba(255,255,255,.80),rgba(244,240,255,.70))!important}
+  & :is(.weather-card,.next-class-card,.weather-day,.week-day,.next7-day,.quick-actions-card,.semester-card,.backup-card,.file-card,.subject-note-card,.subject-topic-card,.exam-row,.files-toolbar,.notes-storage-card,.settings-card){
+    background:var(--lg-inner)!important;border:1px solid var(--lg-inner-edge)!important;border-radius:20px!important;
+    box-shadow:var(--lg-tile-shadow)!important;color:var(--ds-text-1)}
+  & :is(.weather-day,.week-day,.next7-day):is(.selected,.active,.is-today,.today){
+    background:#fff!important;border-color:rgba(122,92,240,.55)!important;box-shadow:0 12px 28px rgba(106,77,230,.18)!important}
+  & :is(.weather-day,.week-day,.next7-day) :is(small,span,b){color:var(--ds-text-2)}
+  & :is(.weather-day,.week-day,.next7-day) b{color:var(--ds-text-1)}
+  & :is(.stat-card,.exam-summary-card) :is(small,p,span){color:var(--ds-text-2)!important}
+  & :is(.stat-card,.exam-summary-card) :is(b,strong,h3){color:var(--ds-text-1)!important}
+  & .panel-heading h2,& .panel-heading h3{font-size:18px;font-weight:700}
+  & .interactive-badge,& .heading-count{background:var(--ds-accent-soft)!important;color:var(--ds-accent-strong)!important;border-radius:99px}
+  & .live-pill{background:rgba(47,182,127,.14)!important;color:#1f8a5e!important;border-radius:99px}
+
+  /* ---------- calendar ---------- */
+  & :is(.calendar-toolbar,.calendar-grid,.week-grid,.calendar-corner,.calendar-day-head,.time-rail,.month-grid,.month-header){background:transparent!important}
+  & .calendar-toolbar{border-bottom:1px solid var(--lg-line)!important}
+  & :is(.calendar-search,.calendar-filter){background:rgba(255,255,255,.85)!important;border:1px solid var(--ds-glass-border)!important;color:var(--ds-text-1)!important;border-radius:14px}
+  & .calendar-search input{background:transparent!important;border:0}
+  & .view-switch{background:var(--ds-glass-soft)!important;border:1px solid var(--ds-glass-border)!important;border-radius:14px;padding:3px}
+  & .view-switch button{background:transparent!important;color:var(--ds-text-2)!important;border:0!important;border-radius:11px}
+  & .view-switch button.selected{background:#fff!important;color:var(--ds-accent-strong)!important;box-shadow:0 3px 10px rgba(60,72,120,.12)!important}
+  & .calendar-day-head{color:var(--ds-text-3)!important;border-color:var(--lg-line)!important}
+  & .calendar-day-head b{color:var(--ds-text-1)!important;font-size:15px}
+  & .calendar-day-head.is-today b{background:var(--ds-accent);color:#fff!important}
+  & .time-label{color:var(--ds-text-3)!important}
+  & :is(.week-column,.day-column){
+    background-color:transparent!important;border-color:var(--lg-line)!important;
+    background-image:repeating-linear-gradient(to bottom,transparent 0,transparent 44px,rgba(31,36,51,.06) 44px,rgba(31,36,51,.06) 45px)!important}
+  & .week-column.is-today{background-color:rgba(122,92,240,.07)!important}
+  & .calendar-event{
+    background:color-mix(in srgb,var(--event-color,#7a5cf0) 15%,#fff)!important;
+    border:1px solid color-mix(in srgb,var(--event-color,#7a5cf0) 30%,#fff)!important;
+    border-left:4px solid var(--event-color,#7a5cf0)!important;border-radius:12px!important;color:var(--ds-text-1)!important;
+    box-shadow:0 4px 12px rgba(60,72,120,.08)!important}
+  & .calendar-event b{color:var(--ds-text-1)!important}
+  & .calendar-event span{color:var(--ds-text-2)!important}
+  & .month-grid>div{border-color:var(--lg-line)!important;color:var(--ds-text-1)}
+  & .month-event{background:color-mix(in srgb,var(--event-color,#7a5cf0) 16%,#fff)!important;color:var(--ds-text-1)!important;border-left:3px solid var(--event-color,#7a5cf0)!important;border-radius:8px}
+  & .calendar-legend{margin-top:14px}
+  & .legend-item{color:var(--ds-text-2)!important}
+
+  /* ---------- notes ---------- */
+  & .notes-workspace{overflow:hidden}
+  & .notes-sidebar{background:rgba(244,245,252,.55)!important;border-right:1px solid var(--lg-line)!important}
+  & .notes-sidebar *{color:var(--ds-text-2)}
+  & :is(.notes-list-row,.notes-overview-link,.notes-topic-row,.notes-tree-page){background:transparent!important;border:1px solid transparent!important;border-radius:14px!important;color:var(--ds-text-2)!important}
+  & :is(.notes-list-row,.notes-overview-link,.notes-topic-row,.notes-tree-page):hover{background:rgba(122,92,240,.07)!important}
+  & :is(.notes-list-row,.notes-overview-link,.notes-tree-page).active{background:#fff!important;border-color:rgba(122,92,240,.4)!important;box-shadow:0 6px 16px rgba(106,77,230,.14)!important;color:var(--ds-accent-strong)!important}
+  & :is(.notes-list-row,.notes-overview-link,.notes-tree-page).active *{color:var(--ds-accent-strong)!important}
+  & .notes-add{color:var(--ds-accent-strong)!important;background:transparent!important;font-weight:600}
+  & .notes-storage-card :is(strong,b){color:var(--ds-text-1)!important}
+  & .notes-storage-card :is(p,span,small){color:var(--ds-text-2)!important}
+  & .subject-workspace,& .subject-workspace-content,& .notes-editor-shell{background:transparent!important;color:var(--ds-text-1)}
+  & .subject-workspace :is(h1,h2,h3,h4){color:var(--ds-text-1)!important}
+  & .subject-workspace p{color:var(--ds-text-2)!important}
+  & .subject-workspace-tabs{border-bottom:1px solid var(--lg-line)!important}
+  & .subject-workspace-tabs button{background:transparent!important;color:var(--ds-text-2)!important;border:0!important;font-weight:600}
+  & .subject-workspace-tabs button.selected{color:var(--ds-accent-strong)!important;box-shadow:inset 0 -2px 0 var(--ds-accent)!important}
+  & :is(.subject-note-card,.subject-topic-card) :is(strong,b){color:var(--ds-text-1)!important}
+  & :is(.subject-note-card,.subject-topic-card) :is(span,small,p){color:var(--ds-text-2)!important}
+  & .subject-note-icon{background:rgba(122,92,240,.10)!important;border-radius:14px!important}
+  & :is(.editor-tabs,.editor-ribbon,.statusbar,.notes-page-header){background:rgba(255,255,255,.55)!important;border-color:var(--lg-line)!important}
+  & .notes-page-header input{color:var(--ds-text-1)!important}
+  & :is(.editor-tabs button){color:var(--ds-text-2)!important;background:transparent!important}
+  & .editor-tabs button.active{background:#fff!important;color:var(--ds-accent-strong)!important;border-radius:10px 10px 0 0!important}
+  & :is(.ribbon-tool,.ribbon-select,.ribbon-dropdown-trigger){background:rgba(255,255,255,.9)!important;color:var(--ds-text-1)!important;border:1px solid var(--ds-glass-border)!important;border-radius:10px!important}
+  & .editor-canvas-wrap{background:transparent!important}
+  & .editor-canvas{background:#fff!important;border-radius:18px!important;box-shadow:var(--ds-shadow-soft)!important}
+
+  /* ---------- exams / files ---------- */
+  & .exam-row :is(strong,b){color:var(--ds-text-1)!important}
+  & .exam-row :is(span,small,p){color:var(--ds-text-2)!important}
+  & .exam-row .exam-icon{background:rgba(229,86,106,.12)!important;color:var(--ds-red)!important;border-radius:12px}
+  & .exam-status{background:var(--ds-accent-soft)!important;color:var(--ds-accent-strong)!important;border-radius:99px;font-style:normal}
+  & .exam-progress i{background:linear-gradient(90deg,#9a86ff,#6a4de6)!important}
+  & .exam-flow span{background:var(--ds-accent-soft)!important;color:var(--ds-accent-strong)!important;border-radius:12px;font-weight:700}
+  & .exam-empty{background:rgba(255,255,255,.5)!important;border:1px dashed var(--ds-glass-border-strong)!important;border-radius:18px!important;color:var(--ds-text-2)!important}
+  & .exam-empty strong{color:var(--ds-text-1)!important}
+  & .file-card-body strong{color:var(--ds-text-1)!important;opacity:1!important}
+  & :is(.file-card-meta,.file-card-meta span){color:var(--ds-text-2)!important}
+  & .file-extension{background:var(--ds-accent-soft)!important;color:var(--ds-accent-strong)!important}
+  & .file-open-action{background:var(--ds-accent-soft)!important;color:var(--ds-accent-strong)!important;border:1px solid rgba(122,92,240,.35)!important;border-radius:12px}
+  & .file-icon-action{background:#fff!important;color:var(--ds-text-1)!important;border:1px solid var(--ds-glass-border)!important;border-radius:12px}
+
+  /* ---------- modals ---------- */
+  & :is(.event-modal,.modal-card,.global-search-modal .modal-card,.auth-card){background:var(--ds-glass-3)!important;color:var(--ds-text-1)!important;border:1px solid var(--ds-card-border)!important;border-radius:26px!important;box-shadow:var(--ds-shadow-float)!important}
+  & .modal-backdrop{background:rgba(31,36,51,.32)!important}
+
+  /* ---------- mobile bottom nav ---------- */
+  & .mobile-bottom-nav{background:var(--ds-glass-3)!important;border:1px solid var(--ds-card-border)!important;box-shadow:var(--ds-shadow-float)!important}
+  & .mobile-nav-item{color:var(--ds-text-3)!important}
+  & .mobile-nav-item.active{background:linear-gradient(135deg,#8f78ff,#6a4de6)!important;color:#fff!important;border-radius:18px}
+  & .mobile-nav-item.active *{color:#fff!important}
+}
+
+/* ---- readability + spacing refinements ---- */
+html:not([data-campushub-theme='dark']) body.glass-theme{
+  /* small text: never below 11px, never lighter than text-3 */
+  & :is(small,.stat-card small,.exam-flow small,.next-position,.quick-action small,.settings-menu-item,.exam-countdown,.week-day b,.planner-day b){color:var(--ds-text-2)!important}
+  & :is(.week-day b,.planner-day b,.month-number,.next-position){font-size:11px!important}
+  & .exam-flow small{font-size:12px!important;line-height:1.45}
+  & .panel-heading h2,& .panel-heading h3{font-size:16px}
+  & :is(.text-button,.next-footer button,.panel button.text-button){font-size:12px!important;color:var(--ds-accent-strong)!important}
+  & :is(.dropdown-arrow,.notes-breadcrumb b,.crumb-slash){color:var(--ds-text-3)!important}
+  & :is(.quick-action-icon,.weather-refresh){color:var(--ds-accent-strong)!important}
+  & .exam-icon{color:#c93a4f!important}
+  /* calendar text sizes were 7–8px */
+  & .calendar-event b{font-size:12px!important;line-height:1.25}
+  & .calendar-event span{font-size:11px!important}
+  & .month-event{font-size:11px!important;padding:3px 7px}
+  & .month-event{background-color:color-mix(in srgb,var(--event-color,#7a5cf0) 16%,#fff)!important}
+  & .month-more{color:var(--ds-accent-strong)!important;font-size:11px}
+  & .month-number.today{background:var(--ds-accent);color:#fff!important;border-radius:99px;min-width:22px;text-align:center}
+  /* notes sidebar: remove the doubled highlight pill */
+  & .notes-subject{background:transparent!important;box-shadow:none!important;border:0!important}
+  & .notes-list-row.active .notes-subject{background:transparent!important}
+  & .notes-tree-topic.open>.notes-topic-row{background:rgba(122,92,240,.08)!important;border-radius:14px!important;width:100%}
+  /* exams: breathing room inside the list panel */
+  & .exam-list-panel{padding:22px!important}
+  & .exam-list-panel .panel-heading{margin-bottom:16px!important}
+  & #examList{display:grid;gap:12px}
+  & .exam-row{padding:14px 18px!important;width:100%}
+  & .exam-side-panel{padding:22px!important}
+  /* settings list icons */
+  & .settings-menu-item{color:var(--ds-text-2)!important}
+}
+
+html:not([data-campushub-theme='dark']) body.glass-theme{
+  & .semester-week{background:var(--lg-inner)!important;border:1px solid var(--lg-inner-edge)!important;border-radius:14px!important;color:var(--ds-text-2)!important}
+  & .semester-week :is(b,small,span){color:var(--ds-text-2)!important;font-size:11px!important}
+  & :is(.subject-empty,.empty-state,.empty-state small,.dashboard-empty,.dashboard-inline-empty){color:var(--ds-text-2)!important}
+  & .empty-state strong{color:var(--ds-text-1)!important;font-size:13px}
+  & .live-pill{color:#157a50!important}
+  & .interactive-badge{color:var(--ds-accent-strong)!important}
+}
+
+/* phones: floating top bar + content use the full width */
+@media(max-width:760px){
+  html:not([data-campushub-theme='dark']) body.glass-theme{
+    & .topbar{margin:10px 12px 0;top:10px;height:56px;border-radius:20px;padding:0 10px 0 12px}
+    & .content{padding-left:14px!important;padding-right:14px!important}
+    & .mobile-bottom-nav{left:12px;right:12px;bottom:calc(10px + env(safe-area-inset-bottom));border-radius:26px}
+  }
+}

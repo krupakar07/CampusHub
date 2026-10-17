@@ -5,7 +5,7 @@ window.CampusHub.state ||= {
   version:'92',
   route:'dashboard',
   auth:{user:null},
-  ui:{theme:'glass',contrast:'normal',reduceMotion:false},
+  ui:{theme:'light',contrast:'normal',reduceMotion:false},
   notes:{subject:null,topic:null,page:null},
   calendar:{view:'week',selectedDate:null}
 };

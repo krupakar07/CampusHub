@@ -24,7 +24,7 @@
     $('prefSettingsView').value=prefs.view||'week';
     $('prefSettingsReminder').value=String(prefs.reminderMinutes??0);
     $('prefSettingsTravel').value=String(prefs.travelBuffer??0);
-    $('prefSettingsTheme').value=prefs.theme==='light'?'light':'glass';
+    $('prefSettingsTheme').value=prefs.theme==='dark'?'dark':'light';
     $('prefSettingsContrast').value=['soft','normal','high'].includes(prefs.contrast)?prefs.contrast:'normal';
     $('prefSettingsReduceMotion').checked=prefs.reduceMotion===true;
     applyUiPrefs({theme:$('prefSettingsTheme').value,contrast:$('prefSettingsContrast').value,reduceMotion:$('prefSettingsReduceMotion').checked});
@@ -34,7 +34,7 @@
   }
 
   function applyUiPrefs(p={}){
-    const theme=p.theme==='light'?'light':'glass';
+    const theme=p.theme==='dark'?'dark':'light';
     const contrast=['soft','normal','high'].includes(p.contrast)?p.contrast:'normal';
     const reduceMotion=p.reduceMotion===true;
     const root=document.documentElement;
@@ -43,7 +43,7 @@
     if(reduceMotion)root.dataset.campushubReduceMotion='true';else delete root.dataset.campushubReduceMotion;
     try{localStorage.setItem('campushub-ui-prefs',JSON.stringify({theme,contrast,reduceMotion}));}catch(_){ }
     const meta=document.querySelector('meta[name="theme-color"]');
-    if(meta)meta.setAttribute('content',theme==='light'?'#f7f8fc':'#15264b');
+    if(meta)meta.setAttribute('content',theme==='dark'?'#0b1330':'#eceff6');
   }
 
   function showTab(tab){
