@@ -1,0 +1,48 @@
+/* CampusHub shell — navigation, topbar, global controls, auth. */
+body.glass-theme .app-shell { position:relative; z-index:1; background:transparent; }
+body.glass-theme .main-area, body.glass-theme .content { background:transparent; }
+
+body.glass-theme .sidebar {
+  position:fixed; z-index:20; left:26px; top:26px; bottom:26px; width:var(--ds-nav-width);
+  display:flex; flex-direction:column; padding:28px 16px 16px;
+  background:var(--ds-glass-1); border:1px solid var(--ds-glass-border-strong);
+  border-radius:24px; box-shadow:var(--ds-shadow-float); overflow:hidden;
+}
+body.glass-theme .sidebar .brand { height:50px; margin:0 10px 34px; gap:11px; color:var(--ds-text-1); }
+body.glass-theme .sidebar .brand-mark { width:35px;height:35px;border-radius:11px;background:linear-gradient(145deg,#b38dff,#7662f2);box-shadow:0 9px 28px rgba(119,91,239,.40); }
+body.glass-theme .sidebar .brand small { color:var(--ds-text-3); font-size:7.5px; letter-spacing:1.35px; }
+body.glass-theme .sidebar .side-label { padding:0 13px; margin-bottom:12px; color:var(--ds-text-3); }
+body.glass-theme .sidebar .main-nav { gap:4px; }
+body.glass-theme .sidebar .nav-item { width:100%;height:46px;padding:0 13px;border-radius:13px;gap:13px;color:var(--ds-text-2);border:1px solid transparent;background:transparent; }
+body.glass-theme .sidebar .nav-item:hover { background:var(--ds-glass-hover);border-color:var(--ds-glass-border);color:var(--ds-text-1); }
+body.glass-theme .sidebar .nav-item.active { background:var(--ds-glass-active);border-color:var(--ds-glass-border-strong);color:var(--ds-text-1);box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 8px 25px rgba(10,16,52,.10); }
+body.glass-theme .sidebar .nav-icon { color:var(--ds-text-1); }
+body.glass-theme .sidebar .sidebar-bottom { margin-top:auto; }
+body.glass-theme .sidebar .profile { border-top:1px solid var(--ds-glass-border); padding:16px 7px 1px;gap:10px; }
+body.glass-theme .sidebar .profile b { font-size:11px;color:var(--ds-text-1); }
+body.glass-theme .sidebar .profile span { font-size:9px;color:var(--ds-text-3); }
+body.glass-theme .sidebar .avatar { width:36px;height:36px;border-radius:12px;background:var(--ds-glass-soft);border:1px solid var(--ds-glass-border-strong);color:var(--ds-text-1); }
+
+body.glass-theme .main-area { margin-left:calc(var(--ds-nav-width) + 52px); }
+body.glass-theme .topbar { position:sticky;top:0;z-index:15;margin:0 18px 0 0;height:62px;padding:0 24px;border-radius:0 0 20px 20px;background:var(--ds-glass-1);border:1px solid var(--ds-glass-border);border-top:0;box-shadow:0 12px 30px rgba(3,8,26,.10); }
+body.glass-theme .breadcrumbs { color:var(--ds-text-2); }
+body.glass-theme .breadcrumbs b { color:var(--ds-text-1); }
+body.glass-theme .crumb-slash { color:var(--ds-text-3); }
+body.glass-theme .global-search-trigger,body.glass-theme .icon-button { background:var(--ds-glass-soft);border:1px solid var(--ds-glass-border-strong);color:var(--ds-text-1);box-shadow:none; }
+body.glass-theme .global-search-trigger:hover,body.glass-theme .icon-button:hover { background:var(--ds-glass-hover); }
+body.glass-theme .primary-button { background:linear-gradient(135deg,#a184ff,#765ce9);border:1px solid rgba(255,255,255,.28);box-shadow:0 12px 30px rgba(107,73,220,.30),inset 0 1px 0 rgba(255,255,255,.20);color:#fff; }
+body.glass-theme .secondary-button { background:var(--ds-glass-soft);border:1px solid var(--ds-glass-border-strong);color:var(--ds-text-1); }
+body.glass-theme input,body.glass-theme select,body.glass-theme textarea { background:var(--ds-glass-soft);border-color:var(--ds-glass-border);color:var(--ds-text-1); }
+body.glass-theme input::placeholder,body.glass-theme textarea::placeholder { color:var(--ds-text-3); }
+
+body.glass-theme .auth-shell:not(.hidden) { position:relative;z-index:2;min-height:100vh;background:transparent; }
+body.glass-theme .auth-card { position:relative;z-index:3;width:min(420px,calc(100% - 32px));background:var(--ds-glass-3);color:var(--ds-text-1);border:1px solid var(--ds-glass-border-strong);box-shadow:var(--ds-shadow-panel); }
+body.glass-theme .auth-card * { color:inherit; }
+
+@media(max-width:1050px){:root{--ds-nav-width:240px}body.glass-theme .main-area{margin-left:266px}}
+@media(max-width:760px){
+  body.glass-theme .sidebar{left:10px;top:10px;bottom:10px;width:246px;border-radius:20px;transform:translateX(-120%);transition:transform .2s ease}
+  body.glass-theme .sidebar.open{transform:translateX(0)}
+  body.glass-theme .main-area{margin-left:0}
+  body.glass-theme .topbar{margin:0 8px;height:59px;padding:0 16px;border-radius:0 0 16px 16px}
+}

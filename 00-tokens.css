@@ -1,0 +1,106 @@
+/* CampusHub Design System v1
+   EDIT THIS FILE FIRST when you want to change the global visual language.
+   Page CSS should consume these tokens instead of inventing new colors. */
+:root {
+  --ds-font-ui: 'DM Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --ds-font-display: 'Manrope', var(--ds-font-ui);
+
+  --ds-photo: 1;
+  --ds-page-bg: #08122d;
+  --ds-glass-1: rgba(12, 20, 48, .78);
+  --ds-glass-2: rgba(18, 27, 59, .84);
+  --ds-glass-3: rgba(24, 34, 72, .90);
+  --ds-glass-soft: rgba(255,255,255,.065);
+  --ds-glass-hover: rgba(255,255,255,.105);
+  --ds-glass-active: rgba(132, 105, 255, .23);
+  --ds-glass-border: rgba(255,255,255,.14);
+  --ds-glass-border-strong: rgba(255,255,255,.25);
+
+  --ds-text-1: #ffffff;
+  --ds-text-2: rgba(245,247,255,.74);
+  --ds-text-3: rgba(235,239,255,.52);
+  --ds-text-dark: #252944;
+  --ds-text-dark-2: #62677e;
+
+  --ds-accent: #8b72ff;
+  --ds-accent-strong: #a98fff;
+  --ds-accent-soft: rgba(139,114,255,.18);
+  --ds-accent-glow: rgba(139,114,255,.28);
+  --ds-blue: #62a1ff;
+  --ds-orange: #f0a34e;
+  --ds-green: #65d5a5;
+  --ds-red: #ff7e8b;
+
+  --ds-radius-xs: 8px;
+  --ds-radius-sm: 12px;
+  --ds-radius-md: 16px;
+  --ds-radius-lg: 22px;
+  --ds-radius-xl: 26px;
+
+  --ds-shadow-soft: 0 12px 36px rgba(3,8,26,.16);
+  --ds-shadow-panel: 0 22px 70px rgba(3,8,26,.20);
+  --ds-shadow-float: 0 20px 55px rgba(3,8,26,.25);
+
+  --ds-nav-width: 274px;
+  --ds-notes-sidebar-width: 314px;
+  --ds-content-gap: 14px;
+  --ds-control-height: 40px;
+
+  --ds-motion-fast: 140ms ease;
+  --ds-motion-normal: 190ms ease;
+}
+
+html[data-campushubTheme='light'] {
+  --ds-page-bg: #eef1f8;
+  --ds-glass-1: rgba(255,255,255,.86);
+  --ds-glass-2: rgba(255,255,255,.91);
+  --ds-glass-3: rgba(255,255,255,.96);
+  --ds-glass-soft: rgba(36,43,76,.045);
+  --ds-glass-hover: rgba(92,76,190,.08);
+  --ds-glass-active: rgba(126,104,230,.13);
+  --ds-glass-border: rgba(43,50,83,.12);
+  --ds-glass-border-strong: rgba(70,62,135,.22);
+  --ds-text-1: #252944;
+  --ds-text-2: #5e6379;
+  --ds-text-3: #85899c;
+}
+
+html[data-campushubContrast='soft'] {
+  --ds-glass-1: rgba(12,20,48,.66);
+  --ds-glass-2: rgba(18,27,59,.72);
+  --ds-glass-3: rgba(24,34,72,.80);
+  --ds-glass-border: rgba(255,255,255,.10);
+}
+html[data-campushubContrast='high'] {
+  --ds-glass-1: rgba(7,14,35,.91);
+  --ds-glass-2: rgba(11,19,45,.94);
+  --ds-glass-3: rgba(16,25,56,.97);
+  --ds-glass-border: rgba(255,255,255,.25);
+  --ds-glass-border-strong: rgba(255,255,255,.36);
+  --ds-text-2: rgba(255,255,255,.84);
+  --ds-text-3: rgba(255,255,255,.66);
+}
+
+body.glass-theme {
+  font-family: var(--ds-font-ui);
+  color: var(--ds-text-1);
+  background: var(--ds-page-bg);
+}
+
+#campusPhotoBackground { position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
+#campusPhotoImage { width: 100%; height: 100%; display: block; object-fit: cover; object-position: center; opacity: var(--ds-photo); }
+body.glass-theme::before, body.glass-theme::after { display: none !important; }
+
+/* Reusable surfaces. Components should use these rather than inventing glass values. */
+.ds-surface { background: var(--ds-glass-2); border: 1px solid var(--ds-glass-border); box-shadow: var(--ds-shadow-soft); }
+.ds-surface-strong { background: var(--ds-glass-3); border: 1px solid var(--ds-glass-border-strong); box-shadow: var(--ds-shadow-panel); }
+.ds-control { min-height: var(--ds-control-height); border-radius: var(--ds-radius-sm); border: 1px solid var(--ds-glass-border); background: var(--ds-glass-soft); color: var(--ds-text-1); transition: background var(--ds-motion-fast), border-color var(--ds-motion-fast), transform var(--ds-motion-fast); }
+.ds-control:hover { background: var(--ds-glass-hover); border-color: var(--ds-glass-border-strong); }
+.ds-control:focus-visible, .ds-interactive:focus-visible { outline: 2px solid var(--ds-accent-strong); outline-offset: 2px; }
+
+html[data-campushubReduceMotion='true'] *,
+html[data-campushubReduceMotion='true'] *::before,
+html[data-campushubReduceMotion='true'] *::after { animation-duration:.01ms !important; animation-iteration-count:1 !important; transition-duration:.01ms !important; scroll-behavior:auto !important; }
+
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+@media(prefers-reduced-transparency:reduce){:root{--ds-glass-1:rgba(10,18,43,.96);--ds-glass-2:rgba(15,24,52,.97);--ds-glass-3:rgba(20,30,63,.98);--ds-glass-border:rgba(255,255,255,.24)}}

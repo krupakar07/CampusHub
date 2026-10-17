@@ -1,0 +1,7 @@
+/* CampusHub reset — browser normalization only. Do not put theme rules here. */
+*,*::before,*::after{box-sizing:border-box}
+html{min-height:100%;-webkit-text-size-adjust:100%;text-size-adjust:100%;scroll-behavior:smooth}
+body{margin:0;min-height:100%;overscroll-behavior-x:none}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+img,svg{max-width:100%}

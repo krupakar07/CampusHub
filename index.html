@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#101a3d">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="CampusHub">
+  <link rel="apple-touch-icon" href="assets/icons/icon.svg">
+  <meta name="description" content="CampusHub — private university calendar, study planner and OneNote-style notes workspace.">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="assets/icons/icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/00-tokens.css?v=93">
+  <link rel="stylesheet" href="css/01-reset.css?v=93">
+  <link rel="stylesheet" href="css/02-base.css?v=93">
+  <link rel="stylesheet" href="css/03-shell.css?v=93">
+  <link rel="stylesheet" href="css/04-components.css?v=93">
+  <link rel="stylesheet" href="css/05-pages.css?v=93">
+  <link rel="stylesheet" href="css/06-notes.css?v=93">
+  <link rel="stylesheet" href="css/07-files.css?v=93">
+  <link rel="stylesheet" href="css/08-calendar.css?v=93">
+  <link rel="stylesheet" href="css/09-exams.css?v=93">
+  <link rel="stylesheet" href="css/10-planner.css?v=93">
+  <link rel="stylesheet" href="css/11-settings.css?v=93">
+  <link rel="stylesheet" href="css/12-responsive.css?v=93">
+  <link rel="stylesheet" href="css/13-accessibility.css?v=93">
+  <title>CampusHub — University Workspace</title>
+  <script>
+    (()=>{
+      try{
+        const p=JSON.parse(localStorage.getItem('campushub-ui-prefs')||'{}');
+        const root=document.documentElement;
+        root.dataset.campushubTheme=p.theme==='light'?'light':'glass';
+        root.dataset.campushubContrast=['soft','normal','high'].includes(p.contrast)?p.contrast:'normal';
+        if(p.reduceMotion===true)root.dataset.campushubReduceMotion='true';
+      }catch(_){ }
+    })();
+  </script>
+</head>
+<body class="glass-theme">
+  <div id="campusPhotoBackground" aria-hidden="true"><img id="campusPhotoImage" src="assets/background/wismar-dusk.webp" alt="" loading="eager" decoding="async"></div>
+  <section class="auth-shell" id="authScreen">
+    <div class="auth-card"><a class="brand auth-brand" href="#"><span class="brand-mark">C</span><span>campus<span class="brand-dot">.</span><small>PRIVATE UNIVERSITY CALENDARS</small></span></a><div class="auth-heading"><div class="eyebrow"><span class="eyebrow-line"></span> YOUR OWN CAMPUS SPACE</div><h1 id="authTitle">Welcome back</h1><p id="authSubtitle">Sign in to open your private calendar.</p></div><div class="auth-tabs"><button id="showSignIn" class="selected">Sign in</button><button id="showSignUp">Create account</button></div><div id="authSetupNotice" class="auth-notice hidden">Online sign-in needs a Supabase project. Add the project URL and publishable key to the Supabase service configuration, then run the included database setup script.</div><form id="signInForm" class="auth-form"><label>Email address<input id="signInEmail" type="email" autocomplete="username" required placeholder="you@example.com"></label><label>Password<input id="signInPassword" type="password" autocomplete="current-password" required minlength="8" placeholder="Your password"></label><button class="primary-button auth-submit" type="submit">Sign in <span>→</span></button></form><form id="signUpForm" class="auth-form hidden"><label>Your name<input id="signUpName" autocomplete="name" required maxlength="60" placeholder="Your name"></label><label>Email address <small>Used as your sign-in name</small><input id="signUpEmail" type="email" autocomplete="email" required placeholder="you@example.com"></label><label>Password<input id="signUpPassword" type="password" autocomplete="new-password" required minlength="8" placeholder="At least 8 characters"></label><label>Your university<select id="signUpUniversity"><option value="Hochschule Wismar">Hochschule Wismar</option><option value="Hochschule Worms">Hochschule Worms</option></select></label><button class="primary-button auth-submit" type="submit">Create private calendar <span>→</span></button></form><div class="auth-footnote"><span>🔒</span> Your calendar is private to your account.</div><div id="authMessage" class="auth-message" role="status"></div></div>
+  </section>
+  <div class="app-shell hidden" id="appShell">
+    <aside class="sidebar" id="sidebar">
+      <a class="brand" href="#" aria-label="Campus home"><span class="brand-mark">C</span><span>campus<span class="brand-dot">.</span><small id="brandUniversity">HOCHSCHULE WISMAR</small></span></a>
+      <div class="side-label">WORKSPACE</div>
+      <nav class="main-nav" aria-label="Main navigation">
+        <button class="nav-item active" data-page="dashboard"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z"/></svg></span><span>Overview</span></button>
+        <button class="nav-item" data-page="calendar"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M8 3v4M16 3v4M4 9h16M8 13h3M13 13h3M8 17h3"/></svg></span><span>Calendar</span></button>
+        <button class="nav-item" data-page="notes"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="5" y="3.5" width="14" height="17" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg></span><span>Notes</span></button>
+        <button class="nav-item" data-page="planner"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 19c3-1 5-3 6-6l2-6 2 5 4-3"/><path d="M5 20h14"/></svg></span><span>Study planner</span></button>
+        <button class="nav-item" data-page="assignments"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 7h12v13H6z"/><path d="M9 7V5h6v2M9 11h6M9 15h4"/></svg></span><span>Assignments</span></button>
+        <button class="nav-item" data-page="exams"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/><path d="M12 4V2M20 12h2"/></svg></span><span>Exams</span></button>
+        <button class="nav-item" data-page="files"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 7.5A2.5 2.5 0 0 1 6.5 5H10l2 2h5.5A2.5 2.5 0 0 1 20 9.5v8A2.5 2.5 0 0 1 17.5 20h-11A2.5 2.5 0 0 1 4 17.5z"/></svg></span><span>Files</span></button>
+        <button class="nav-item" data-page="settings"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1-1.8 1.8-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.6v.1h-2.6V20a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1-1.8-1.8.1-.1A1.7 1.7 0 0 0 8 15a1.7 1.7 0 0 0-1.6-1H6.3v-2.6h.1A1.7 1.7 0 0 0 8 10a1.7 1.7 0 0 0-.3-1.9l-.1-.1 1.8-1.8.1.1a1.7 1.7 0 0 0 1.9.3 1.7 1.7 0 0 0 1-1.6v-.1H15V5a1.7 1.7 0 0 0 1 1.6 1.7 1.7 0 0 0 1.9-.3l.1-.1 1.8 1.8-.1.1a1.7 1.7 0 0 0-.3 1.9 1.7 1.7 0 0 0 1.6 1h.1v2.6H21a1.7 1.7 0 0 0-1.6 1.4z"/></svg></span><span>Settings</span></button>
+      </nav>
+      <div class="category-list" id="categoryList" aria-hidden="true"></div>
+      <div class="sidebar-bottom"><div class="profile"><div class="avatar" id="profileAvatar">K</div><div class="profile-text"><b id="profileName">Krupakar</b><span id="profileUniversity">Student · Wismar</span></div><button class="more signout-button" id="signOutButton" aria-label="Sign out" title="Sign out"><span class="signout-icon">↪</span><span class="signout-label">Sign out</span></button></div></div>
+    </aside>
+    <div class="mobile-drawer-backdrop" id="mobileDrawerBackdrop" aria-hidden="true"></div>
+    <main class="main-area">
+      <header class="topbar"><button class="mobile-menu" id="mobileMenu" aria-label="Open navigation" aria-expanded="false" aria-controls="sidebar">☰</button><div class="breadcrumbs"><span>Workspace</span><span class="crumb-slash">/</span><b id="crumbCurrent">Overview</b></div><div class="top-actions"><button class="global-search-trigger" id="globalSearchButton" title="Search CampusHub (⌘K / Ctrl K)"><span>⌕</span><span class="search-trigger-text">Search</span><kbd>⌘ K</kbd></button><span class="today-pill"><i></i> YOUR PERSONAL CAMPUS</span><button class="icon-button" id="todayButton" title="Go to today">◷</button><button class="primary-button top-add" id="topAdd"><span>＋</span> Add event</button></div></header>
+      <div class="content dashboard-content" id="dashboardPage">
+        <section class="dashboard-hero">
+          <div class="dashboard-hero-copy">
+            <div class="eyebrow"><span class="eyebrow-line"></span> YOUR PERSONAL CAMPUS</div>
+            <h1><span id="timeGreeting">Good morning</span>, <span id="dashboardName">student</span> <span class="wave">✦</span></h1>
+            <p class="subheading" id="todayEyebrow">Thursday, 15 October 2026</p>
+            <div class="hero-meta"><span>✦ <b id="heroClassCount">2</b> classes today</span><span>Stay consistent. 🚀</span></div>
+          </div>
+          <div class="weather-card" id="weatherCard" role="button" tabindex="0" aria-label="Open campus weather">
+            <div class="weather-top"><span class="weather-location" id="weatherLocation">CAMPUS</span><button class="weather-refresh" id="weatherRefresh" aria-label="Refresh weather">↻</button></div>
+            <div class="weather-main"><span class="weather-icon" id="weatherIcon">☁</span><div><strong id="weatherTemp">—°</strong><span id="weatherSummary">Loading weather…</span></div></div>
+            <div class="weather-meta"><span id="weatherFeels">Feels like —</span><span id="weatherWind">Wind —</span></div>
+          </div>
+        </section>
+
+        <section class="stats-grid" id="statsGrid"></section>
+
+        <section class="panel dashboard-weather-week" id="weatherWeekPanel">
+          <div class="panel-heading">
+            <div><h2><span id="weatherWeekTitle">7-day weather</span> <span class="interactive-badge">CLICK A DAY</span></h2><p id="weatherWeekSubtitle">Campus forecast for your university</p></div>
+            <button class="text-button" id="weatherRefreshWeek">Refresh <span>↻</span></button>
+          </div>
+          <div class="weather-week-list" id="weatherWeekList"></div>
+          <div class="weather-day-details" id="weatherDayDetails" aria-live="polite"></div>
+        </section>
+
+        <section class="dashboard-command-grid">
+          <div class="panel schedule-panel dashboard-schedule">
+            <div class="panel-heading"><div><h2>Today’s schedule <span class="heading-count" id="todayCount">0</span></h2><p>Your classes and events for today</p></div><button class="text-button" data-open-calendar>View full calendar <span>↗</span></button></div>
+            <div id="todaySchedule" class="schedule-list"></div>
+          </div>
+          <div class="dashboard-side-stack">
+            <div class="panel next-panel dashboard-next"><div class="panel-heading"><div><h2>Current / next class</h2><p id="nextSubtitle">Live timetable status</p></div><div class="next-navigation"><button type="button" class="next-nav-button" id="nextClassPrev" aria-label="Previous class" title="Previous class">‹</button><span class="next-position" id="nextClassPosition">1 / 1</span><button type="button" class="next-nav-button" id="nextClassNext" aria-label="Next class" title="Next class">›</button><span class="live-pill" id="nextLivePill">● LIVE</span></div></div><div id="nextClass"></div><div class="next-footer"><span id="nextFooterText">Stay on top of your semester</span><button id="upNextView">View calendar ↗</button></div></div>
+          </div>
+        </section>
+
+        <section class="panel week-panel dashboard-week dashboard-week-featured" id="overviewWeekPanel"><div class="panel-heading"><div><h2>This week <span class="interactive-badge">CLICK A DAY</span></h2><p>Choose a day to see its classes directly on Overview.</p></div><button class="text-button" data-open-calendar>View week <span>↗</span></button></div><div class="week-chart" id="weekChart"></div><div class="week-day-details" id="weekDayDetails" aria-live="polite"></div></section>
+
+        <section class="panel dashboard-next7" id="overviewNext7Panel">
+          <div class="panel-heading"><div><h2>Next 7 days <span class="interactive-badge">CLICK A DAY</span></h2><p id="next7Summary">Your upcoming week</p></div><button class="text-button" data-open-calendar>Full calendar <span>↗</span></button></div>
+          <div class="next7-list" id="next7List"></div>
+          <div class="next7-details" id="next7Details" aria-live="polite"></div>
+        </section>
+
+        <section class="dashboard-lower-grid">
+          <div class="panel dashboard-tasks"><div class="panel-heading"><div><h2>Study planner</h2><p>What needs your attention next</p></div><button class="text-button" data-open-planner>Open planner <span>↗</span></button></div><div id="dashboardTasks"></div></div>
+          <div class="panel dashboard-actions"><div class="panel-heading"><div><h2>Quick actions</h2><p>Get things done faster</p></div><span class="quick-action-icon">✦</span></div><div class="action-grid"><button data-dashboard-action="event"><span>＋</span><b>Add event</b><small>Schedule a class or deadline</small></button><button data-dashboard-action="notes"><span>▤</span><b>Create note</b><small>Open your notes workspace</small></button><button data-dashboard-action="assignment"><span>✓</span><b>Add assignment</b><small>Track work and due dates</small></button><button data-dashboard-action="exam"><span>◉</span><b>View exams</b><small>Check revision progress</small></button></div></div>
+        </section>
+
+        <footer class="app-footer"><span><i class="offline-dot"></i> <span id="storageStatus">Synced privately to your account</span></span><span>CampusHub v71 · Made for your studies <b>✳</b></span></footer>
+      </div>
+      <div class="content calendar-content hidden" id="calendarPage">
+        <section class="calendar-title-row"><div><div class="eyebrow"><span class="eyebrow-line"></span> YOUR PERSONAL TIMETABLE</div><h1>Calendar</h1><p class="subheading">Plan your semester, one day at a time.</p></div><div class="calendar-actions"><details class="tools-menu"><summary>⇩ &nbsp; Export / backup</summary><div class="tools-popover"><button id="exportIcs">Export calendar (.ics)</button><button id="downloadBackup">Download backup (.json)</button><button id="restoreBackup">Restore backup (.json)</button></div></details><input id="backupFileInput" type="file" accept=".json,application/json" hidden><button class="secondary-button" id="importCsvButton">⇧ &nbsp; Import timetable</button><input id="csvFileInput" type="file" accept=".csv,.ics,text/csv,text/calendar" hidden><button class="primary-button" id="calendarAdd">＋ &nbsp; Add event</button></div></section>
+        <section class="panel calendar-panel"><div class="calendar-toolbar"><div class="calendar-nav"><button id="prevPeriod" aria-label="Previous period">‹</button><button id="nextPeriod" aria-label="Next period">›</button><button class="today-control" id="calendarToday">Today</button><h2 id="periodLabel"></h2></div><div class="calendar-tools"><label class="calendar-search"><span>⌕</span><input id="calendarSearch" type="search" placeholder="Search classes" aria-label="Search classes"></label><select id="calendarFilter" class="calendar-filter" aria-label="Filter by event type"><option value="all">All types</option></select><div class="view-switch" role="tablist" aria-label="Calendar view"><button data-view="day">Day</button><button data-view="week" class="selected">Week</button><button data-view="month">Month</button></div></div></div><div id="calendarGrid" class="calendar-grid"></div><div id="calendarTravelAdvice"></div></section>
+        <div class="calendar-legend" id="calendarLegend"></div>
+      </div>
+      <div class="content quick-notes-content hidden" id="quickNotesPage">
+        <section class="calendar-title-row quick-notes-title-row"><div><div class="eyebrow"><span class="eyebrow-line"></span> CAPTURE WITHOUT FRICTION</div><h1>Quick Notes</h1><p class="subheading">Capture an idea now. Organize it properly when you are ready.</p></div><button class="primary-button" id="quickNoteAdd">＋ New quick note</button></section>
+        <section class="quick-notes-layout">
+          <article class="panel quick-notes-list-panel"><div class="quick-notes-list-head"><div><h2>Scratchpad</h2><p>Fast notes, reminders and lecture thoughts.</p></div><div class="quick-note-filters"><button class="quick-filter selected" data-qfilter="all">All</button><button class="quick-filter" data-qfilter="pinned">Pinned</button><button class="quick-filter" data-qfilter="archived">Archived</button></div></div><div id="quickNotesList"></div></article>
+          <article class="panel quick-note-editor-panel" id="quickNoteEditorPanel"><div class="quick-empty-editor"><span>✎</span><strong>Select a quick note</strong><small>Or create a new one. Your text saves automatically.</small></div></article>
+        </section>
+      </div>
+      <div class="content exams-content hidden" id="examsPage">
+        <section class="calendar-title-row exam-title-row"><div><div class="eyebrow"><span class="eyebrow-line"></span> PREPARE WITH PURPOSE</div><h1>Exams</h1><p class="subheading">Each exam is a workspace for your syllabus, revision and practice.</p></div><button class="primary-button" id="examAdd">＋ New exam</button></section>
+        <section class="exam-summary" id="examSummary"></section>
+        <section class="exam-layout"><article class="panel exam-list-panel"><div class="panel-heading"><div><h2>Your exams</h2><p>Open an exam to manage everything needed for it.</p></div></div><div id="examList"></div></article><aside class="panel exam-side-panel"><div class="panel-heading"><div><h2>Exam workflow</h2><p>A focused path from syllabus to readiness.</p></div></div><div class="exam-flow"><div><span>01</span><b>Understand</b><small>Capture syllabus, format, location and important topics.</small></div><div><span>02</span><b>Revise</b><small>Link your notes and create a revision checklist.</small></div><div><span>03</span><b>Practice</b><small>Keep practice questions and study sessions beside the exam.</small></div><div><span>04</span><b>Ready</b><small>Track progress and mark the exam ready when you are prepared.</small></div></div></aside></section>
+      </div>
+      <div class="content planner-content hidden" id="plannerPage"><section class="calendar-title-row"><div><div class="eyebrow"><span class="eyebrow-line"></span> PLAN YOUR STUDY TIME</div><h1>Study planner</h1><p class="subheading">Assignments, exam preparation, and the weeks ahead.</p></div><button class="primary-button" id="plannerAddTask">＋ Add task</button></section><section class="planner-columns"><article class="panel planner-task-panel"><div class="panel-heading"><div><h2>Upcoming tasks</h2><p>Assignments and deadlines from your calendar</p></div></div><div id="plannerTasks"></div></article><article class="panel planner-overview-panel"><div class="panel-heading"><div><h2>Semester at a glance</h2><p>Your next 12 weeks</p></div></div><div id="semesterOverview"></div></article></section></div>
+      <div class="content settings-page hidden" id="settingsPage">
+        <section class="settings-page-head"><div><div class="eyebrow"><span class="eyebrow-line"></span> CAMPUSHUB SETTINGS</div><h1>Settings</h1><p class="subheading">Manage your account, preferences and data.</p></div></section>
+        <div class="settings-layout">
+          <aside class="settings-menu panel">
+            <button class="settings-menu-item selected" data-settings-tab="profile">👤 <span>Profile</span></button>
+            <button class="settings-menu-item" data-settings-tab="preferences">⚙ <span>Preferences</span></button>
+            <button class="settings-menu-item" data-settings-tab="data">☁ <span>Data &amp; Backup</span></button>
+            <button class="settings-menu-item" data-settings-tab="account">🔒 <span>Account</span></button>
+          </aside>
+          <section class="settings-panel-area">
+            <div class="settings-section panel" data-settings-section="profile">
+              <div class="settings-section-head"><div><h2>Profile</h2><p>This information is shown across your private CampusHub.</p></div></div>
+              <div class="settings-form-grid"><label class="field">Full name<input id="profileSettingsName" maxlength="60"></label><label class="field">University<select id="profileSettingsUniversity"><option value="Hochschule Wismar">Hochschule Wismar</option><option value="Hochschule Worms">Hochschule Worms</option></select></label><label class="field full-field">Email address<input id="profileSettingsEmail" type="email" readonly></label></div>
+              <div class="settings-actions"><button class="primary-button" id="saveProfileSettings">Save profile</button></div>
+            </div>
+            <div class="settings-section panel hidden" data-settings-section="preferences">
+              <div class="settings-section-head"><div><h2>Preferences</h2><p>Control how CampusHub behaves on this device.</p></div></div>
+              <div class="settings-form-grid"><label class="field">Default calendar view<select id="prefSettingsView"><option value="day">Day</option><option value="week">Week</option><option value="month">Month</option></select></label><label class="field">Class reminder<select id="prefSettingsReminder"><option value="0">Off</option><option value="5">5 minutes before</option><option value="10">10 minutes before</option><option value="15">15 minutes before</option><option value="30">30 minutes before</option></select></label><label class="field">Travel buffer<select id="prefSettingsTravel"><option value="0">Off</option><option value="5">5 minutes</option><option value="10">10 minutes</option><option value="15">15 minutes</option><option value="20">20 minutes</option></select></label></div>
+              <div class="settings-accessibility"><div class="settings-subhead"><h3>Appearance &amp; accessibility</h3><p>Choose how much of the campus photo you see and how strongly the interface prioritizes readability.</p></div><div class="settings-form-grid"><label class="field">Theme<select id="prefSettingsTheme"><option value="glass">Glass / Dusk</option><option value="light">Light</option></select><small class="field-help">Light mode uses brighter surfaces and darker text for bright rooms and outdoor use.</small></label><label class="field">Contrast<select id="prefSettingsContrast"><option value="soft">Soft</option><option value="normal">Normal</option><option value="high">High</option></select><small class="field-help">Soft shows more photo; High uses stronger surfaces and text contrast.</small></label></div><label class="settings-toggle"><input id="prefSettingsReduceMotion" type="checkbox"><span><b>Reduce motion</b><small>Minimize transitions and animations when you prefer less motion.</small></span></label></div>
+              <div class="settings-info">Browser reminders work while CampusHub is open. You can change notification permission in your browser settings.</div>
+              <div class="settings-actions"><button class="primary-button" id="savePreferenceSettings">Save preferences</button></div>
+            </div>
+            <div class="settings-section panel hidden" data-settings-section="data">
+              <div class="settings-section-head"><div><h2>Data &amp; Backup</h2><p>Keep a portable copy of your CampusHub data.</p></div></div>
+              <div class="backup-cards">
+                <article class="backup-card"><span class="backup-icon">↓</span><div><h3>Full backup</h3><p>Export notes, assignments, exams, quick notes, calendar and file metadata to one JSON file.</p></div><button class="secondary-button" id="fullBackupButton">Download backup</button></article>
+                <article class="backup-card"><span class="backup-icon">↑</span><div><h3>Restore backup</h3><p>Restore structured CampusHub data from a backup file. Existing matching data will be replaced.</p></div><button class="secondary-button" id="fullRestoreButton">Choose backup</button></article>
+                <article class="backup-card"><span class="backup-icon">▣</span><div><h3>File manifest</h3><p>Download a list of your stored materials. File contents stay safely in Supabase Storage.</p></div><button class="secondary-button" id="fileManifestButton">Export manifest</button></article>
+              </div>
+              <input id="fullRestoreInput" type="file" accept=".json,application/json" hidden>
+              <div class="settings-info warning">Backups contain your private study data. Store the downloaded JSON somewhere secure. Uploaded file contents are not included in the JSON backup.</div>
+            </div>
+            <div class="settings-section panel hidden" data-settings-section="account">
+              <div class="settings-section-head"><div><h2>Account</h2><p>Manage your signed-in CampusHub account.</p></div></div>
+              <div class="account-card"><div class="account-avatar" id="settingsAccountAvatar">S</div><div><strong id="settingsAccountName">My studies</strong><span id="settingsAccountEmail">—</span></div></div>
+              <div class="danger-zone"><div><h3>Sign out</h3><p>Sign out of this device. Your cloud data remains in your account.</p></div><button class="cancel-button" id="settingsSignOut">Sign out</button></div>
+            </div>
+          </section>
+        </div>
+      </div>
+      <div class="content campus-notes-page hidden" id="notesPage">
+        <div class="notes-workspace">
+          <div class="mobile-notes-header" id="mobileNotesHeader" aria-label="Mobile subject navigation">
+            <div class="mobile-notes-header-main">
+              <span class="mobile-notes-header-label">SUBJECT</span>
+              <select id="mobileSubjectSelect" aria-label="Select subject"></select>
+            </div>
+            <div class="mobile-notes-header-actions"><button type="button" class="mobile-notes-manage" id="mobileNotesSubjectMenu" aria-label="Manage current subject" title="Manage current subject">⋯</button><button type="button" class="mobile-notes-add" id="mobileNotesAddSubject" aria-label="Add subject">＋</button></div>
+          </div>
+          <aside class="notes-sidebar">
+            <div class="notes-sidebar-title">MY NOTES</div>
+            <div class="notes-subjects" id="notesSubjectList">
+              <button class="notes-subject active" data-subject="Academic Research & Writing"><span class="notes-dot purple"></span>Academic Research & Writing</button>
+              <button class="notes-subject" data-subject="International Management"><span class="notes-dot blue"></span>International Management</button>
+              <button class="notes-subject" data-subject="Finance"><span class="notes-dot green"></span>Finance</button>
+              <button class="notes-subject" data-subject="German"><span class="notes-dot orange"></span>German</button>
+            </div>
+            <button class="notes-add" id="notesAddSubject">＋ Add subject</button>
+            <div class="notes-section-label notes-pages-heading">TOPICS &amp; PAGES</div>
+            <button type="button" class="notes-overview-link" id="notesSubjectOverview">⌂ <span>Subject overview</span></button>
+            <div id="notesPageList"><button class="notes-page-link active" data-note-page="Lecture Notes"><img class="notes-nav-icon page-icon" src="data:image/png;base64,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" alt="" aria-hidden="true"><span>Lecture Notes</span></button></div>
+            <button class="notes-add" id="notesNewTopic">＋ New topic</button>
+            <button class="notes-add" id="notesNewPage">＋ New page</button>
+            <div class="notes-storage-card"><strong>CampusHub Notes</strong><p>Autosaves privately on this device for the signed-in account.</p></div>
+          </aside>
+          <section class="notes-editor-shell">
+            <section id="subjectWorkspace" class="subject-workspace hidden" aria-label="Subject workspace">
+              <div class="subject-workspace-top">
+                <div>
+                  <div class="eyebrow"><span class="eyebrow-line"></span> SUBJECT WORKSPACE</div>
+                  <h2 id="subjectWorkspaceTitle">Academic Research &amp; Writing</h2>
+                  <p id="subjectWorkspaceSubtitle">Everything for this subject in one place.</p>
+                </div>
+                <div class="subject-workspace-actions">
+                  <button type="button" class="secondary-button" id="subjectOpenNotes">Open notes</button>
+                  <button type="button" class="primary-button" id="subjectNewPage">＋ New page</button>
+                </div>
+              </div>
+              <div class="subject-workspace-tabs" role="tablist" aria-label="Subject sections">
+                <button type="button" class="selected" data-subject-tab="overview">Overview</button>
+                <button type="button" data-subject-tab="notes">Notes</button>
+                <button type="button" data-subject-tab="quick">Quick Notes</button>
+                <button type="button" data-subject-tab="assignments">Assignments</button>
+                <button type="button" data-subject-tab="exams">Exams</button>
+                <button type="button" data-subject-tab="files">Files</button>
+                <button type="button" data-subject-tab="calendar">Calendar</button>
+              </div>
+              <div id="subjectWorkspaceContent" class="subject-workspace-content"></div>
+            </section>
+            <section id="noteEditorView">
+              <div class="notes-page-header"><div class="notes-breadcrumb" id="notesBreadcrumb"><span>Subject</span><b>›</b><span>Topic</span><b>›</b><strong>Page</strong></div><input id="noteTitle" value="Academic Research & Writing — Lecture Notes" aria-label="Page title"><span id="saveState">Saved locally</span></div>
+              <div class="onenote-editor" id="editorApp">
+                <div class="editor-tabs"><button type="button" data-tab="Home" class="selected">Home</button><button type="button" data-tab="Insert">Insert</button></div>
+                <div class="editor-ribbon" id="ribbon"></div>
+                <div class="editor-canvas-wrap"><div id="editor" class="editor-canvas" contenteditable="true" spellcheck="true"><h1>Academic Research &amp; Writing</h1><p>Start typing your lecture notes here. Select text and use the Home or Insert ribbon like OneNote.</p><p>Use <strong>Home → Dictate</strong> for speech-to-text, or <strong>Insert → Table</strong> to add a table.</p></div></div>
+                <div class="statusbar"><span id="wordCount">0 words</span><span>•</span><span>Local autosave on</span><span class="status-spacer"></span><button id="zoomOut">−</button><span id="zoomLabel">100%</span><button id="zoomIn">＋</button></div>
+              </div>
+            </section>
+          </section>
+        </div>
+      </div>
+    </main>
+    <nav class="mobile-bottom-nav" id="mobileBottomNav" aria-label="Mobile navigation">
+      <button class="mobile-nav-item active" data-page="dashboard"><span>▦</span><small>Home</small></button>
+      <button class="mobile-nav-item" data-page="calendar"><span>▣</span><small>Calendar</small></button>
+      <button class="mobile-nav-item" data-page="notes"><span>▤</span><small>Notes</small></button>
+      <button class="mobile-nav-item" data-page="planner"><span>✓</span><small>Planner</small></button>
+      <button class="mobile-nav-item" data-page="exams"><span>◉</span><small>Exams</small></button>
+    </nav>
+  </div>
+  <div class="modal-backdrop hidden" id="detailsModal" role="presentation"><section class="event-modal details-modal" role="dialog" aria-modal="true" aria-labelledby="detailsTitle"><div class="modal-header"><div><div class="eyebrow"><span class="eyebrow-line"></span> EVENT DETAILS</div><h2 id="detailsTitle"></h2></div><div class="details-menu-wrap"><button class="details-menu-button" id="detailsMenuButton" aria-label="Event actions" aria-expanded="false">⋯</button><div class="details-menu hidden" id="detailsMenu"><button id="detailsEdit">Edit event</button><button id="detailsEditOccurrence" class="hidden">Edit this occurrence</button><button id="detailsDelete">Delete event</button><button id="detailsDeleteSeries" class="hidden">Delete entire series</button></div><button class="close-button" id="closeDetails" aria-label="Close">×</button></div></div><div id="detailsBody" class="details-body"></div></section></div>
+  <div class="modal-backdrop hidden" id="settingsModal" role="presentation"><section class="event-modal settings-modal" role="dialog" aria-modal="true" aria-labelledby="settingsTitle"><div class="modal-header"><div><div class="eyebrow"><span class="eyebrow-line"></span> PERSONAL PREFERENCES</div><h2 id="settingsTitle">Calendar settings</h2></div><button class="close-button" id="closeSettings" aria-label="Close">×</button></div><form id="settingsForm"><label class="field full-field">Your name<input id="settingsName" maxlength="60" required></label><label class="field full-field">Your university<select id="settingsUniversity"><option value="Hochschule Wismar">Hochschule Wismar</option><option value="Hochschule Worms">Hochschule Worms</option></select></label><label class="field full-field">Default calendar view<select id="settingsView"><option value="day">Day</option><option value="week">Week</option><option value="month">Month</option></select></label><label class="field full-field">Travel buffer between classes<select id="travelBuffer"><option value="0">Off</option><option value="5">5 minutes</option><option value="10">10 minutes</option><option value="15">15 minutes</option><option value="20">20 minutes</option></select></label><label class="field full-field">Class reminder<select id="reminderMinutes"><option value="0">Off</option><option value="5">5 minutes before</option><option value="10">10 minutes before</option><option value="15">15 minutes before</option><option value="30">30 minutes before</option></select></label><div class="settings-note">Browser reminders appear while this app is open. Allow notifications when your browser asks.</div><div class="modal-actions"><span class="form-spacer"></span><button type="button" class="cancel-button" id="cancelSettings">Cancel</button><button type="submit" class="primary-button save-button">Save settings <span>→</span></button></div></form></section></div>
+  <div class="modal-backdrop hidden global-search-modal" id="globalSearchModal" role="dialog" aria-modal="true" aria-labelledby="globalSearchTitle"><section class="global-search-dialog"><div class="global-search-head"><div class="global-search-input-wrap"><span>⌕</span><input id="globalSearchInput" type="search" autocomplete="off" placeholder="Search notes, files, assignments, exams…" aria-label="Search CampusHub"><kbd>ESC</kbd></div><button class="global-search-close" id="globalSearchClose" aria-label="Close search">×</button></div><div class="global-search-meta"><span id="globalSearchCount">Search your whole CampusHub</span><div class="search-filters" role="tablist"><button class="selected" data-search-filter="all">All</button><button data-search-filter="notes">Notes</button><button data-search-filter="files">Files</button><button data-search-filter="assignments">Assignments</button><button data-search-filter="exams">Exams</button><button data-search-filter="quick-notes">Quick Notes</button><button data-search-filter="calendar">Calendar</button></div></div><div class="global-search-results" id="globalSearchResults"></div></section></div>
+  <div class="modal-backdrop hidden" id="eventModal" role="presentation"><section class="event-modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><div class="modal-header"><div><div class="eyebrow"><span class="eyebrow-line"></span> PERSONAL TIMETABLE</div><h2 id="modalTitle">Add an event</h2></div><button class="close-button" id="closeModal" aria-label="Close">×</button></div><form id="eventForm"><input type="hidden" id="eventId"><label class="field full-field">Event title<input id="titleInput" required maxlength="90" placeholder="e.g. Academic Research & Writing"></label><div class="form-grid"><label class="field">Event type<select id="typeInput"></select></label><label class="field">Subject / module<input id="subjectInput" placeholder="e.g. MIM 201"></label><label class="field">Date<input id="dateInput" type="date" required></label><div class="time-fields"><label class="field">Starts<input id="startInput" type="time" required></label><label class="field">Ends<input id="endInput" type="time" required></label></div><label class="field">Room<input id="roomInput" placeholder="e.g. House 1 · Room 2.12"></label><label class="field">Professor<input id="professorInput" placeholder="e.g. Prof. Müller"></label><label class="field full-field">Repeat<select id="repeatInput"><option value="none">Does not repeat</option><option value="weekly">Every week</option><option value="biweekly">Every 2 weeks</option><option value="monthly">Every month</option></select></label><label class="field full-field">Notes <span class="optional">OPTIONAL</span><textarea id="notesInput" rows="3" placeholder="Add a note or reminder for yourself..."></textarea></label></div><div class="modal-actions"><button type="button" class="delete-button hidden" id="deleteEvent">Delete event</button><span class="form-spacer"></span><button type="button" class="cancel-button" id="cancelModal">Cancel</button><button type="submit" class="primary-button save-button">Save event <span>→</span></button></div></form></section></div>
+  <div class="modal-backdrop hidden" id="importModal" role="presentation"><section class="event-modal import-modal" role="dialog" aria-modal="true" aria-labelledby="importTitle"><div class="modal-header"><div><div class="eyebrow"><span class="eyebrow-line"></span> TIMETABLE IMPORT</div><h2 id="importTitle">Review your schedule</h2><p class="subheading" id="importFileName"></p></div><button class="close-button" id="closeImport" aria-label="Close">×</button></div><div id="importSummary" class="import-summary"></div><div class="import-controls"><span id="duplicateSummary"></span><label id="removeMissingWrap" class="missing-control hidden"><input id="removeMissingImport" type="checkbox"><span>Remove missing classes from this imported schedule</span></label></div><div id="importErrors" class="import-errors hidden"></div><div id="importPreview" class="import-preview"></div><div class="modal-actions"><button type="button" class="cancel-button" id="cancelImport">Cancel</button><span class="form-spacer"></span><button type="button" class="primary-button save-button" id="applyImport">Apply selected changes <span>→</span></button></div></section></div>
+  <input id="notesImageInput" type="file" accept="image/*" hidden>
+  <input id="notesFileInput" type="file" hidden>
+  <input id="notesAudioInput" type="file" accept="audio/*" hidden>
+  <input id="notesVideoInput" type="file" accept="video/*" hidden>
+  <div class="toast" id="toast" role="status"></div>
+  <script src="https://unpkg.com/@supabase/supabase-js@2.118.0"></script>
+  <script src="js/core/state.js"></script>
+  <script src="js/core/events.js"></script>
+  <script src="js/core/dom.js"></script>
+  <script src="js/core/router.js"></script>
+  <script src="js/core/app.js"></script>
+</body>
+</html>
