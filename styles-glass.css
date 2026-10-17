@@ -20,6 +20,26 @@ body.glass-theme{
   min-height:100vh;
   overflow-x:hidden;
 }
+body.glass-theme::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  z-index:-4;
+  pointer-events:none;
+  background:
+    linear-gradient(180deg,rgba(15,24,58,.24),rgba(12,22,52,.40)),
+    url("assets/background/campushub-wismar-dusk.png") center center / cover no-repeat;
+  transform:translateZ(0);
+}
+body.glass-theme::after{
+  content:"";
+  position:fixed;
+  inset:0;
+  z-index:-3;
+  pointer-events:none;
+  background:linear-gradient(135deg,rgba(67,53,126,.12),rgba(28,95,164,.10) 48%,rgba(236,139,153,.08));
+}
+
 .glass-theme .app-shell{background:transparent}
 .glass-theme .sidebar{
   background:rgba(20,31,65,.48);
@@ -217,6 +237,22 @@ body.glass-theme{
   color:#f7f8ff!important;
   isolation:isolate;
 }
+body.glass-theme::before{
+  background:
+    radial-gradient(900px 600px at 74% 8%,rgba(122,106,255,.32),transparent 62%),
+    radial-gradient(700px 500px at 8% 78%,rgba(39,137,212,.30),transparent 64%),
+    radial-gradient(620px 480px at 62% 72%,rgba(232,112,76,.18),transparent 58%),
+    linear-gradient(135deg,#203867 0%,#15264c 42%,#0d1833 100%) !important;
+  z-index:-4;
+}
+body.glass-theme::after{
+  background:
+    radial-gradient(ellipse at 48% 30%,rgba(255,196,160,.20) 0 7%,transparent 30%),
+    radial-gradient(ellipse at 78% 58%,rgba(100,88,255,.22) 0 8%,transparent 32%),
+    radial-gradient(ellipse at 22% 62%,rgba(74,159,224,.20) 0 8%,transparent 30%) !important;
+  filter:blur(48px)!important;
+  z-index:-3;
+}
 .glass-theme .app-shell,.glass-theme .main-area,.glass-theme .content,.glass-theme .dashboard-content{background:transparent!important}
 .glass-theme .sidebar{
   background:linear-gradient(180deg,rgba(19,30,63,.70),rgba(13,24,52,.54))!important;
@@ -305,6 +341,34 @@ body.glass-theme{
   color:var(--v70-text)!important;
   background:#1b2b62!important;
 }
+body.glass-theme::before{
+  content:"";
+  position:fixed!important;
+  inset:-10%!important;
+  z-index:-5!important;
+  pointer-events:none!important;
+  background:
+    radial-gradient(ellipse 46% 54% at 17% 17%,rgba(214,118,238,.70) 0%,rgba(150,91,205,.43) 34%,transparent 68%),
+    radial-gradient(ellipse 48% 52% at 78% 16%,rgba(45,193,225,.72) 0%,rgba(47,142,198,.42) 35%,transparent 68%),
+    radial-gradient(ellipse 52% 50% at 83% 78%,rgba(227,120,186,.64) 0%,rgba(153,85,174,.35) 34%,transparent 69%),
+    radial-gradient(ellipse 48% 55% at 22% 83%,rgba(48,78,171,.74) 0%,rgba(38,53,122,.50) 40%,transparent 72%),
+    linear-gradient(125deg,#23347a 0%,#463b87 28%,#245f91 57%,#514185 79%,#9b5e9b 100%)!important;
+  filter:blur(22px) saturate(125%)!important;
+  transform:scale(1.08)!important;
+}
+body.glass-theme::after{
+  content:"";
+  position:fixed!important;
+  inset:-18%!important;
+  z-index:-4!important;
+  pointer-events:none!important;
+  background:
+    radial-gradient(circle at 35% 38%,rgba(255,255,255,.09),transparent 22%),
+    radial-gradient(circle at 66% 30%,rgba(255,255,255,.08),transparent 19%),
+    radial-gradient(circle at 51% 72%,rgba(255,177,225,.10),transparent 23%)!important;
+  filter:blur(55px)!important;
+}
+
 .glass-theme .app-shell,.glass-theme .main-area,.glass-theme .content,.glass-theme .dashboard-content{background:transparent!important}
 .glass-theme .sidebar{
   width:236px!important;
@@ -402,6 +466,24 @@ body.glass-theme{
 @media(prefers-reduced-transparency:reduce){body.glass-theme::before,body.glass-theme::after{filter:none!important}.glass-theme .sidebar,.glass-theme .topbar,.glass-theme .panel,.glass-theme .stat-card,.glass-theme .dashboard-command-grid>*{backdrop-filter:none!important;-webkit-backdrop-filter:none!important;background:#27386c!important}}
 
 /* v71 performance layer: preserve the glass look without expensive per-frame backdrop filtering. */
+body.glass-theme::before{
+  filter:none!important;
+  transform:none!important;
+  background:
+    radial-gradient(ellipse 55% 58% at 12% 12%,rgba(214,118,238,.56) 0%,rgba(150,91,205,.30) 34%,transparent 68%),
+    radial-gradient(ellipse 55% 58% at 82% 14%,rgba(45,193,225,.58) 0%,rgba(47,142,198,.28) 35%,transparent 68%),
+    radial-gradient(ellipse 58% 56% at 86% 80%,rgba(227,120,186,.48) 0%,rgba(153,85,174,.24) 35%,transparent 69%),
+    radial-gradient(ellipse 55% 60% at 18% 84%,rgba(48,78,171,.58) 0%,rgba(38,53,122,.38) 40%,transparent 72%),
+    linear-gradient(125deg,#23347a 0%,#463b87 28%,#245f91 57%,#514185 79%,#8d5790 100%)!important;
+}
+body.glass-theme::after{
+  filter:none!important;
+  background:
+    radial-gradient(circle at 35% 38%,rgba(255,255,255,.055),transparent 22%),
+    radial-gradient(circle at 66% 30%,rgba(255,255,255,.045),transparent 19%),
+    radial-gradient(circle at 51% 72%,rgba(255,177,225,.055),transparent 23%)!important;
+}
+
 /* Large scrolling surfaces are intentionally translucent, not backdrop-filtered. */
 .glass-theme .sidebar,
 .glass-theme .topbar,
@@ -603,57 +685,78 @@ body.glass-theme{
   .glass-theme .sidebar .nav-item{height:45px!important}
 }
 
-/* CampusHub v78 — single authoritative photo background.
-   The photograph is the page background. No pseudo-element tint is used. */
-html,body{min-height:100%;}
+/* CampusHub v74 — use the approved Wismar photograph as the actual background.
+   No dark color tint; glass surfaces provide readability instead. */
 body.glass-theme{
-  position:relative!important;
-  min-height:100vh!important;
-  color:var(--glass-text);
-  background:#263d70 url("assets/background/campushub-wismar-dusk.png") center center / cover fixed no-repeat!important;
+  background:#17294f url("assets/background/campushub-wismar-dusk.png") center center / cover fixed no-repeat !important;
   isolation:isolate;
-  overflow-x:hidden;
 }
-body.glass-theme::before,
+body.glass-theme::before{
+  display:none!important;
+}
+body.glass-theme::after{
+  display:none!important;
+}
 .glass-theme .app-shell,
 .glass-theme .main-area,
 .glass-theme .content,
 .glass-theme .dashboard-content{
-  position:relative;
-  z-index:1;
   background:transparent!important;
 }
-.glass-theme .auth-shell{
-  position:relative;
-  z-index:2;
-  min-height:100vh;
-  background:transparent!important;
+.glass-theme .sidebar{
+  background:rgba(30,42,76,.28)!important;
+  backdrop-filter:blur(24px) saturate(120%)!important;
+  -webkit-backdrop-filter:blur(24px) saturate(120%)!important;
 }
-.glass-theme .auth-card{
-  background:rgba(255,255,255,.16)!important;
-  border-color:rgba(255,255,255,.32)!important;
-  box-shadow:0 24px 70px rgba(10,20,50,.20),inset 0 1px 0 rgba(255,255,255,.28)!important;
-  backdrop-filter:blur(20px) saturate(125%);
-  -webkit-backdrop-filter:blur(20px) saturate(125%);
+.glass-theme .topbar{
+  background:rgba(24,36,70,.20)!important;
+  backdrop-filter:blur(18px) saturate(115%)!important;
+  -webkit-backdrop-filter:blur(18px) saturate(115%)!important;
 }
-.glass-theme .auth-heading h1,
-.glass-theme .auth-heading p,
-.glass-theme .auth-form label,
-.glass-theme .auth-footnote{color:#fff!important}
-.glass-theme .auth-heading p{color:rgba(255,255,255,.72)!important}
-.glass-theme .auth-form input,
-.glass-theme .auth-form select{
-  background:rgba(255,255,255,.78)!important;
-  border-color:rgba(255,255,255,.55)!important;
+@media(max-width:760px){
+  body.glass-theme{
+    background:#17294f url("assets/background/campushub-wismar-dusk.png") center center / cover fixed no-repeat !important;
+  }
+  .glass-theme .sidebar{background:rgba(25,37,72,.30)!important;}
+  .glass-theme .topbar{background:rgba(24,36,70,.20)!important;}
 }
-.glass-theme .auth-tabs{background:rgba(255,255,255,.16)!important}
-.glass-theme .auth-tabs button{color:rgba(255,255,255,.78)!important}
-.glass-theme .auth-tabs button.selected{background:rgba(255,255,255,.86)!important;color:#625bd2!important}
-.glass-theme .auth-footnote{border-top-color:rgba(255,255,255,.20)!important}
-.glass-theme .auth-message{color:#fff!important}
-.glass-theme .auth-message.error{color:#ffd5d8!important}
 
-/* Glass surfaces: readable, but intentionally transparent enough to keep the Wismar photo visible. */
+
+/* CampusHub v75 — clean background layer. The approved Wismar photo is a real
+   DOM layer behind the application, avoiding the older pseudo-background stack. */
+#campusPhotoBackground{
+  position:fixed!important;
+  inset:0!important;
+  z-index:0!important;
+  pointer-events:none!important;
+  background-image:url("assets/background/campushub-wismar-dusk.png")!important;
+  background-position:center center!important;
+  background-size:cover!important;
+  background-repeat:no-repeat!important;
+  background-color:#263d70!important;
+}
+body.glass-theme{
+  position:relative!important;
+  background:transparent!important;
+  isolation:isolate!important;
+}
+body.glass-theme::before,
+body.glass-theme::after{
+  display:none!important;
+  content:none!important;
+}
+.glass-theme .app-shell{
+  position:relative!important;
+  z-index:1!important;
+  background:transparent!important;
+}
+.glass-theme .main-area,
+.glass-theme .content,
+.glass-theme .dashboard-content{
+  background:transparent!important;
+}
+
+/* Reference-matched glass: light surfaces, visible photography, no blue veil. */
 .glass-theme .sidebar{
   background:rgba(255,255,255,.12)!important;
   border-color:rgba(255,255,255,.30)!important;
@@ -680,7 +783,15 @@ body.glass-theme::before,
   backdrop-filter:blur(12px) saturate(120%)!important;
   -webkit-backdrop-filter:blur(12px) saturate(120%)!important;
 }
-.glass-theme .dashboard-hero{background:linear-gradient(115deg,rgba(255,255,255,.16),rgba(255,255,255,.08))!important}
+.glass-theme .dashboard-hero{
+  background:linear-gradient(115deg,rgba(255,255,255,.16),rgba(255,255,255,.08))!important;
+}
+.glass-theme .stat-card:nth-child(1),
+.glass-theme .stat-card:nth-child(2),
+.glass-theme .stat-card:nth-child(3),
+.glass-theme .stat-card:nth-child(4){
+  background:rgba(255,255,255,.115)!important;
+}
 .glass-theme .weather-card,
 .glass-theme .next-class-card,
 .glass-theme .weather-day,
@@ -703,14 +814,153 @@ body.glass-theme::before,
   backdrop-filter:blur(18px) saturate(125%)!important;
   -webkit-backdrop-filter:blur(18px) saturate(125%)!important;
 }
+
 @media(max-width:760px){
-  body.glass-theme{background-position:center top!important;background-attachment:scroll!important}
-  .glass-theme .sidebar{background:rgba(255,255,255,.14)!important}
-  .glass-theme .topbar{background:rgba(255,255,255,.09)!important}
+  #campusPhotoBackground{
+    background-position:center top!important;
+  }
+  .glass-theme .sidebar{
+    background:rgba(255,255,255,.14)!important;
+  }
+  .glass-theme .topbar{
+    background:rgba(255,255,255,.09)!important;
+  }
   .glass-theme .dashboard-hero,
   .glass-theme .panel,
   .glass-theme .stat-card,
   .glass-theme .dashboard-command-grid > *,
   .glass-theme .dashboard-lower-grid > *,
-  .glass-theme .dashboard-next7{background:rgba(255,255,255,.12)!important;backdrop-filter:blur(10px) saturate(120%)!important;-webkit-backdrop-filter:blur(10px) saturate(120%)!important}
+  .glass-theme .dashboard-next7{
+    background:rgba(255,255,255,.12)!important;
+    backdrop-filter:blur(10px) saturate(120%)!important;
+    -webkit-backdrop-filter:blur(10px) saturate(120%)!important;
+  }
+}
+
+/* CampusHub v79 — performance pass.
+   Keep the Wismar photo and glass appearance, but remove expensive backdrop
+   filtering from persistent/scrolling surfaces. Transient modals retain a
+   small blur because they are not part of the normal scrolling render path. */
+body.glass-theme #campusPhotoBackground{
+  will-change:auto!important;
+  transform:none!important;
+}
+
+.glass-theme .sidebar,
+.glass-theme .topbar,
+.glass-theme .global-search-trigger,
+.glass-theme .icon-button,
+.glass-theme .dashboard-hero,
+.glass-theme .panel,
+.glass-theme .stat-card,
+.glass-theme .dashboard-command-grid > *,
+.glass-theme .dashboard-lower-grid > *,
+.glass-theme .dashboard-next7,
+.glass-theme .weather-card,
+.glass-theme .next-class-card,
+.glass-theme .weather-day,
+.glass-theme .week-day,
+.glass-theme .next7-day,
+.glass-theme .action-grid button,
+.glass-theme .mobile-bottom-nav,
+.glass-theme .mobile-nav-item,
+.glass-theme .semester-card,
+.glass-theme .profile{
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+}
+
+/* Slightly stronger translucency replaces blur on the large surfaces. */
+.glass-theme .sidebar{
+  background:rgba(255,255,255,.13)!important;
+  box-shadow:0 18px 45px rgba(10,20,55,.16),inset 0 1px 0 rgba(255,255,255,.24)!important;
+}
+.glass-theme .topbar{
+  background:rgba(255,255,255,.09)!important;
+  box-shadow:0 8px 24px rgba(10,20,55,.10),inset 0 1px 0 rgba(255,255,255,.18)!important;
+}
+.glass-theme .dashboard-hero,
+.glass-theme .panel,
+.glass-theme .stat-card,
+.glass-theme .dashboard-command-grid > *,
+.glass-theme .dashboard-lower-grid > *,
+.glass-theme .dashboard-next7{
+  background:rgba(255,255,255,.115)!important;
+  box-shadow:0 12px 32px rgba(10,20,55,.11),inset 0 1px 0 rgba(255,255,255,.22)!important;
+  contain:paint;
+}
+.glass-theme .weather-card,
+.glass-theme .next-class-card,
+.glass-theme .weather-day,
+.glass-theme .week-day,
+.glass-theme .next7-day,
+.glass-theme .action-grid button{
+  background:rgba(255,255,255,.10)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.18),0 8px 20px rgba(10,20,55,.08)!important;
+}
+.glass-theme .mobile-bottom-nav{
+  background:rgba(25,35,72,.86)!important;
+  box-shadow:0 -8px 24px rgba(4,9,35,.16)!important;
+}
+
+/* Only transient overlays get blur. */
+.glass-theme .modal-backdrop{
+  backdrop-filter:blur(5px)!important;
+  -webkit-backdrop-filter:blur(5px)!important;
+}
+.glass-theme .event-modal,
+.glass-theme .search-modal,
+.glass-theme .settings-card,
+.glass-theme .subject-card,
+.glass-theme .topic-card,
+.glass-theme .file-card,
+.glass-theme .assignment-card,
+.glass-theme .exam-card,
+.glass-theme .quick-note-card{
+  backdrop-filter:blur(8px) saturate(115%)!important;
+  -webkit-backdrop-filter:blur(8px) saturate(115%)!important;
+}
+
+/* Keep motion cheap: avoid transition-driven repaint of large surfaces. */
+.glass-theme .panel,
+.glass-theme .stat-card,
+.glass-theme .dashboard-hero,
+.glass-theme .dashboard-command-grid > *,
+.glass-theme .dashboard-lower-grid > *,
+.glass-theme .dashboard-next7,
+.glass-theme .weather-card,
+.glass-theme .weather-day,
+.glass-theme .week-day,
+.glass-theme .next7-day{
+  transition-property:background-color,border-color,box-shadow,color,opacity!important;
+  transition-duration:140ms!important;
+}
+
+@media(max-width:760px){
+  .glass-theme .sidebar,
+  .glass-theme .topbar,
+  .glass-theme .dashboard-hero,
+  .glass-theme .panel,
+  .glass-theme .stat-card,
+  .glass-theme .dashboard-command-grid > *,
+  .glass-theme .dashboard-lower-grid > *,
+  .glass-theme .dashboard-next7,
+  .glass-theme .weather-card,
+  .glass-theme .next-class-card,
+  .glass-theme .weather-day,
+  .glass-theme .week-day,
+  .glass-theme .next7-day,
+  .glass-theme .mobile-bottom-nav,
+  .glass-theme .mobile-nav-item{
+    backdrop-filter:none!important;
+    -webkit-backdrop-filter:none!important;
+  }
+  .glass-theme .dashboard-hero,
+  .glass-theme .panel,
+  .glass-theme .stat-card,
+  .glass-theme .dashboard-command-grid > *,
+  .glass-theme .dashboard-lower-grid > *,
+  .glass-theme .dashboard-next7{
+    box-shadow:0 8px 24px rgba(10,20,55,.10),inset 0 1px 0 rgba(255,255,255,.20)!important;
+  }
 }
