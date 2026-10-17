@@ -1,6 +1,6 @@
-const CACHE='campushub-shell-v88';
+const CACHE='campushub-shell-v89';
 const CORE=[
-  './','./index.html','./styles.css','./styles-glass.css?v=88','./styles-notes.css',
+  './','./index.html','./styles.css','./styles-glass.css?v=89','./styles-notes.css?v=89',
   './supabase-config.js','./cloud-sync.js','./assignments.js','./exams.js','./quick-notes.js','./app.js',
   './manifest.webmanifest','./icon.svg','./assets/background/campushub-wismar-dusk.webp','./assets/background/campushub-wismar-dusk.png',
   './files.js','./search.js','./settings.js','./export.js','./notes-ui.js'
