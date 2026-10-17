@@ -435,3 +435,22 @@ html[data-campushub-reduce-motion="true"] *::after{
     scroll-behavior:auto;
   }
 }
+
+/* v86 — scroll performance.
+   styles.css still applied blur(22px) to ~33 always-visible elements (sidebar, top bar,
+   every panel/card). The glass theme already tints them, so the blur is pure GPU cost on
+   every scroll frame. Persistent surfaces: no blur. Modals keep theirs (short-lived). */
+.glass-theme .sidebar,.glass-theme .topbar,.glass-theme .panel,.glass-theme .stat-card,
+.glass-theme .date-chip,.glass-theme .icon-button,.glass-theme .semester-card,
+.glass-theme .quick-actions-card,.glass-theme .next-class-card,.glass-theme .weather-card,
+.glass-theme .weather-day,.glass-theme .week-day,.glass-theme .dashboard-next7,
+.glass-theme .subject-files-panel,.glass-theme .file-card,.glass-theme .assignment-card,
+.glass-theme .exam-card,.glass-theme .settings-card,.glass-theme .quick-note-card,
+.glass-theme .subject-card,.glass-theme .topic-card,.glass-theme .mobile-bottom-nav,
+.glass-theme .global-search-trigger,.glass-theme .calendar-grid,.glass-theme .calendar-toolbar{
+  backdrop-filter:none!important;-webkit-backdrop-filter:none!important;
+}
+/* keep the fixed photo on its own GPU layer so it is never repainted while scrolling */
+#campusPhotoBackground{transform:translateZ(0);will-change:transform;contain:strict}
+/* hover shadow transitions on big cards force repaints of large areas; keep them cheap */
+.glass-theme .panel,.glass-theme .stat-card{transition:transform .18s ease,border-color .18s ease}
