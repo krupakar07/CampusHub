@@ -1,7 +1,0 @@
-/* CampusHub reusable component contracts. Feature CSS should consume these. */
-.ds-card{background:var(--ds-glass-2);border:1px solid var(--ds-glass-border);border-radius:var(--ds-radius-md);box-shadow:var(--ds-shadow-soft)}
-.ds-card-strong{background:var(--ds-glass-3);border:1px solid var(--ds-glass-border-strong);border-radius:var(--ds-radius-md);box-shadow:var(--ds-shadow-panel)}
-.ds-button{min-height:var(--ds-control-height);padding:0 14px;border-radius:var(--ds-radius-sm);border:1px solid var(--ds-glass-border);background:var(--ds-glass-soft);color:var(--ds-text-1)}
-.ds-button:hover{background:var(--ds-glass-hover);border-color:var(--ds-glass-border-strong)}
-.ds-button-primary{background:linear-gradient(135deg,#a184ff,#765ce9);border-color:rgba(255,255,255,.28);color:#fff;box-shadow:0 12px 30px rgba(107,73,220,.22)}
-.ds-focus:focus-visible{outline:2px solid var(--ds-accent-strong);outline-offset:2px}

@@ -1,3 +1,0 @@
-/* Responsive contract. Keep breakpoint policy here; feature files own their internals. */
-@media(max-width:1100px){body.glass-theme .main-area{margin-left:calc(var(--ds-nav-width) + 26px)}}
-@media(max-width:760px){html{scroll-behavior:auto}.app-shell{min-height:100dvh}.main-area{min-height:100dvh}}
