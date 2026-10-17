@@ -436,68 +436,134 @@ html[data-campushub-reduce-motion="true"] *::after{
   }
 }
 
-/* v86 — scroll performance.
-   styles.css still applied blur(22px) to ~33 always-visible elements (sidebar, top bar,
-   every panel/card). The glass theme already tints them, so the blur is pure GPU cost on
-   every scroll frame. Persistent surfaces: no blur. Modals keep theirs (short-lived). */
-.glass-theme .sidebar,.glass-theme .topbar,.glass-theme .panel,.glass-theme .stat-card,
-.glass-theme .date-chip,.glass-theme .icon-button,.glass-theme .semester-card,
-.glass-theme .quick-actions-card,.glass-theme .next-class-card,.glass-theme .weather-card,
-.glass-theme .weather-day,.glass-theme .week-day,.glass-theme .dashboard-next7,
-.glass-theme .subject-files-panel,.glass-theme .file-card,.glass-theme .assignment-card,
-.glass-theme .exam-card,.glass-theme .settings-card,.glass-theme .quick-note-card,
-.glass-theme .subject-card,.glass-theme .topic-card,.glass-theme .mobile-bottom-nav,
-.glass-theme .global-search-trigger,.glass-theme .calendar-grid,.glass-theme .calendar-toolbar{
-  backdrop-filter:none!important;-webkit-backdrop-filter:none!important;
-}
-/* keep the fixed photo on its own GPU layer so it is never repainted while scrolling */
-#campusPhotoBackground{transform:translateZ(0);will-change:transform;contain:strict}
-/* hover shadow transitions on big cards force repaints of large areas; keep them cheap */
-.glass-theme .panel,.glass-theme .stat-card{transition:transform .18s ease,border-color .18s ease}
+/* v86 — secondary-page glass redesign to match the CampusHub showcase.
+   Calendar, Exams and subject Files now use the same translucent dark surfaces
+   as the dashboard instead of falling back to the base white cards. */
 
-/* v87 — remaining scroll jitter fixes */
-/* 1. no hover repaints while scrolling (class toggled by perf.js) */
-html.is-scrolling body *{pointer-events:none!important}
-/* 2. big soft shadows on ~70 translucent cards are expensive to blend; use a crisp
-      border + 1px highlight instead (the glass look is carried by the tint + border) */
-.glass-theme .panel,.glass-theme .stat-card,.glass-theme .dashboard-hero,
-.glass-theme .weather-card,.glass-theme .next-class-card,.glass-theme .weather-day,
-.glass-theme .week-day,.glass-theme .dashboard-next7,.glass-theme .file-card,
-.glass-theme .assignment-card,.glass-theme .exam-card,.glass-theme .subject-card,
-.glass-theme .topic-card,.glass-theme .quick-note-card,.glass-theme .settings-card,
-.glass-theme .semester-card,.glass-theme .quick-actions-card,
-.glass-theme .sidebar,.glass-theme .topbar{
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.14)!important;
+.glass-theme .calendar-panel{
+  background:rgba(10,20,48,.68);
+  border-color:rgba(255,255,255,.24);
+  box-shadow:0 20px 45px rgba(3,8,25,.22),inset 0 1px 0 rgba(255,255,255,.12);
+  overflow:hidden;
 }
-.glass-theme .panel:hover,.glass-theme .stat-card:hover,.glass-theme .file-card:hover{transform:none!important}
-/* 3. fixed chrome gets its own compositor layer so scrolling cards never repaint it */
-@media(min-width:761px){.glass-theme .sidebar,.glass-theme .topbar{transform:translateZ(0)}}
-/* (mobile: the sidebar slides in/out with its own transform, so it must not be overridden) */
-.glass-theme .topbar{will-change:auto}
+.glass-theme .calendar-toolbar{
+  background:rgba(20,31,68,.74);
+  border-color:rgba(255,255,255,.18);
+}
+.glass-theme .calendar-nav button,
+.glass-theme .today-control,
+.glass-theme .calendar-filter,
+.glass-theme .calendar-search,
+.glass-theme .view-switch{
+  background:rgba(255,255,255,.09);
+  border-color:rgba(255,255,255,.20);
+  color:#fff;
+}
+.glass-theme .calendar-nav button:hover,
+.glass-theme .today-control:hover,
+.glass-theme .calendar-filter:hover,
+.glass-theme .calendar-search:focus-within,
+.glass-theme .view-switch button:hover{background:rgba(255,255,255,.15);}
+.glass-theme .calendar-search input{background:transparent;border:0;color:#fff;}
+.glass-theme .calendar-search input::placeholder{color:rgba(240,244,255,.55);}
+.glass-theme .calendar-filter option{background:#18284f;color:#fff;}
+.glass-theme .view-switch button{color:rgba(240,244,255,.72);background:transparent;}
+.glass-theme .view-switch button.selected{background:rgba(141,126,255,.34);color:#fff;box-shadow:inset 0 1px 0 rgba(255,255,255,.15);}
+.glass-theme .calendar-grid{color:#fff;}
+.glass-theme .calendar-corner,
+.glass-theme .calendar-day-head,
+.glass-theme .week-column,
+.glass-theme .day-column,
+.glass-theme .month-cell{border-color:rgba(255,255,255,.16);}
+.glass-theme .calendar-day-head{color:rgba(235,240,255,.58);}
+.glass-theme .calendar-day-head b{color:#fff;}
+.glass-theme .calendar-day-head.is-today b{background:#8175f2;box-shadow:0 6px 18px rgba(129,117,242,.35);}
+.glass-theme .time-label{color:rgba(235,240,255,.48);}
+.glass-theme .week-column,
+.glass-theme .day-column{background:repeating-linear-gradient(to bottom,transparent 0,transparent 44px,rgba(255,255,255,.13) 44px,rgba(255,255,255,.13) 45px);}
+.glass-theme .week-column.is-today{background-color:rgba(129,117,242,.07);}
+.glass-theme .month-cell.muted{background:rgba(0,0,0,.10);color:rgba(255,255,255,.35);}
+.glass-theme .month-number{color:rgba(245,247,255,.78);}
+.glass-theme .month-event{color:#fff;}
+.glass-theme .month-more{color:rgba(240,244,255,.62);}
+.glass-theme .calendar-legend{color:rgba(240,244,255,.68);}
+.glass-theme .calendar-event{border-radius:7px;padding:7px 8px;background:rgba(109,93,220,.46);box-shadow:inset 0 1px 0 rgba(255,255,255,.16),0 6px 16px rgba(3,8,25,.16);}
+.glass-theme .calendar-event b{color:#fff;font-size:9px;}
+.glass-theme .calendar-event span{color:rgba(255,255,255,.82);opacity:1;}
 
-/* v88 — floating rounded glass top bar (matches the cards and sidebar) */
-.glass-theme .topbar{
-  height:66px;
-  margin:22px 38px 0;                    /* lines up with the dashboard cards below */
-  padding:0 18px 0 26px;
-  border:1px solid rgba(255,255,255,.25);
-  border-radius:22px;
-  background:linear-gradient(120deg,rgba(28,45,91,.70),rgba(40,50,100,.60))!important;
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.18)!important;
+/* Exams */
+.glass-theme .exam-summary-card{
+  background:rgba(18,30,65,.68);
+  border-color:rgba(255,255,255,.22);
+  box-shadow:0 14px 32px rgba(3,8,25,.18),inset 0 1px 0 rgba(255,255,255,.12);
+  color:#fff;
 }
-.glass-theme .topbar .global-search-trigger{border-radius:16px}
-.glass-theme .topbar .icon-button{border-radius:14px}
-.glass-theme .topbar .primary-button{border-radius:16px}
-@media(max-width:1050px){.glass-theme .topbar{margin:18px 27px 0}}
-@media(max-width:760px){
-  .glass-theme .topbar{
-    margin:10px 12px 0;height:56px;padding:0 10px 0 12px;border-radius:18px;
-    top:10px;                            /* sticky offset so it floats while scrolling */
-  }
+.glass-theme .exam-summary-card:after{background:rgba(255,111,126,.16);}
+.glass-theme .exam-summary-card.purple:after{background:rgba(143,124,255,.18);}
+.glass-theme .exam-summary-card.green:after{background:rgba(83,213,160,.16);}
+.glass-theme .exam-summary-card span{color:rgba(238,242,255,.60);}
+.glass-theme .exam-summary-card b{color:#fff;}
+.glass-theme .exam-summary-card small{color:rgba(238,242,255,.62);}
+.glass-theme .exam-list-panel,.glass-theme .exam-side-panel{
+  background:rgba(11,22,50,.68);
+  border-color:rgba(255,255,255,.22);
+  box-shadow:var(--glass-shadow);
 }
-@media(max-width:390px){.glass-theme .topbar{margin:8px 8px 0;border-radius:16px}}
-html[data-campushub-theme="light"] .glass-theme .topbar{
-  border-color:rgba(255,255,255,.7);
-  background:linear-gradient(120deg,rgba(255,255,255,.82),rgba(240,244,255,.72))!important;
+.glass-theme .exam-row{background:rgba(255,255,255,.055);border-top-color:rgba(255,255,255,.13);color:#fff;border-radius:9px;margin-top:7px;padding:13px 10px;}
+.glass-theme .exam-row:hover{background:rgba(255,255,255,.11);}
+.glass-theme .exam-icon{background:rgba(255,111,126,.15);color:#ff9ba5;border:1px solid rgba(255,145,157,.18);}
+.glass-theme .exam-main strong{color:#fff;}
+.glass-theme .exam-main span,.glass-theme .exam-main small{color:rgba(239,243,255,.67);}
+.glass-theme .exam-progress:before{background:rgba(255,255,255,.12);}
+.glass-theme .exam-progress i{background:linear-gradient(90deg,#8a7cff,#b0a6ff);}
+.glass-theme .exam-progress small{color:rgba(239,243,255,.58);}
+.glass-theme .exam-status-planned{color:#dce0ef;background:rgba(255,255,255,.09);}
+.glass-theme .exam-status-studying{color:#ffd58b;background:rgba(255,190,91,.14);}
+.glass-theme .exam-status-ready{color:#9ff0c6;background:rgba(83,213,160,.14);}
+.glass-theme .exam-status-completed{color:#c7c0ff;background:rgba(139,124,255,.15);}
+.glass-theme .exam-countdown{color:rgba(239,243,255,.58);}
+.glass-theme .exam-countdown.overdue{color:#ff9ca5;}
+.glass-theme .exam-flow>div{border-top-color:rgba(255,255,255,.15);}
+.glass-theme .exam-flow span{background:rgba(255,255,255,.12);color:#c8c0ff;border:1px solid rgba(255,255,255,.14);}
+.glass-theme .exam-flow b{color:#fff;}
+.glass-theme .exam-flow small{color:rgba(239,243,255,.64);}
+
+/* Subject materials / Files */
+.glass-theme .subject-files-panel{padding:0;}
+.glass-theme .files-toolbar{padding:0 2px 16px;}
+.glass-theme .files-toolbar h3{color:#fff;}
+.glass-theme .files-toolbar p{color:rgba(239,243,255,.70);}
+.glass-theme .files-toolbar .subject-panel-kicker{color:rgba(229,234,255,.55);}
+.glass-theme .files-grid{grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;}
+.glass-theme .file-card{
+  min-height:185px;
+  padding:14px;
+  background:rgba(18,30,65,.68);
+  border-color:rgba(255,255,255,.22);
+  box-shadow:0 12px 28px rgba(3,8,25,.16),inset 0 1px 0 rgba(255,255,255,.10);
 }
-.glass-theme .topbar .mobile-menu,.glass-theme .topbar .mobile-settings{background:rgba(13,23,52,.58);border:1px solid rgba(255,255,255,.25);color:#fff;border-radius:14px}
+.glass-theme .file-card:hover{transform:translateY(-2px);border-color:rgba(181,169,255,.46);background:rgba(28,40,78,.76);box-shadow:0 16px 34px rgba(3,8,25,.22),inset 0 1px 0 rgba(255,255,255,.13);}
+.glass-theme .file-card-icon{background:rgba(132,117,247,.16);border-color:rgba(191,183,255,.18);color:#d6d0ff;}
+.glass-theme .file-extension{color:#ddd8ff;background:rgba(255,255,255,.09);border-color:rgba(255,255,255,.15);}
+.glass-theme .file-card-body strong{color:#fff;}
+.glass-theme .file-card-meta{color:rgba(239,243,255,.60);}
+.glass-theme .file-card-actions{border-top-color:rgba(255,255,255,.13);}
+.glass-theme .file-card-actions button{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.16);color:#fff;}
+.glass-theme .file-card-actions button:hover{background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.25);color:#fff;}
+.glass-theme .file-open-action{background:rgba(133,117,247,.20)!important;border-color:rgba(182,171,255,.25)!important;color:#e5e0ff!important;}
+.glass-theme .file-icon-action.danger:hover{background:rgba(255,92,110,.14)!important;border-color:rgba(255,135,148,.30)!important;color:#ffb0b8!important;}
+.glass-theme .files-empty{background:rgba(18,30,65,.60);border-color:rgba(255,255,255,.20);color:#fff;}
+.glass-theme .files-empty-icon{background:rgba(132,117,247,.18);color:#d6d0ff;}
+.glass-theme .files-empty h4{color:#fff;}
+.glass-theme .files-empty p{color:rgba(239,243,255,.65);}
+
+/* Preserve the showcase composition on narrower screens. */
+@media(max-width:900px){
+  .glass-theme .exam-summary{grid-template-columns:repeat(2,1fr);}
+  .glass-theme .exam-layout{grid-template-columns:1fr;}
+  .glass-theme .files-grid{grid-template-columns:repeat(2,minmax(0,1fr));}
+}
+@media(max-width:600px){
+  .glass-theme .exam-summary{grid-template-columns:1fr 1fr;}
+  .glass-theme .files-grid{grid-template-columns:1fr;}
+}

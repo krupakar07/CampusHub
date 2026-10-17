@@ -412,3 +412,84 @@
 @media(max-width:760px){
   .campus-notes-page .notes-item-menu{opacity:1;width:30px;height:32px}
 }
+
+/* v86 — Notes glass workspace redesign matching the CampusHub showcase. */
+body.glass-theme .campus-notes-page{
+  background:transparent!important;
+  color:#f8f9ff;
+}
+body.glass-theme .campus-notes-page .notes-workspace{background:transparent;}
+body.glass-theme .campus-notes-page .notes-sidebar{
+  background:rgba(13,23,52,.72);
+  border-right:1px solid rgba(255,255,255,.18);
+  box-shadow:inset -1px 0 0 rgba(255,255,255,.05);
+}
+body.glass-theme .campus-notes-page .notes-sidebar-title,
+body.glass-theme .campus-notes-page .notes-section-label{color:rgba(235,240,255,.52);}
+body.glass-theme .campus-notes-page .notes-subject,
+body.glass-theme .campus-notes-page .notes-page-link,
+body.glass-theme .campus-notes-page .notes-topic-toggle{color:rgba(245,248,255,.74);}
+body.glass-theme .campus-notes-page .notes-subject:hover,
+body.glass-theme .campus-notes-page .notes-subject.active,
+body.glass-theme .campus-notes-page .notes-page-link:hover,
+body.glass-theme .campus-notes-page .notes-page-link.active,
+body.glass-theme .campus-notes-page .notes-topic-row:hover,
+body.glass-theme .campus-notes-page .notes-tree-topic.open .notes-topic-row{background:rgba(255,255,255,.10);color:#fff;}
+body.glass-theme .campus-notes-page .notes-add{color:#c5bcff;}
+body.glass-theme .campus-notes-page .notes-add:hover{background:rgba(255,255,255,.08);}
+body.glass-theme .campus-notes-page .notes-storage-card{
+  background:rgba(255,255,255,.07);
+  border-color:rgba(255,255,255,.15);
+  color:rgba(239,243,255,.62);
+}
+body.glass-theme .campus-notes-page .notes-storage-card strong{color:#fff;}
+body.glass-theme .campus-notes-page .notes-editor-shell{background:transparent;}
+body.glass-theme .campus-notes-page .subject-workspace{
+  background:rgba(10,20,48,.38)!important;
+  color:#f8f9ff;
+  border-left:1px solid rgba(255,255,255,.10);
+}
+body.glass-theme .campus-notes-page .subject-workspace-top h2{color:#fff;}
+body.glass-theme .campus-notes-page .subject-workspace-top p{color:rgba(239,243,255,.68);}
+body.glass-theme .campus-notes-page .subject-workspace-tabs{border-bottom-color:rgba(255,255,255,.16);}
+body.glass-theme .campus-notes-page .subject-workspace-tabs button{color:rgba(239,243,255,.62);}
+body.glass-theme .campus-notes-page .subject-workspace-tabs button:hover{color:#fff;background:rgba(255,255,255,.06);}
+body.glass-theme .campus-notes-page .subject-workspace-tabs button.selected{color:#ddd7ff;border-bottom-color:#9b8dff;background:rgba(132,117,247,.08);}
+body.glass-theme .campus-notes-page .subject-stat-card,
+body.glass-theme .campus-notes-page .subject-panel,
+body.glass-theme .campus-notes-page .subject-note-card,
+body.glass-theme .campus-notes-page .subject-placeholder{
+  background:rgba(18,30,65,.64);
+  border-color:rgba(255,255,255,.20);
+  color:#fff;
+  box-shadow:0 12px 28px rgba(3,8,25,.14),inset 0 1px 0 rgba(255,255,255,.09);
+}
+body.glass-theme .campus-notes-page .subject-stat-card:hover,
+body.glass-theme .campus-notes-page .subject-note-card:hover{background:rgba(30,43,82,.74);border-color:rgba(181,169,255,.40);}
+body.glass-theme .campus-notes-page .subject-stat-icon{background:rgba(132,117,247,.18);color:#d6d0ff;}
+body.glass-theme .campus-notes-page .subject-stat-copy strong,
+body.glass-theme .campus-notes-page .subject-stat-copy span,
+body.glass-theme .campus-notes-page .subject-note-card strong,
+body.glass-theme .campus-notes-page .subject-placeholder h3{color:#fff;}
+body.glass-theme .campus-notes-page .subject-stat-copy small,
+body.glass-theme .campus-notes-page .subject-note-card small,
+body.glass-theme .campus-notes-page .subject-placeholder p{color:rgba(239,243,255,.62);}
+body.glass-theme .campus-notes-page .subject-note-icon{background:rgba(132,117,247,.14);}
+body.glass-theme .campus-notes-page .subject-panel-heading h3,
+body.glass-theme .campus-notes-page .subject-panel-heading p,
+body.glass-theme .campus-notes-page .subject-section-intro h3,
+body.glass-theme .campus-notes-page .subject-section-intro p{color:#fff;}
+body.glass-theme .campus-notes-page .subject-panel-heading p,
+body.glass-theme .campus-notes-page .subject-section-intro p{color:rgba(239,243,255,.64);}
+body.glass-theme .campus-notes-page .subject-placeholder-icon{background:rgba(132,117,247,.18);color:#d6d0ff;}
+body.glass-theme .campus-notes-page .notes-page-header,
+body.glass-theme .campus-notes-page .editor-tabs,
+body.glass-theme .campus-notes-page .editor-ribbon{background:rgba(13,23,52,.72);border-color:rgba(255,255,255,.15);}
+body.glass-theme .campus-notes-page .notes-page-header input{color:#fff;}
+body.glass-theme .campus-notes-page .notes-page-header span{color:rgba(239,243,255,.60);}
+body.glass-theme .campus-notes-page .editor-tabs button{color:rgba(239,243,255,.64);}
+body.glass-theme .campus-notes-page .editor-tabs button:hover{background:rgba(255,255,255,.07);color:#fff;}
+body.glass-theme .campus-notes-page .editor-tabs button.selected{background:rgba(132,117,247,.18);border-color:rgba(255,255,255,.16);border-bottom-color:rgba(132,117,247,.18);color:#ddd7ff;}
+body.glass-theme .campus-notes-page .mobile-notes-header{background:rgba(13,23,52,.88)!important;border-color:rgba(255,255,255,.16)!important;}
+body.glass-theme .campus-notes-page .mobile-notes-header-label{color:rgba(239,243,255,.55);}
+body.glass-theme .campus-notes-page .mobile-notes-header select{background:rgba(255,255,255,.09)!important;color:#fff!important;border-color:rgba(255,255,255,.20)!important;}
