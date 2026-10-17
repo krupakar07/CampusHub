@@ -1009,3 +1009,105 @@ body.glass-theme #campusPhotoBackground{
 @media(max-width:480px){
   .glass-theme .auth-card{width:min(420px,calc(100% - 24px))!important}
 }
+
+
+/* CampusHub v82 — readability pass.
+   Keep the Wismar photo, but give persistent UI surfaces enough contrast to
+   remain readable over bright sunset areas. No backdrop blur on large surfaces. */
+body.glass-theme::before{
+  background:
+    linear-gradient(180deg,rgba(8,16,40,.18),rgba(8,16,40,.28)),
+    url("assets/background/campushub-wismar-dusk.png") center center / cover no-repeat!important;
+}
+body.glass-theme::after{
+  background:linear-gradient(135deg,rgba(34,28,78,.10),rgba(14,54,100,.10) 52%,rgba(95,40,65,.08))!important;
+}
+.glass-theme .sidebar{
+  background:rgba(13,23,52,.64)!important;
+  border-color:rgba(255,255,255,.26)!important;
+  box-shadow:0 18px 45px rgba(3,8,25,.30),inset 0 1px 0 rgba(255,255,255,.18)!important;
+}
+.glass-theme .topbar{
+  background:rgba(13,23,52,.48)!important;
+  border-bottom-color:rgba(255,255,255,.20)!important;
+  box-shadow:0 8px 24px rgba(3,8,25,.18),inset 0 1px 0 rgba(255,255,255,.16)!important;
+}
+.glass-theme .dashboard-hero,
+.glass-theme .panel,
+.glass-theme .stat-card,
+.glass-theme .dashboard-bottom-strip,
+.glass-theme .dashboard-command-grid > *,
+.glass-theme .dashboard-lower-grid > *,
+.glass-theme .dashboard-next7{
+  background:rgba(15,25,57,.58)!important;
+  border-color:rgba(255,255,255,.25)!important;
+  box-shadow:0 14px 34px rgba(3,8,25,.22),inset 0 1px 0 rgba(255,255,255,.16)!important;
+}
+.glass-theme .dashboard-hero{
+  background:linear-gradient(120deg,rgba(28,45,91,.64),rgba(67,51,101,.52))!important;
+}
+.glass-theme .weather-card,
+.glass-theme .next-class-card,
+.glass-theme .weather-day,
+.glass-theme .week-day,
+.glass-theme .next7-day,
+.glass-theme .action-grid button{
+  background:rgba(20,31,68,.62)!important;
+  border-color:rgba(255,255,255,.25)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.16),0 8px 20px rgba(3,8,25,.18)!important;
+}
+.glass-theme .weather-day.selected,
+.glass-theme .week-day.selected,
+.glass-theme .next7-day.selected{
+  background:linear-gradient(145deg,rgba(117,99,232,.58),rgba(48,43,104,.52))!important;
+  border-color:rgba(220,215,255,.55)!important;
+}
+.glass-theme .nav-item{color:rgba(248,250,255,.86)!important}
+.glass-theme .category-item{color:rgba(242,245,255,.80)!important}
+.glass-theme .breadcrumbs{color:rgba(242,245,255,.74)!important}
+.glass-theme .eyebrow,.glass-theme .subheading{color:rgba(242,245,255,.78)!important}
+.glass-theme .stat-label,.glass-theme .stat-meta{color:rgba(242,245,255,.76)!important}
+.glass-theme .panel-heading p,
+.glass-theme .schedule-description span,
+.glass-theme .schedule-time small,
+.glass-theme .schedule-status,
+.glass-theme .inline-event-copy small,
+.glass-theme .week-detail-head span,
+.glass-theme .next7-detail-head span{
+  color:rgba(242,245,255,.72)!important;
+}
+.glass-theme .weather-card .weather-summary,
+.glass-theme .weather-card .weather-meta,
+.glass-theme .next-class-card .module,
+.glass-theme .next-details,
+.glass-theme .next-footer{
+  color:rgba(242,245,255,.78)!important;
+}
+.glass-theme .week-day .weekday,
+.glass-theme .week-day .class-number,
+.glass-theme .next7-day span,
+.glass-theme .next7-day small,
+.glass-theme .weather-day span,
+.glass-theme .weather-day small{
+  color:rgba(242,245,255,.78)!important;
+}
+.glass-theme .global-search-trigger,
+.glass-theme .icon-button{
+  background:rgba(13,23,52,.46)!important;
+  border-color:rgba(255,255,255,.25)!important;
+}
+.glass-theme .mobile-bottom-nav{
+  background:rgba(13,23,52,.88)!important;
+}
+@media(max-width:760px){
+  .glass-theme .sidebar{background:rgba(13,23,52,.78)!important}
+  .glass-theme .topbar{background:rgba(13,23,52,.62)!important}
+  .glass-theme .dashboard-hero,
+  .glass-theme .panel,
+  .glass-theme .stat-card,
+  .glass-theme .dashboard-command-grid > *,
+  .glass-theme .dashboard-lower-grid > *,
+  .glass-theme .dashboard-next7{
+    background:rgba(15,25,57,.66)!important;
+  }
+}
