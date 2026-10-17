@@ -1,0 +1,414 @@
+.campus-notes-page .notes-editor-shell{flex:1;min-width:0;min-height:0;display:flex;flex-direction:column}.campus-notes-page .onenote-editor{height:100%;min-height:0;display:flex;flex-direction:column}
+
+.campus-notes-page{padding:0!important;max-width:none!important;height:calc(100vh - 70px);overflow:hidden;background:#fff}.notes-workspace{height:100%;display:flex;min-height:0}.notes-sidebar{width:225px;background:#faf9fc;border-right:1px solid #e5e2ea;padding:18px 13px;overflow:auto;flex:none}.notes-sidebar-title,.notes-section-label{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:#8a8794;margin:0 9px 10px}.notes-section-label{margin-top:22px}.notes-subject-open{margin-left:auto;opacity:.45;font-size:18px;line-height:1;transition:transform .15s ease,opacity .15s ease}.notes-subject:hover .notes-subject-open,.notes-subject.active .notes-subject-open{opacity:1;transform:translateX(2px)}
+
+.notes-subject{display:flex;align-items:center;gap:9px;width:100%;border:0;background:transparent;border-radius:7px;padding:9px 10px;font-size:12px;text-align:left;cursor:pointer;margin-bottom:2px;color:#4d4a56}.notes-subject:hover,.notes-subject.active,.notes-page-link:hover,.notes-page-link.active{background:#ece9f7}.notes-dot{width:8px;height:8px;border-radius:50%;flex:none}.notes-dot.purple{background:#7661c9}.notes-dot.blue{background:#5c8edb}.notes-dot.green{background:#5da27b}.notes-dot.orange{background:#db9651}.notes-add{width:100%;border:0;background:transparent;text-align:left;padding:8px 10px;color:#6a5bb7;cursor:pointer;border-radius:7px;font-size:12px}.notes-add:hover{background:#f0eef8}.notes-page-link{display:flex;align-items:center;gap:9px;width:100%;border:0;background:transparent;border-radius:7px;padding:9px 10px;font-size:12px;text-align:left;cursor:pointer;margin-bottom:2px;color:#4d4a56}.notes-storage-card{margin:25px 5px 0;padding:12px;border:1px solid #e4e1ea;border-radius:9px;background:white;font-size:10px;color:#77737f;line-height:1.45}.notes-storage-card strong{color:#4b4853}.notes-page-header{height:58px;border-bottom:1px solid #e9e7ef;display:flex;align-items:center;gap:12px;padding:0 22px;flex:none}.notes-page-header input{border:0;outline:0;font-size:19px;font-weight:650;flex:1;color:#2e2b37;background:transparent}.notes-page-header span{font-size:11px;color:#918e99}.campus-notes-page .editor-tabs{height:39px;display:flex;align-items:end;gap:3px;padding:0 12px;background:#faf9fd;border-bottom:1px solid #e9e7ef;position:relative;z-index:20;pointer-events:auto}.campus-notes-page .editor-tabs button{height:35px;border:0;background:transparent;padding:0 18px;color:#777489;font-size:12px;font-weight:650;border-radius:7px 7px 0 0;cursor:pointer;position:relative;z-index:21;pointer-events:auto}.campus-notes-page .editor-tabs button:hover{background:#f0eef8}.campus-notes-page .editor-tabs button.selected{background:#fff;color:#6655c1;border:1px solid #e7e5ef;border-bottom-color:#fff;margin-bottom:-1px}.campus-notes-page .editor-ribbon{display:flex;gap:0;min-height:92px;background:#fff;border-bottom:1px solid #eeeef3;overflow-x:auto;padding:6px 8px;align-items:stretch}.campus-notes-page .ribbon-group{display:flex;gap:3px;padding:0 9px;border-right:1px solid #eeeef2;align-items:center;position:relative}.campus-notes-page .ribbon-group:last-child{border-right:0}.campus-notes-page .group-label{position:absolute;bottom:3px;left:0;right:0;text-align:center;font-size:9px;color:#aaa6b1}.campus-notes-page .ribbon-tool{min-width:39px;height:66px;border:1px solid transparent;background:transparent;border-radius:6px;color:#4f4b58;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;padding:4px 5px;cursor:pointer;font-size:9px;white-space:nowrap}.campus-notes-page .ribbon-tool:hover{background:#f4f2fa;border-color:#e7e3f0}.campus-notes-page .ribbon-tool .big{font-size:17px;font-weight:700}.campus-notes-page .ribbon-select{height:30px;border:1px solid #dedbe5;background:white;border-radius:6px;padding:0 7px;font-size:11px;outline:none}.campus-notes-page .mini-stack{display:flex;flex-direction:column;gap:4px}.campus-notes-page .editor-canvas-wrap{flex:1;min-height:0;overflow:auto;background:#f8f7fa;padding:26px}.campus-notes-page .editor-canvas{max-width:980px;min-height:100%;margin:0 auto;background:white;border:1px solid #ece9f0;border-radius:4px;box-shadow:0 2px 10px rgba(40,35,60,.04);padding:55px 70px;outline:none;font-size:15px;line-height:1.65;transform-origin:top left}.campus-notes-page .editor-canvas:focus{border-color:#ddd8e9}.campus-notes-page .editor-canvas h1,.campus-notes-page .editor-canvas h2,.campus-notes-page .editor-canvas h3{line-height:1.25}.campus-notes-page .editor-canvas blockquote{border-left:4px solid #7565c7;background:#f6f3fc;margin:16px 0;padding:10px 15px;color:#625d70}.campus-notes-page .editor-canvas pre{background:#25232c;color:#f7f6fa;border-radius:7px;padding:14px;overflow:auto}.campus-notes-page .editor-canvas table{border-collapse:collapse;width:100%;margin:12px 0}.campus-notes-page .editor-canvas td,.campus-notes-page .editor-canvas th{border:1px solid #bbb6c5;padding:8px;min-width:60px}.campus-notes-page .editor-canvas img{max-width:100%;height:auto}.campus-notes-page .editor-canvas .tag-chip{display:inline-block;padding:2px 7px;border-radius:12px;background:#ece8fa;color:#594ba7;font-size:12px;font-weight:650;margin:0 3px}.campus-notes-page .todo-line{display:flex;align-items:center;gap:8px;margin:5px 0}.campus-notes-page .todo-line input{width:16px;height:16px}.campus-notes-page .statusbar{height:31px;border-top:1px solid #eceaf0;background:#faf9fc;display:flex;align-items:center;gap:8px;padding:0 12px;color:#8d8996;font-size:10px}.campus-notes-page .status-spacer{flex:1}.campus-notes-page .statusbar button{border:0;background:transparent;cursor:pointer;color:#6f6a78}.campus-notes-page .table-picker{position:fixed;z-index:100;background:white;border:1px solid #ddd8e7;border-radius:9px;padding:8px;box-shadow:0 10px 30px rgba(30,25,50,.18)}.campus-notes-page .table-grid{display:grid;grid-template-columns:repeat(10,20px);gap:3px}.campus-notes-page .table-cell{width:20px;height:20px;border:1px solid #d8d3e2;background:#faf9fc;cursor:pointer}.campus-notes-page .table-cell:hover,.campus-notes-page .table-cell.active{background:#dcd5f4;border-color:#8c7bd0}.campus-notes-page .picker-label{text-align:center;font-size:10px;color:#77737f;margin-bottom:7px}.campus-notes-page .symbol-menu{position:fixed;z-index:100;background:#fff;border:1px solid #ddd8e7;border-radius:9px;padding:8px;box-shadow:0 10px 30px rgba(30,25,50,.18);display:grid;grid-template-columns:repeat(8,32px);gap:3px}.campus-notes-page .symbol-menu button{height:30px;border:0;background:#f7f5fa;border-radius:5px;cursor:pointer}.campus-notes-page .symbol-menu button:hover{background:#e9e4f6}
+@media(max-width:900px){.notes-sidebar{width:185px}.campus-notes-page .editor-canvas-wrap{padding:10px}.campus-notes-page .editor-canvas{padding:30px 24px}.campus-notes-page .ribbon-tool{min-width:35px}}
+@media(max-width:700px){.notes-sidebar{display:none}.campus-notes-page .editor-canvas-wrap{padding:8px}.campus-notes-page .editor-canvas{padding:28px 20px}}
+@media print{.campus-notes-page .notes-sidebar,.campus-notes-page .notes-page-header,.campus-notes-page .editor-tabs,.campus-notes-page .editor-ribbon,.campus-notes-page .statusbar{display:none!important}.campus-notes-page .editor-canvas-wrap{padding:0;background:white}.campus-notes-page .editor-canvas{box-shadow:none;border:0;max-width:none}}
+
+/* OneNote-style dropdowns and active/toggle states */
+.campus-notes-page .ribbon-dropdown-wrap{position:relative;display:flex;align-items:center}
+.campus-notes-page .ribbon-dropdown-trigger{position:relative;padding-bottom:8px!important}
+.campus-notes-page .ribbon-tool.active{background:#e8e4f7;border-color:#cfc7ed;color:#4e3f9f;box-shadow:inset 0 0 0 1px #d8d0f0}
+.campus-notes-page .ribbon-tool.active .big{color:#4e3f9f}
+.campus-notes-page .dropdown-arrow{position:absolute;right:4px;bottom:2px;font-size:9px;color:#8b8497}
+.campus-notes-page .color-swatch{position:absolute;bottom:1px;left:50%;transform:translateX(-50%);width:22px;height:3px;border-radius:2px;border:1px solid rgba(0,0,0,.12)}
+.campus-notes-page .ribbon-color-menu{position:fixed;z-index:1000;width:190px;padding:10px;background:#fff;border:1px solid #ddd8e7;border-radius:9px;box-shadow:0 12px 30px rgba(30,25,50,.2);display:grid;grid-template-columns:repeat(6,24px);gap:7px}
+.campus-notes-page .ribbon-color-menu[hidden]{display:none!important}
+.campus-notes-page .color-choice{width:24px;height:24px;border:1px solid #ddd8e7;background:#fff;border-radius:5px;padding:3px;cursor:pointer}
+.campus-notes-page .color-choice:hover{border-color:#7565c7;background:#f3f0fb}
+.campus-notes-page .color-choice span{display:block;width:100%;height:100%;border-radius:3px;border:1px solid rgba(0,0,0,.12)}
+
+/* OneNote-style Tags dropdown */
+.campus-notes-page .ribbon-tag-menu{position:fixed;z-index:1100;width:245px;background:#fff;border:1px solid #d7d3dd;border-radius:5px;box-shadow:0 10px 28px rgba(30,25,50,.20);padding:6px 0;overflow:hidden}
+.campus-notes-page .tag-menu-scroll{max-height:565px;overflow-y:auto;padding:0 0 3px}
+.campus-notes-page .tag-menu-item{width:100%;min-height:34px;border:0;background:#fff;display:grid;grid-template-columns:25px 1fr auto;align-items:center;gap:8px;padding:6px 12px;text-align:left;font-size:12px;color:#45414c;cursor:pointer}
+.campus-notes-page .tag-menu-item:hover{background:#f0eef8}
+.campus-notes-page .tag-menu-icon{font-size:15px;text-align:center;color:#6e657b}
+.campus-notes-page .tag-menu-item kbd{font-family:inherit;font-size:9px;color:#99939f;margin-left:8px}
+.campus-notes-page .tag-menu-item.remember span:nth-child(2){background:#fff59d;padding:2px 4px;width:max-content}
+.campus-notes-page .tag-menu-item.definition span:nth-child(2){background:#30d158;color:#111;padding:2px 4px;width:max-content}
+.campus-notes-page .tag-menu-item.highlight span:nth-child(2){background:#fff59d;padding:2px 4px;width:max-content}
+.campus-notes-page .tag-menu-item.critical .tag-menu-icon{color:#e53935}
+.campus-notes-page .tag-menu-item.project-a .tag-menu-icon{color:#e86b5b}
+.campus-notes-page .tag-menu-item.project-b .tag-menu-icon{color:#e8c65a}
+.campus-notes-page .tag-menu-item.customize{border-top:1px solid #e7e4eb;margin-top:3px;padding-top:9px}
+.campus-notes-page .tag-menu-item.remove-tag{color:#aaa;cursor:pointer}
+.campus-notes-page .tagged-text{border-radius:2px;padding:1px 3px;cursor:pointer}
+.campus-notes-page .tagged-text:hover{outline:1px dashed #8b7bd0;outline-offset:1px}
+.campus-notes-page .tagged-text.remember,.campus-notes-page .tagged-text.highlight{background:#fff59d}
+.campus-notes-page .tagged-text.definition{background:#30d158;color:#111}
+.campus-notes-page .tagged-text.critical{border-left:2px solid #e53935;padding-left:4px}
+.campus-notes-page .tagged-text.project-a{background:#ffe1dc}
+.campus-notes-page .tagged-text.project-b{background:#fff1bd}
+
+/* CampusHub editor optimization v5 */
+.campus-notes-page .ribbon-select-wrap{display:flex;align-items:center;height:66px;padding:0 3px;position:relative}
+.campus-notes-page .ribbon-select{min-width:86px;height:32px;font-size:12px;cursor:pointer;background:#fff}
+.campus-notes-page .style-select{min-width:108px}
+.campus-notes-page .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.campus-notes-page .ribbon-tool:focus-visible,.campus-notes-page .ribbon-select:focus-visible,.campus-notes-page .table-cell:focus-visible,.campus-notes-page .color-choice:focus-visible,.campus-notes-page .tag-menu-item:focus-visible{outline:2px solid #7565c7;outline-offset:1px}
+.campus-notes-page .ribbon-tool[aria-pressed="true"]{background:#e8e4f7;border-color:#cfc7ed;color:#4e3f9f}
+.campus-notes-page .table-picker{width:250px;max-height:360px;overflow:auto}
+.campus-notes-page .table-grid{grid-template-columns:repeat(10,20px);max-height:230px;overflow:auto}
+.campus-notes-page .table-picker .table-cell{padding:0}
+.campus-notes-page .symbol-menu{max-width:285px;max-height:230px;overflow:auto}
+.campus-notes-page .ribbon-tag-menu{width:260px}
+.campus-notes-page .editor-canvas{caret-color:#5b4cc4}
+.campus-notes-page .editor-canvas img{display:block;margin:8px 0;max-height:700px;object-fit:contain}
+.campus-notes-page .editor-canvas audio,.campus-notes-page .editor-canvas video{display:block;margin:8px 0;max-width:100%}
+.campus-notes-page .editor-canvas .equation{font-family:Georgia,serif;background:#f7f4ff;border:1px solid #e4def6;border-radius:4px;padding:2px 5px}
+.campus-notes-page .editor-canvas .file-attachment{padding:10px 12px;border:1px solid #e2ddec;background:#faf9fd;border-radius:7px}
+.campus-notes-page .editor-canvas [data-tag]{user-select:text}
+@media(max-width:900px){.campus-notes-page .ribbon-select{min-width:70px}.campus-notes-page .style-select{min-width:90px}}
+
+.campus-notes-page .editor-ribbon [data-action="table"]{min-width:64px;font-weight:700}.campus-notes-page .editor-ribbon .ribbon-group:has([data-action="table"]){min-width:88px}
+
+.campus-notes-page .table-picker{position:fixed!important;z-index:99999!important;background:#fff!important;display:block!important;visibility:visible!important;opacity:1!important;pointer-events:auto!important}
+
+.campus-notes-page .table-picker .picker-title{font-size:12px;font-weight:700;color:#393542;margin:2px 2px 4px;text-align:center}.campus-notes-page .table-picker .picker-hint{font-size:9px;color:#8a8692;text-align:center;margin-top:7px}.campus-notes-page .table-picker{min-width:270px;box-sizing:border-box;pointer-events:auto!important}.campus-notes-page .table-picker[hidden]{display:none!important}
+
+/* Native table dialog: intentionally independent of ribbon/menu stacking. */
+.campus-table-dialog{border:1px solid #d8d3e2;border-radius:12px;padding:0;background:#fff;box-shadow:0 18px 60px rgba(30,25,50,.28);width:330px;max-width:calc(100vw - 24px);z-index:100000;}
+.campus-table-dialog::backdrop{background:rgba(30,25,50,.12);}
+.campus-table-dialog-inner{padding:14px;}
+.campus-table-dialog-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;font-size:13px;color:#393542;}
+.campus-table-size{font-size:11px;color:#7565c7;font-weight:700;background:#f0eefb;border-radius:5px;padding:4px 7px;min-width:45px;text-align:center;}
+.campus-table-grid{display:grid;grid-template-columns:repeat(10,22px);gap:3px;justify-content:center;padding:5px 0;}
+.campus-table-cell{width:22px;height:22px;padding:0;border:1px solid #d7d2e0;background:#faf9fc;border-radius:2px;cursor:pointer;}
+.campus-table-cell:hover,.campus-table-cell.active{background:#dcd5f4;border-color:#8c7bd0;}
+.campus-table-dialog-foot{display:flex;align-items:center;justify-content:space-between;margin-top:10px;font-size:9px;color:#8a8692;}
+.campus-table-dialog-foot button{border:1px solid #ddd8e7;background:#fff;border-radius:6px;padding:5px 9px;font-size:10px;cursor:pointer;}
+
+/* Deletion controls for My Notes subjects and pages */
+.campus-notes-page .notes-list-row{display:flex;align-items:center;gap:2px;width:100%;margin-bottom:2px;border-radius:7px;}
+.campus-notes-page .notes-list-row:hover,.campus-notes-page .notes-list-row.active{background:#ece9f7;}
+.campus-notes-page .notes-list-row .notes-subject,
+.campus-notes-page .notes-list-row .notes-page-link{flex:1;min-width:0;margin-bottom:0;background:transparent;}
+.campus-notes-page .notes-list-row .notes-subject:hover,
+.campus-notes-page .notes-list-row .notes-page-link:hover,
+.campus-notes-page .notes-list-row .notes-subject.active,
+.campus-notes-page .notes-list-row .notes-page-link.active{background:transparent;}
+.campus-notes-page .notes-list-label{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.campus-notes-page .notes-delete-item{width:25px;height:25px;flex:none;border:0;border-radius:5px;background:transparent;color:#aaa3b1;font-size:16px;line-height:1;cursor:pointer;opacity:0;transition:opacity .12s ease,background .12s ease,color .12s ease;}
+.campus-notes-page .notes-list-row:hover .notes-delete-item,.campus-notes-page .notes-delete-item:focus-visible{opacity:1;}
+.campus-notes-page .notes-delete-item:hover{background:#e7dfe9;color:#b42318;}
+
+/* Subject workspace */
+.campus-notes-page .notes-pages-heading{margin-top:18px}
+.campus-notes-page .notes-overview-link{display:flex;align-items:center;gap:8px;width:100%;padding:8px 10px;border:0;border-radius:7px;background:transparent;color:#625d6d;font:600 12px/1.2 inherit;text-align:left;cursor:pointer;margin:0 0 5px}
+.campus-notes-page .notes-overview-link:hover,.campus-notes-page .notes-overview-link.active{background:#ece9f7;color:#4e4197}
+.campus-notes-page .subject-workspace{height:100%;overflow:auto;padding:34px 38px 44px;background:#fff}
+.campus-notes-page .subject-workspace-top{display:flex;align-items:flex-start;justify-content:space-between;gap:24px;margin-bottom:24px}
+.campus-notes-page .subject-workspace-top h2{margin:6px 0 5px;font-size:30px;line-height:1.1;color:#27283f;letter-spacing:-.03em}
+.campus-notes-page .subject-workspace-top p{margin:0;color:#7d7889;font-size:13px}
+.campus-notes-page .subject-workspace-actions{display:flex;gap:8px;flex:none;padding-top:4px}
+.campus-notes-page .subject-workspace-tabs{display:flex;gap:4px;overflow-x:auto;border-bottom:1px solid #e8e4ee;padding-bottom:0;margin-bottom:24px;scrollbar-width:none}
+.campus-notes-page .subject-workspace-tabs::-webkit-scrollbar{display:none}
+.campus-notes-page .subject-workspace-tabs button{border:0;background:transparent;color:#777183;padding:10px 13px;margin-bottom:-1px;border-bottom:2px solid transparent;white-space:nowrap;font:600 12px/1.2 inherit;cursor:pointer}
+.campus-notes-page .subject-workspace-tabs button:hover{color:#51439a}
+.campus-notes-page .subject-workspace-tabs button.selected{color:#5546a6;border-bottom-color:#7564d1}
+.campus-notes-page .subject-stat-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:18px}
+.campus-notes-page .subject-stat-card{display:flex;align-items:center;gap:12px;min-height:86px;padding:15px;border:1px solid #e9e5ef;border-radius:12px;background:#fff;text-align:left;cursor:pointer;box-shadow:0 1px 2px rgba(36,31,54,.03);transition:transform .12s ease,box-shadow .12s ease,border-color .12s ease}
+.campus-notes-page .subject-stat-card:hover{transform:translateY(-1px);border-color:#d8d1eb;box-shadow:0 7px 20px rgba(52,42,82,.07)}
+.campus-notes-page .subject-stat-icon{display:grid;place-items:center;width:38px;height:38px;border-radius:10px;background:#f0edfb;color:#6858bc;font-size:18px;flex:none}
+.campus-notes-page .subject-stat-copy{display:flex;flex-direction:column;min-width:0;gap:2px;flex:1}
+.campus-notes-page .subject-stat-copy strong{font-size:20px;line-height:1;color:#2e2d43}
+.campus-notes-page .subject-stat-copy span{font-size:12px;font-weight:700;color:#4b4858}
+.campus-notes-page .subject-stat-copy small{font-size:10px;color:#96919f;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.campus-notes-page .subject-stat-arrow{color:#b1acba;font-size:18px}
+.campus-notes-page .subject-workspace-columns{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.campus-notes-page .subject-panel{border:1px solid #e9e5ef;border-radius:12px;background:#fff;padding:18px}
+.campus-notes-page .subject-panel-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:12px}
+.campus-notes-page .subject-panel-kicker{display:block;font-size:9px;letter-spacing:.14em;font-weight:800;color:#8e879a;margin-bottom:5px}
+.campus-notes-page .subject-panel h3{margin:0;color:#313045;font-size:16px;line-height:1.25}
+.campus-notes-page .subject-panel p,.campus-notes-page .subject-section-intro p{color:#898394;font-size:12px;line-height:1.55;margin:5px 0 0}
+.campus-notes-page .text-button{border:0;background:transparent;color:#6657b6;font:700 11px/1 inherit;cursor:pointer;padding:3px 0}
+.campus-notes-page .subject-list{display:flex;flex-direction:column;gap:3px}
+.campus-notes-page .subject-list-item{display:flex;align-items:center;gap:11px;width:100%;padding:10px 8px;border:0;border-radius:8px;background:transparent;color:#343247;text-align:left;cursor:pointer}
+.campus-notes-page .subject-list-item:hover{background:#f7f5fb}
+.campus-notes-page .subject-list-item.readonly{cursor:default}
+.campus-notes-page .subject-list-item.readonly:hover{background:#faf9fc}
+.campus-notes-page .subject-list-item>span:nth-child(2){display:flex;flex-direction:column;min-width:0;flex:1}
+.campus-notes-page .subject-list-item strong{font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.campus-notes-page .subject-list-item small{font-size:10px;color:#96919f;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.campus-notes-page .subject-list-icon{font-size:15px}.campus-notes-page .subject-event-dot{width:8px;height:8px;border-radius:50%;background:#7968ce;flex:none}.campus-notes-page .subject-event-badge{display:grid;place-items:center;width:27px;height:27px;border-radius:7px;background:#f0edfb;color:#6858bc;font-weight:800;flex:none}
+.campus-notes-page .subject-empty{padding:22px 8px;color:#9993a3;font-size:12px;text-align:center}
+.campus-notes-page .subject-section-intro{display:flex;align-items:flex-start;justify-content:space-between;gap:20px;margin-bottom:20px}
+.campus-notes-page .subject-section-intro h3{margin:0;color:#313045;font-size:21px}
+.campus-notes-page .subject-notes-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.campus-notes-page .subject-note-card{display:flex;flex-direction:column;align-items:flex-start;gap:6px;padding:18px;border:1px solid #e9e5ef;border-radius:12px;background:#fff;text-align:left;cursor:pointer;min-height:110px}
+.campus-notes-page .subject-note-card:hover{border-color:#d5cdea;background:#faf9fd}.campus-notes-page .subject-note-card>span{font-size:20px}.campus-notes-page .subject-note-card strong{font-size:13px;color:#363348}.campus-notes-page .subject-note-card small{font-size:10px;color:#96919f}
+.campus-notes-page .subject-placeholder{min-height:340px;border:1px dashed #ddd7e8;border-radius:14px;background:#faf9fd;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:36px}
+.campus-notes-page .subject-placeholder-icon{display:grid;place-items:center;width:52px;height:52px;border-radius:15px;background:#eeebf9;color:#6858bc;font-size:24px;margin-bottom:14px}
+.campus-notes-page .subject-placeholder h3{margin:2px 0 6px;color:#333147;font-size:20px}.campus-notes-page .subject-placeholder p{max-width:540px;margin:0 0 18px;color:#8b8696;font-size:12px;line-height:1.6}
+@media(max-width:1050px){.campus-notes-page .subject-stat-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.campus-notes-page .subject-workspace-columns{grid-template-columns:1fr}.campus-notes-page .subject-notes-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:720px){.campus-notes-page .subject-workspace{padding:22px 18px 30px}.campus-notes-page .subject-workspace-top{flex-direction:column}.campus-notes-page .subject-stat-grid,.campus-notes-page .subject-notes-grid{grid-template-columns:1fr}.campus-notes-page .subject-workspace-actions{width:100%}.campus-notes-page .subject-workspace-actions button{flex:1}}
+
+
+/* Subject → Topic → Page hierarchy */
+.campus-notes-page .notes-tree-topic{margin-bottom:3px}
+.campus-notes-page .notes-topic-toggle{display:flex;align-items:center;gap:7px;width:100%;min-height:30px;padding:6px 8px;border:0;border-radius:7px;background:transparent;color:#4f4a5a;text-align:left;font:600 11px/1.2 inherit;cursor:pointer}
+.campus-notes-page .notes-topic-toggle:hover,.campus-notes-page .notes-tree-topic.open .notes-topic-toggle{background:#f0edf7;color:#51439a}
+.campus-notes-page .notes-topic-toggle small{margin-left:auto;color:#a09aaa;font-size:9px;font-weight:700}
+.campus-notes-page .notes-topic-chevron{width:10px;color:#8d8798;font-size:10px}
+.campus-notes-page .notes-tree-page{display:flex;align-items:center;gap:2px;margin-left:19px;border-radius:6px}
+.campus-notes-page .notes-tree-page:hover,.campus-notes-page .notes-tree-page.active{background:#ece9f7}
+.campus-notes-page .notes-tree-page .notes-page-link{flex:1;min-width:0;margin:0;padding-left:9px;background:transparent!important}
+.campus-notes-page .notes-tree-page .notes-delete-item{opacity:0}
+.campus-notes-page .notes-tree-page:hover .notes-delete-item,.campus-notes-page .notes-tree-page .notes-delete-item:focus-visible{opacity:1}
+.campus-notes-page .notes-breadcrumb{display:flex;align-items:center;gap:7px;min-width:0;color:#96919f;font-size:10px;margin-right:14px;white-space:nowrap;overflow:hidden}
+.campus-notes-page .notes-breadcrumb span{overflow:hidden;text-overflow:ellipsis}
+.campus-notes-page .notes-breadcrumb b{color:#c0bac7;font-weight:600}
+.campus-notes-page .notes-breadcrumb strong{color:#5b5268;overflow:hidden;text-overflow:ellipsis}
+.campus-notes-page .workspace-breadcrumb{margin-bottom:16px}
+.campus-notes-page .workspace-breadcrumb-link{color:#6657b6;cursor:pointer}
+.campus-notes-page .workspace-breadcrumb-sep{color:#b8b1c2;padding:0 6px}
+.campus-notes-page .subject-topic-card{min-height:125px}
+
+/* v33.1 mobile subject navigation fix: keep the subject selector visible and touchable on phones. */
+@media (max-width:700px){
+  .campus-notes-page .notes-sidebar{
+    display:block !important;
+    width:100% !important;
+    height:auto !important;
+    max-height:170px !important;
+    flex:none !important;
+    position:relative;
+    z-index:25;
+    pointer-events:auto;
+    overflow-x:hidden;
+    overflow-y:auto;
+  }
+  .campus-notes-page .notes-subjects{
+    display:flex !important;
+    width:100%;
+    min-height:44px;
+    align-items:center;
+    gap:6px;
+    overflow-x:auto !important;
+    overflow-y:hidden;
+    -webkit-overflow-scrolling:touch;
+    touch-action:pan-x;
+  }
+  .campus-notes-page .notes-subject{
+    flex:0 0 auto;
+    min-height:42px;
+    min-width:max-content;
+    position:relative;
+    z-index:26;
+    pointer-events:auto !important;
+    touch-action:manipulation;
+  }
+  .campus-notes-page .notes-add{
+    min-height:42px;
+    position:relative;
+    z-index:26;
+    pointer-events:auto !important;
+  }
+}
+
+/* Dedicated mobile subject switcher. Native select is intentionally used on touch
+   devices so subject navigation never depends on a tiny/scrollable sidebar button. */
+.mobile-subject-picker{display:none}
+@media(max-width:760px){
+  .campus-notes-page .mobile-subject-picker{
+    display:flex;
+    flex-direction:column;
+    gap:5px;
+    padding:0 0 9px;
+    position:relative;
+    z-index:60;
+  }
+  .campus-notes-page .mobile-subject-picker label{
+    font-size:9px;
+    font-weight:800;
+    letter-spacing:.09em;
+    color:#77737f;
+  }
+  .campus-notes-page .mobile-subject-picker select{
+    width:100%;
+    min-height:48px;
+    border:1px solid #d9d5e5;
+    border-radius:11px;
+    background:#fff;
+    color:#343040;
+    padding:0 42px 0 13px;
+    font-size:15px;
+    font-weight:700;
+    outline:none;
+    box-shadow:0 2px 8px rgba(45,38,75,.06);
+    -webkit-appearance:auto;
+    appearance:auto;
+    pointer-events:auto;
+    touch-action:manipulation;
+  }
+  .campus-notes-page .mobile-subject-picker select:focus{
+    border-color:#7665c7;
+    box-shadow:0 0 0 3px rgba(118,101,199,.12);
+  }
+  .campus-notes-page .notes-subjects{display:none !important}
+  .campus-notes-page .notes-sidebar{max-height:145px;overflow:visible;position:relative;z-index:50}
+}
+
+
+/* v35 — phone notes navigation redesign. The desktop notes sidebar is removed from the phone entirely.
+   Subject switching lives in a dedicated, full-width mobile header instead of competing with the editor. */
+.mobile-notes-header{display:none}
+@media (max-width:760px){
+  .campus-notes-page{height:calc(100dvh - 58px)!important;overflow:hidden!important;padding:0!important;}
+  .campus-notes-page .notes-workspace{height:100%!important;min-height:0!important;display:flex!important;flex-direction:column!important;overflow:hidden!important;width:100%!important;}
+  .campus-notes-page .mobile-notes-header{display:flex!important;align-items:stretch!important;gap:8px!important;padding:10px 11px!important;background:#fff!important;border-bottom:1px solid #e9e7ef!important;box-shadow:0 2px 8px rgba(35,31,55,.05)!important;position:relative!important;z-index:40!important;flex:0 0 auto!important;width:100%!important;box-sizing:border-box!important;}
+  .mobile-notes-header-main{display:flex;flex-direction:column;gap:4px;min-width:0;flex:1;}
+  .mobile-notes-header-label{font-size:8px;font-weight:800;letter-spacing:1.2px;color:#96919f;}
+  .campus-notes-page .mobile-notes-header select{display:block!important;width:100%!important;height:46px!important;min-height:46px!important;border:1px solid #dcd8e8!important;border-radius:10px!important;background:#fff!important;color:#302c3b!important;padding:0 38px 0 12px!important;font-size:15px!important;font-weight:700!important;outline:none!important;appearance:auto!important;-webkit-appearance:auto!important;pointer-events:auto!important;touch-action:manipulation!important;box-shadow:0 1px 4px rgba(40,34,60,.05)!important;}
+  .campus-notes-page .mobile-notes-header select:focus{border-color:#7565c7!important;box-shadow:0 0 0 3px rgba(117,101,199,.12)!important;}
+  .campus-notes-page .mobile-notes-add{display:grid!important;place-items:center!important;align-self:flex-end!important;width:46px!important;height:46px!important;min-width:46px!important;border:1px solid #7565c7!important;border-radius:10px!important;background:#7565c7!important;color:#fff!important;font-size:24px!important;line-height:1!important;font-weight:500!important;box-shadow:0 4px 10px rgba(117,101,199,.18)!important;pointer-events:auto!important;touch-action:manipulation!important;}
+  .campus-notes-page .notes-sidebar{display:none!important;width:0!important;height:0!important;max-height:0!important;min-width:0!important;overflow:hidden!important;padding:0!important;border:0!important;}
+  .campus-notes-page .notes-editor-shell{display:flex!important;flex:1 1 auto!important;width:100%!important;min-width:0!important;min-height:0!important;overflow:hidden!important;}
+  .campus-notes-page #subjectWorkspace,.campus-notes-page #noteEditorView{width:100%!important;min-width:0!important;max-width:100%!important;overflow-x:hidden!important;box-sizing:border-box!important;}
+  .campus-notes-page .subject-workspace{width:100%!important;max-width:100%!important;min-width:0!important;box-sizing:border-box!important;overflow-x:hidden!important;padding:20px 13px 30px!important;}
+  .campus-notes-page .subject-workspace-top{width:100%!important;min-width:0!important;gap:15px!important;margin-bottom:16px!important;}
+  .campus-notes-page .subject-workspace-top h2{font-size:25px!important;line-height:1.12!important;overflow-wrap:anywhere!important;word-break:normal!important;max-width:100%!important;}
+  .campus-notes-page .subject-workspace-top p{font-size:12px!important;}
+  .campus-notes-page .subject-workspace-actions{display:grid!important;grid-template-columns:1fr 1fr!important;width:100%!important;min-width:0!important;}
+  .campus-notes-page .subject-workspace-actions button{min-width:0!important;width:100%!important;min-height:44px!important;}
+  .campus-notes-page .subject-workspace-tabs{width:100%!important;max-width:100%!important;overflow-x:auto!important;overflow-y:hidden!important;margin-bottom:18px!important;}
+  .campus-notes-page .subject-workspace-content{width:100%!important;min-width:0!important;overflow-x:hidden!important;}
+  .campus-notes-page .subject-stat-grid,.campus-notes-page .subject-notes-grid,.campus-notes-page .subject-workspace-columns{width:100%!important;min-width:0!important;grid-template-columns:1fr!important;}
+  .campus-notes-page .subject-card,.campus-notes-page .subject-note-card{min-width:0!important;max-width:100%!important;overflow:hidden!important;}
+}
+@media (max-width:430px){
+  .campus-notes-page .mobile-notes-header{padding:8px 9px!important;}
+  .campus-notes-page .mobile-notes-header select{font-size:14px!important;height:44px!important;min-height:44px!important;}
+  .campus-notes-page .mobile-notes-add{width:44px!important;height:44px!important;min-width:44px!important;}
+  .campus-notes-page .subject-workspace{padding:17px 11px 25px!important;}
+  .campus-notes-page .subject-workspace-top h2{font-size:23px!important;}
+}
+
+
+/* v36 — actual phone layout: the mobile subject selector is the only subject
+   navigation surface, and the subject workspace is a single-column document. */
+@media (max-width:760px){
+  .campus-notes-page.mobile-notes-mode .notes-sidebar{display:none!important;width:0!important;height:0!important;max-height:0!important;min-height:0!important;min-width:0!important;padding:0!important;margin:0!important;border:0!important;overflow:hidden!important;}
+  .campus-notes-page.mobile-notes-mode .notes-workspace{display:flex!important;flex-direction:column!important;height:100%!important;min-height:0!important;width:100%!important;overflow:hidden!important;}
+  .campus-notes-page.mobile-notes-mode .mobile-notes-header{display:flex!important;flex:0 0 auto!important;}
+  .campus-notes-page.mobile-notes-mode .notes-editor-shell{display:flex!important;flex:1 1 auto!important;width:100%!important;min-width:0!important;min-height:0!important;overflow:hidden!important;}
+  .campus-notes-page.mobile-notes-mode .subject-workspace{display:block!important;width:100%!important;height:100%!important;min-height:0!important;max-width:none!important;overflow-x:hidden!important;overflow-y:auto!important;padding:18px 12px calc(90px + env(safe-area-inset-bottom))!important;-webkit-overflow-scrolling:touch!important;}
+  .campus-notes-page.mobile-notes-mode .subject-workspace-top{display:block!important;width:100%!important;margin:0 0 18px!important;padding:0!important;}
+  .campus-notes-page.mobile-notes-mode .subject-workspace-top h2{font-size:27px!important;line-height:1.12!important;margin:7px 0 7px!important;overflow-wrap:anywhere!important;}
+  .campus-notes-page.mobile-notes-mode .subject-workspace-top p{font-size:12px!important;line-height:1.45!important;margin:0!important;}
+  .campus-notes-page.mobile-notes-mode .subject-workspace-actions{display:grid!important;grid-template-columns:1fr 1fr!important;gap:8px!important;width:100%!important;margin-top:15px!important;}
+  .campus-notes-page.mobile-notes-mode .subject-workspace-actions button{width:100%!important;min-width:0!important;min-height:46px!important;padding:10px 8px!important;white-space:normal!important;}
+  .campus-notes-page.mobile-notes-mode .subject-workspace-tabs{display:flex!important;width:100%!important;max-width:none!important;gap:0!important;margin:0 0 20px!important;padding:0!important;overflow-x:auto!important;overflow-y:hidden!important;-webkit-overflow-scrolling:touch!important;}
+  .campus-notes-page.mobile-notes-mode .subject-workspace-tabs button{flex:0 0 auto!important;min-height:44px!important;padding:0 14px!important;font-size:12px!important;}
+  .campus-notes-page.mobile-notes-mode .subject-workspace-content{display:block!important;width:100%!important;min-width:0!important;max-width:none!important;overflow:visible!important;}
+  .campus-notes-page.mobile-notes-mode .subject-section-intro{display:block!important;width:100%!important;margin:0 0 15px!important;}
+  .campus-notes-page.mobile-notes-mode .subject-section-intro>div:first-child{width:100%!important;min-width:0!important;}
+  .campus-notes-page.mobile-notes-mode .subject-section-intro h3{font-size:21px!important;line-height:1.2!important;overflow-wrap:anywhere!important;margin:0!important;}
+  .campus-notes-page.mobile-notes-mode .subject-section-intro p{font-size:12px!important;line-height:1.5!important;}
+  .campus-notes-page.mobile-notes-mode .subject-section-intro .subject-workspace-actions{margin-top:13px!important;}
+  .campus-notes-page.mobile-notes-mode .subject-notes-grid,
+  .campus-notes-page.mobile-notes-mode .subject-stat-grid,
+  .campus-notes-page.mobile-notes-mode .subject-workspace-columns,
+  .campus-notes-page.mobile-notes-mode .assignment-subject-grid{display:grid!important;grid-template-columns:1fr!important;width:100%!important;min-width:0!important;gap:10px!important;}
+  .campus-notes-page.mobile-notes-mode .subject-note-card,
+  .campus-notes-page.mobile-notes-mode .subject-stat-card,
+  .campus-notes-page.mobile-notes-mode .assignment-subject-card{width:100%!important;min-width:0!important;max-width:100%!important;box-sizing:border-box!important;}
+  .campus-notes-page.mobile-notes-mode .subject-note-card{min-height:76px!important;padding:15px!important;}
+  .campus-notes-page.mobile-notes-mode .subject-topic-card{min-height:86px!important;}
+  .campus-notes-page.mobile-notes-mode .workspace-breadcrumb{width:100%!important;margin-bottom:14px!important;}
+  .campus-notes-page.mobile-notes-mode .workspace-breadcrumb .secondary-button{width:100%!important;min-height:44px!important;}
+  .campus-notes-page.mobile-notes-mode .subject-placeholder{width:100%!important;box-sizing:border-box!important;padding:20px 14px!important;}
+  .campus-notes-page.mobile-notes-mode .subject-list{width:100%!important;min-width:0!important;}
+  .campus-notes-page.mobile-notes-mode .subject-list-item{width:100%!important;box-sizing:border-box!important;}
+}
+@media (max-width:430px){
+  .campus-notes-page.mobile-notes-mode .subject-workspace{padding-left:11px!important;padding-right:11px!important;}
+  .campus-notes-page.mobile-notes-mode .subject-workspace-top h2{font-size:24px!important;}
+  .campus-notes-page.mobile-notes-mode .subject-workspace-actions{grid-template-columns:1fr!important;}
+  .campus-notes-page.mobile-notes-mode .subject-workspace-actions button{min-height:44px!important;}
+}
+
+/* v37 — mobile editor/workspace are mutually exclusive.  The subject workspace
+   must never remain underneath the editor; this also guards against high-
+   specificity mobile rules overriding the generic .hidden utility. */
+@media (max-width:760px){
+  .campus-notes-page.mobile-editor-open #subjectWorkspace{display:none!important;}
+  .campus-notes-page.mobile-editor-open #noteEditorView{display:block!important;width:100%!important;height:100%!important;min-width:0!important;min-height:0!important;overflow:hidden!important;}
+  .campus-notes-page.mobile-editor-open #noteEditorView .notes-page-header{flex:0 0 auto!important;}
+  .campus-notes-page.mobile-editor-open #noteEditorView .onenote-editor{height:calc(100% - 58px)!important;min-height:0!important;display:flex!important;flex-direction:column!important;}
+  .campus-notes-page.mobile-editor-open #noteEditorView .editor-canvas-wrap{flex:1 1 auto!important;min-height:0!important;overflow:auto!important;}
+  .campus-notes-page.mobile-workspace-open #subjectWorkspace{display:block!important;}
+  .campus-notes-page.mobile-workspace-open #noteEditorView{display:none!important;}
+}
+
+
+/* Subject export center */
+.campus-export-modal{border:0;border-radius:16px;padding:0;width:min(760px,calc(100vw - 28px));max-width:760px;box-shadow:0 24px 70px rgba(30,25,50,.22);color:#302d40;background:#fff}
+.campus-export-modal::backdrop{background:rgba(35,30,50,.34);backdrop-filter:blur(3px)}
+.export-shell{display:flex;flex-direction:column;max-height:min(86vh,760px)}
+.export-head{display:flex;justify-content:space-between;gap:18px;padding:22px 24px 18px;border-bottom:1px solid #ece9f1}.export-kicker{font-size:9px;letter-spacing:.14em;font-weight:800;color:#8177b8}.export-head h2{margin:5px 0 4px;font-size:22px}.export-head p{margin:0;font-size:11px;color:#918b9c}.export-close{border:0;background:#f5f3f8;width:34px;height:34px;border-radius:9px;font-size:21px;color:#777183;cursor:pointer}.export-body{padding:20px 24px;overflow:auto}.export-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.export-grid label{display:grid;gap:6px}.export-grid label>span{font-size:10px;font-weight:800;color:#676174}.export-grid select{height:40px;border:1px solid #dfdbe7;border-radius:9px;padding:0 10px;background:#fff;color:#3e394b}.export-toggles{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:18px 0}.export-toggles label{display:flex;align-items:center;gap:8px;padding:10px 11px;border:1px solid #e9e5ef;border-radius:9px;background:#faf9fc;font-size:10px;color:#595465}.export-page-picker{display:grid;gap:12px;padding:13px;border:1px solid #e7e3ed;border-radius:11px;background:#fbfaff;max-height:240px;overflow:auto}.export-page-picker.hidden{display:none}.export-topic-group{display:grid;gap:5px}.export-topic-group strong{font-size:10px;color:#65599a}.export-topic-group label{display:flex;gap:8px;align-items:center;padding:5px 6px;border-radius:6px;font-size:10px;color:#555061}.export-topic-group label:hover{background:#f0edf8}.export-summary{margin-top:14px;padding:10px 12px;border-radius:8px;background:#f2f0f8;color:#665d79;font-size:10px;font-weight:700}.export-empty{padding:18px;text-align:center;color:#9690a0;font-size:10px}.export-foot{display:flex;justify-content:flex-end;gap:8px;padding:14px 24px;border-top:1px solid #ece9f1;background:#fcfbfd}.export-foot button{min-height:38px}
+@media(max-width:620px){.campus-export-modal{width:calc(100vw - 16px);border-radius:13px}.export-head,.export-body,.export-foot{padding-left:15px;padding-right:15px}.export-grid,.export-toggles{grid-template-columns:1fr}.export-shell{max-height:92vh}}
+
+/* v48 — custom Topic/Page artwork: recognizable, colorful, still compact. */
+.campus-notes-page .notes-nav-icon{
+  display:block;
+  flex:none;
+  width:24px;
+  height:24px;
+  object-fit:cover;
+  border-radius:6px;
+  transition:transform .14s ease,filter .14s ease;
+}
+.campus-notes-page .notes-nav-icon.topic-icon{width:25px;height:25px;border-radius:7px}
+.campus-notes-page .notes-nav-icon.page-icon{width:22px;height:22px;border-radius:5px}
+.campus-notes-page .notes-topic-toggle:hover .notes-nav-icon,
+.campus-notes-page .notes-page-link:hover .notes-nav-icon{transform:scale(1.07);filter:saturate(1.06)}
+.campus-notes-page .notes-topic-toggle:active .notes-nav-icon,
+.campus-notes-page .notes-page-link:active .notes-nav-icon{transform:scale(.96)}
+.campus-notes-page .notes-tree-page .notes-page-link{gap:8px}
+.campus-notes-page .notes-topic-toggle{gap:7px}
+.campus-notes-page .subject-note-icon{display:grid;place-items:center;width:42px;height:42px;border-radius:10px;overflow:hidden;flex:none;background:#f5f3fa}
+.campus-notes-page .subject-note-icon .notes-nav-icon{width:100%;height:100%;border-radius:0;transition:transform .14s ease}
+.campus-notes-page .subject-note-card:hover .subject-note-icon .notes-nav-icon{transform:scale(1.05)}
+.campus-notes-page .subject-note-card:active .subject-note-icon .notes-nav-icon{transform:scale(.97)}
+
+/* Subject management: one consistent overflow menu for rename/delete. */
+.campus-notes-page .notes-subject-menu{width:28px;height:28px;flex:none;border:0;border-radius:6px;background:transparent;color:#9893a2;font-size:17px;line-height:1;cursor:pointer;opacity:0;transition:opacity .12s ease,background .12s ease,color .12s ease;letter-spacing:1px}
+.campus-notes-page .notes-list-row:hover .notes-subject-menu,.campus-notes-page .notes-subject-menu:focus-visible{opacity:1}
+.campus-notes-page .notes-subject-menu:hover{background:#e7e3f1;color:#51439a}
+.subject-action-menu{position:fixed;z-index:10000;width:180px;padding:5px;background:#fff;border:1px solid #ded9e8;border-radius:9px;box-shadow:0 12px 30px rgba(38,32,60,.16)}
+.subject-action-menu button{display:block;width:100%;border:0;background:transparent;border-radius:6px;padding:9px 10px;text-align:left;font-size:12px;color:#45414f;cursor:pointer}
+.subject-action-menu button:hover{background:#f2eff8;color:#4f419d}
+.subject-action-menu button.danger{color:#b42318}
+.subject-action-menu button.danger:hover{background:#fff0ef;color:#a11d14}
+.notes-subject-rename-form{display:flex;align-items:center;gap:4px;width:100%;padding:3px 4px}
+.notes-subject-rename-input{flex:1;min-width:0;height:30px;border:1px solid #b9afe0;border-radius:6px;background:#fff;padding:0 8px;font:inherit;font-size:12px;color:#3e3a49;outline:none;box-shadow:0 0 0 2px rgba(118,97,201,.08)}
+.notes-subject-rename-save,.notes-subject-rename-cancel{width:28px;height:28px;border:0;border-radius:6px;background:#f0edf8;color:#5b4aa9;cursor:pointer;font-size:14px;line-height:1}
+.notes-subject-rename-cancel{background:#f5f3f7;color:#77727f}
+.notes-subject-rename-save:hover{background:#e3def5}.notes-subject-rename-cancel:hover{background:#ebe7ee}
+.mobile-notes-header-actions{display:flex;align-items:center;gap:4px}
+.mobile-notes-manage{width:38px;height:38px;border:0;border-radius:8px;background:#f1eef9;color:#5c4caf;font-size:19px;line-height:1;cursor:pointer}
+.mobile-notes-manage:hover{background:#e7e2f6}
+@media(max-width:760px){
+  .campus-notes-page .notes-subject-menu{opacity:1;width:30px;height:34px}
+  .campus-notes-page .notes-list-row{min-width:max-content}
+}
+
+/* v64: consistent Topic + Page management controls */
+.campus-notes-page .notes-topic-row{display:flex;align-items:center;gap:2px;width:100%;border-radius:7px}
+.campus-notes-page .notes-topic-row:hover,.campus-notes-page .notes-tree-topic.open .notes-topic-row{background:#f0edf7}
+.campus-notes-page .notes-topic-row .notes-topic-toggle{flex:1;min-width:0;background:transparent}
+.campus-notes-page .notes-topic-row .notes-topic-toggle:hover{background:transparent}
+.campus-notes-page .notes-item-menu{width:28px;height:28px;flex:none;border:0;border-radius:6px;background:transparent;color:#9893a2;font-size:17px;line-height:1;cursor:pointer;opacity:0;transition:opacity .12s ease,background .12s ease,color .12s ease;letter-spacing:1px}
+.campus-notes-page .notes-topic-row:hover .notes-item-menu,
+.campus-notes-page .notes-tree-page:hover .notes-item-menu,
+.campus-notes-page .notes-item-menu:focus-visible{opacity:1}
+.campus-notes-page .notes-item-menu:hover{background:#e7e3f1;color:#51439a}
+.campus-notes-page .notes-tree-page .notes-item-menu{margin-right:2px}
+.campus-notes-page .notes-tree-page .notes-page-link{min-width:0}
+@media(max-width:760px){
+  .campus-notes-page .notes-item-menu{opacity:1;width:30px;height:32px}
+}
