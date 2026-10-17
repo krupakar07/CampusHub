@@ -493,3 +493,70 @@ body.glass-theme .campus-notes-page .editor-tabs button.selected{background:rgba
 body.glass-theme .campus-notes-page .mobile-notes-header{background:rgba(13,23,52,.88)!important;border-color:rgba(255,255,255,.16)!important;}
 body.glass-theme .campus-notes-page .mobile-notes-header-label{color:rgba(239,243,255,.55);}
 body.glass-theme .campus-notes-page .mobile-notes-header select{background:rgba(255,255,255,.09)!important;color:#fff!important;border-color:rgba(255,255,255,.20)!important;}
+
+/* v88 — notes / files glass polish */
+.glass-theme .campus-notes-page{background:transparent!important;}
+.glass-theme .notes-workspace{height:calc(100vh - 70px);background:rgba(10,18,43,.42);border:1px solid rgba(255,255,255,.16);border-radius:18px;overflow:hidden;box-shadow:0 22px 55px rgba(3,8,25,.22),inset 0 1px 0 rgba(255,255,255,.10);}
+.glass-theme .notes-sidebar{width:255px;padding:24px 12px 16px;background:linear-gradient(180deg,rgba(22,31,66,.82),rgba(9,20,48,.80));border-right:1px solid rgba(255,255,255,.16);color:#fff;}
+.glass-theme .notes-sidebar-title,.glass-theme .notes-section-label{margin-left:14px;color:rgba(235,239,255,.48);font-size:10px;font-weight:700;letter-spacing:.14em;}
+.glass-theme .notes-section-label{margin-top:24px;margin-bottom:10px;}
+.glass-theme .notes-subject{min-height:43px;padding:0 12px;border:1px solid transparent;border-radius:12px;color:rgba(244,247,255,.76);font-size:13px;gap:11px;margin-bottom:4px;background:transparent;}
+.glass-theme .notes-subject:hover{background:rgba(255,255,255,.065);border-color:rgba(255,255,255,.08);color:#fff;}
+.glass-theme .notes-subject.active{background:linear-gradient(100deg,rgba(226,220,255,.96),rgba(196,188,241,.88));border-color:rgba(255,255,255,.65);color:#fff;box-shadow:0 10px 24px rgba(3,8,25,.14),inset 0 1px 0 rgba(255,255,255,.72);}
+.glass-theme .notes-subject.active .notes-list-label{color:#fff;text-shadow:0 1px 8px rgba(53,40,105,.20);}
+.glass-theme .notes-list-label{display:block;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.glass-theme .notes-dot{width:9px;height:9px;box-shadow:0 0 0 3px rgba(255,255,255,.05);}
+.glass-theme .notes-subject-open{color:rgba(255,255,255,.58);font-size:20px;}
+.glass-theme .notes-subject.active .notes-subject-open{color:#fff;}
+.glass-theme .notes-add{min-height:40px;padding:0 12px;color:#c7baff;font-size:13px;border-radius:11px;}
+.glass-theme .notes-add:hover{background:rgba(143,124,255,.10);color:#e6e0ff;}
+.glass-theme .notes-overview-link{display:flex;align-items:center;gap:10px;width:100%;min-height:44px;padding:0 12px;border:1px solid transparent;border-radius:12px;background:transparent;color:rgba(238,242,255,.74);font-size:13px;cursor:pointer;}
+.glass-theme .notes-overview-link:hover{background:rgba(255,255,255,.065);border-color:rgba(255,255,255,.08);color:#fff;}
+.glass-theme .notes-overview-link.active{background:linear-gradient(100deg,rgba(226,220,255,.96),rgba(196,188,241,.88));border-color:rgba(255,255,255,.65);color:#4f46a6;box-shadow:0 10px 24px rgba(3,8,25,.14);}
+.glass-theme .notes-tree-page{display:flex;align-items:center;margin:4px 0 0 12px;border-radius:11px;}
+.glass-theme .notes-tree-page .notes-page-link{flex:1;min-width:0;min-height:42px;padding:0 10px 0 12px;border:1px solid transparent;border-radius:11px;color:rgba(239,243,255,.72);background:transparent;gap:10px;font-size:12px;}
+.glass-theme .notes-tree-page .notes-page-link:hover{background:rgba(255,255,255,.065);border-color:rgba(255,255,255,.07);color:#fff;}
+.glass-theme .notes-tree-page.active .notes-page-link,.glass-theme .notes-tree-page .notes-page-link.active{background:linear-gradient(100deg,rgba(142,124,255,.25),rgba(142,124,255,.10));border-color:rgba(180,167,255,.22);color:#fff;box-shadow:inset 0 1px 0 rgba(255,255,255,.08);}
+.glass-theme .notes-nav-icon{width:25px;height:25px;object-fit:contain;flex:none;filter:drop-shadow(0 3px 7px rgba(4,9,28,.24));}
+.glass-theme .notes-storage-card{margin:28px 7px 0;padding:15px 14px;border:1px solid rgba(255,255,255,.18);border-radius:15px;background:linear-gradient(145deg,rgba(255,255,255,.10),rgba(255,255,255,.045));box-shadow:inset 0 1px 0 rgba(255,255,255,.10),0 12px 28px rgba(3,8,25,.14);color:rgba(239,243,255,.68);font-size:11px;}
+.glass-theme .notes-storage-card strong{color:#fff;font-size:12px;}
+.glass-theme .notes-storage-card p{margin:8px 0 0;}
+.glass-theme .notes-editor-shell{min-width:0;background:rgba(8,17,42,.24);}
+.glass-theme .subject-workspace{height:100%;border:0!important;border-radius:0!important;background:linear-gradient(180deg,rgba(20,31,67,.64),rgba(7,18,44,.48))!important;box-shadow:none!important;padding:24px 26px 28px;overflow:auto;}
+.glass-theme .subject-workspace-top{padding-bottom:18px;border-bottom:1px solid rgba(255,255,255,.13);}
+.glass-theme .subject-workspace-top h2{color:#fff;letter-spacing:-.025em;}
+.glass-theme .subject-workspace-top p{color:rgba(235,240,255,.62);}
+.glass-theme .subject-workspace-tabs{background:transparent;border-bottom:1px solid rgba(255,255,255,.13);gap:3px;padding-top:8px;}
+.glass-theme .subject-workspace-tabs button{color:rgba(239,243,255,.62);border:1px solid transparent;background:transparent;border-radius:9px 9px 0 0;}
+.glass-theme .subject-workspace-tabs button:hover{background:rgba(255,255,255,.06);color:#fff;}
+.glass-theme .subject-workspace-tabs button.selected{color:#fff;background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.13);border-bottom-color:rgba(142,124,255,.95);box-shadow:inset 0 1px 0 rgba(255,255,255,.08);}
+.glass-theme .subject-section-intro{padding:20px 2px 14px;}
+.glass-theme .subject-section-intro h3{color:#fff;}
+.glass-theme .subject-section-intro p{color:rgba(235,240,255,.58);}
+.glass-theme .subject-panel-kicker{color:rgba(202,194,255,.64);letter-spacing:.13em;}
+.glass-theme .subject-notes-grid{gap:12px;}
+.glass-theme .subject-notes-grid > *{background:rgba(255,255,255,.07)!important;border:1px solid rgba(255,255,255,.14)!important;color:#fff!important;border-radius:15px!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 10px 24px rgba(3,8,25,.12)!important;}
+
+/* Files: compact glass material cards with clear hierarchy. */
+.glass-theme .subject-files-panel{padding:0 2px 10px;}
+.glass-theme .files-toolbar{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:14px 16px 16px;border:1px solid rgba(255,255,255,.14);border-radius:15px;background:rgba(255,255,255,.055);box-shadow:inset 0 1px 0 rgba(255,255,255,.08);}
+.glass-theme .files-toolbar-copy{min-width:0;}
+.glass-theme .files-toolbar h3{margin:3px 0 4px;color:#fff;font-size:18px;letter-spacing:-.02em;}
+.glass-theme .files-toolbar p{margin:0;color:rgba(235,240,255,.60);font-size:11px;line-height:1.5;}
+.glass-theme .files-toolbar-actions{display:flex;gap:8px;flex:none;}
+.glass-theme .files-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:14px;}
+.glass-theme .file-card{min-height:172px;padding:14px;background:linear-gradient(145deg,rgba(29,42,83,.76),rgba(12,24,55,.68));border:1px solid rgba(255,255,255,.16);border-radius:15px;box-shadow:inset 0 1px 0 rgba(255,255,255,.09),0 12px 26px rgba(3,8,25,.16);transition:transform .16s ease,border-color .16s ease,background .16s ease;}
+.glass-theme .file-card:hover{transform:translateY(-2px);border-color:rgba(181,169,255,.40);background:linear-gradient(145deg,rgba(40,52,95,.80),rgba(15,28,62,.74));}
+.glass-theme .file-card-top{align-items:center;}
+.glass-theme .file-card-icon{width:44px;height:44px;border-radius:12px;background:linear-gradient(145deg,rgba(151,130,255,.22),rgba(151,130,255,.08));border:1px solid rgba(194,184,255,.20);color:#e2dcff;box-shadow:inset 0 1px 0 rgba(255,255,255,.10);}
+.glass-theme .file-extension{font-size:9px;font-weight:800;letter-spacing:.06em;color:#e4dfff;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.13);padding:5px 7px;border-radius:999px;}
+.glass-theme .file-card-body{padding-top:14px;}
+.glass-theme .file-card-body strong{display:block;color:#fff;font-size:12px;line-height:1.35;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.glass-theme .file-card-meta{margin-top:6px;color:rgba(235,240,255,.55);font-size:10px;}
+.glass-theme .file-card-actions{margin-top:16px;padding-top:10px;border-top:1px solid rgba(255,255,255,.11);gap:6px;}
+.glass-theme .file-card-actions button{height:32px;border-radius:9px;background:rgba(255,255,255,.065);border:1px solid rgba(255,255,255,.12);color:#f4f5ff;}
+.glass-theme .file-open-action{background:linear-gradient(135deg,rgba(145,125,255,.30),rgba(118,92,233,.18))!important;border-color:rgba(190,179,255,.25)!important;color:#fff!important;}
+.glass-theme .files-empty{margin-top:14px;padding:32px;border:1px dashed rgba(255,255,255,.22);border-radius:16px;background:rgba(255,255,255,.045);color:#fff;}
+
+@media(max-width:900px){.glass-theme .notes-sidebar{width:220px}.glass-theme .files-grid{grid-template-columns:repeat(2,minmax(0,1fr));}}
+@media(max-width:600px){.glass-theme .files-toolbar{align-items:flex-start;flex-direction:column}.glass-theme .files-toolbar-actions{width:100%}.glass-theme .files-toolbar-actions>*{flex:1}.glass-theme .files-grid{grid-template-columns:1fr;}}
