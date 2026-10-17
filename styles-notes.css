@@ -561,137 +561,319 @@ body.glass-theme .campus-notes-page .mobile-notes-header select{background:rgba(
 @media(max-width:900px){.glass-theme .notes-sidebar{width:220px}.glass-theme .files-grid{grid-template-columns:repeat(2,minmax(0,1fr));}}
 @media(max-width:600px){.glass-theme .files-toolbar{align-items:flex-start;flex-direction:column}.glass-theme .files-toolbar-actions{width:100%}.glass-theme .files-toolbar-actions>*{flex:1}.glass-theme .files-grid{grid-template-columns:1fr;}}
 
-/* v89 — Notes sidebar rebuilt from the polished glass reference */
+/* v90 — Notes workspace redesign: one coherent glass surface system.
+   The reference is treated as a layout system, not a color overlay:
+   floating sidebar, contained workspace, restrained borders, and clear hierarchy. */
+.glass-theme .campus-notes-page{
+  padding:0 0 18px!important;
+  max-width:none!important;
+  height:calc(100vh - 70px);
+  overflow:hidden;
+  background:transparent!important;
+}
+.glass-theme .campus-notes-page .notes-workspace{
+  height:100%;
+  min-height:0;
+  display:flex;
+  gap:14px;
+  padding:16px 18px 0;
+  box-sizing:border-box;
+}
+
+/* --- Left Notes navigation --- */
 .glass-theme .campus-notes-page .notes-sidebar{
-  width:300px;
-  padding:28px 18px 20px;
-  background:linear-gradient(180deg,rgba(22,31,70,.82) 0%,rgba(11,22,51,.86) 100%);
-  border-right:1px solid rgba(255,255,255,.13);
-  box-shadow:inset -1px 0 0 rgba(255,255,255,.04);
+  width:320px;
+  min-width:320px;
+  min-height:0;
+  box-sizing:border-box;
+  padding:28px 16px 18px;
+  overflow:auto;
+  border:1px solid rgba(255,255,255,.17);
+  border-radius:24px;
+  background:linear-gradient(160deg,rgba(20,31,69,.88),rgba(12,22,51,.84));
+  box-shadow:0 22px 55px rgba(3,8,25,.24),inset 0 1px 0 rgba(255,255,255,.08);
+  color:#fff;
+  scrollbar-width:thin;
+  scrollbar-color:rgba(184,170,255,.28) transparent;
 }
+.glass-theme .campus-notes-page .notes-sidebar::-webkit-scrollbar{width:7px}
+.glass-theme .campus-notes-page .notes-sidebar::-webkit-scrollbar-thumb{background:rgba(184,170,255,.25);border-radius:999px}
 .glass-theme .campus-notes-page .notes-sidebar-title{
-  margin:0 14px 16px;
-  color:rgba(238,242,255,.60);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin:0 8px 16px;
+  color:rgba(239,243,255,.68);
   font-size:13px;
-  letter-spacing:.10em;
+  line-height:1;
   font-weight:700;
+  letter-spacing:.13em;
 }
-.glass-theme .campus-notes-page .notes-subjects{display:grid;gap:5px;}
-.glass-theme .campus-notes-page .notes-list-row{position:relative;display:flex;align-items:center;}
+.glass-theme .campus-notes-page .notes-sidebar-title::after{
+  content:'+';
+  display:grid;
+  place-items:center;
+  width:38px;
+  height:38px;
+  margin:-8px 0 -8px 10px;
+  border:1px solid rgba(255,255,255,.18);
+  border-radius:13px;
+  background:rgba(255,255,255,.07);
+  color:#ddd5ff;
+  font-size:25px;
+  font-weight:300;
+  letter-spacing:0;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.08);
+}
+.glass-theme .campus-notes-page .notes-subjects{display:grid;gap:4px}
+.glass-theme .campus-notes-page .notes-list-row{display:flex;align-items:center;position:relative;min-width:0}
 .glass-theme .campus-notes-page .notes-subject{
-  min-height:52px;
-  padding:0 14px;
+  min-width:0;
+  min-height:54px;
   flex:1;
-  border:1px solid rgba(255,255,255,.10);
+  padding:0 13px;
+  display:flex;
+  align-items:center;
+  gap:14px;
+  border:1px solid rgba(255,255,255,.11);
   border-radius:16px;
   background:rgba(255,255,255,.025);
-  color:rgba(244,247,255,.82);
+  color:rgba(243,246,255,.84);
   font-size:16px;
-  font-weight:500;
-  gap:14px;
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.04);
+  font-weight:520;
+  text-align:left;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.035);
+  transition:background .16s ease,border-color .16s ease,transform .16s ease,box-shadow .16s ease;
 }
-.glass-theme .campus-notes-page .notes-subject:hover{background:rgba(255,255,255,.075);border-color:rgba(255,255,255,.15);}
+.glass-theme .campus-notes-page .notes-subject:hover{
+  background:rgba(255,255,255,.065);
+  border-color:rgba(255,255,255,.16);
+  transform:translateY(-1px);
+}
 .glass-theme .campus-notes-page .notes-subject.active{
-  background:linear-gradient(105deg,rgba(132,105,245,.42),rgba(106,82,201,.26));
-  border-color:rgba(184,167,255,.68);
+  background:linear-gradient(105deg,rgba(128,99,240,.56),rgba(106,77,201,.31));
+  border-color:rgba(190,174,255,.70);
   color:#fff;
-  box-shadow:0 8px 24px rgba(58,39,143,.24),inset 0 1px 0 rgba(255,255,255,.20);
+  box-shadow:0 10px 28px rgba(65,43,161,.27),inset 0 1px 0 rgba(255,255,255,.18);
 }
-.glass-theme .campus-notes-page .notes-subject.active .notes-list-label{color:#fff;text-shadow:0 1px 10px rgba(39,25,95,.35);}
-.glass-theme .campus-notes-page .notes-dot{width:12px;height:12px;box-shadow:0 0 0 3px rgba(255,255,255,.035);}
-.glass-theme .campus-notes-page .notes-subject-open{font-size:24px;color:rgba(238,242,255,.48);margin-left:auto;}
-.glass-theme .campus-notes-page .notes-subject.active .notes-subject-open{color:#fff;}
+.glass-theme .campus-notes-page .notes-subject.active .notes-list-label{color:#fff;text-shadow:0 1px 12px rgba(38,24,91,.35)}
+.glass-theme .campus-notes-page .notes-list-label{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.glass-theme .campus-notes-page .notes-dot{width:12px;height:12px;flex:0 0 12px;box-shadow:0 0 0 3px rgba(255,255,255,.045)}
+.glass-theme .campus-notes-page .notes-subject-open{margin-left:auto;color:rgba(240,243,255,.55);font-size:25px;line-height:1}
+.glass-theme .campus-notes-page .notes-subject.active .notes-subject-open{color:#fff}
 .glass-theme .campus-notes-page .notes-subject-menu,
 .glass-theme .campus-notes-page .notes-item-menu{
-  width:34px;height:34px;border:0;border-radius:10px;background:transparent;color:rgba(238,242,255,.48);cursor:pointer;opacity:0;transition:.15s ease;
+  width:32px;height:32px;flex:0 0 32px;border:0;border-radius:10px;background:transparent;color:rgba(239,243,255,.50);cursor:pointer;opacity:0;transition:opacity .15s ease,background .15s ease,color .15s ease
 }
 .glass-theme .campus-notes-page .notes-list-row:hover .notes-subject-menu,
 .glass-theme .campus-notes-page .notes-tree-topic:hover>.notes-topic-row>.notes-item-menu,
-.glass-theme .campus-notes-page .notes-tree-page:hover>.notes-item-menu{opacity:1;}
+.glass-theme .campus-notes-page .notes-tree-page:hover>.notes-item-menu,
+.glass-theme .campus-notes-page .notes-subject-menu:focus-visible,
+.glass-theme .campus-notes-page .notes-item-menu:focus-visible{opacity:1}
 .glass-theme .campus-notes-page .notes-subject-menu:hover,
-.glass-theme .campus-notes-page .notes-item-menu:hover{background:rgba(255,255,255,.09);color:#fff;}
+.glass-theme .campus-notes-page .notes-item-menu:hover{background:rgba(255,255,255,.09);color:#fff}
 .glass-theme .campus-notes-page .notes-add{
-  min-height:48px;margin-top:4px;padding:0 14px;color:#c9bcff;font-size:16px;font-weight:600;border-radius:14px;
+  min-height:48px;
+  margin-top:5px;
+  padding:0 12px;
+  border-radius:13px;
+  color:#c9bcff;
+  font-size:16px;
+  font-weight:650;
 }
-.glass-theme .campus-notes-page .notes-add:hover{background:rgba(141,120,255,.10);}
+.glass-theme .campus-notes-page .notes-add:hover{background:rgba(142,119,255,.11);color:#e9e3ff}
+
+/* --- Topics / pages tree --- */
 .glass-theme .campus-notes-page .notes-pages-heading{
-  margin:30px 14px 12px;
+  margin:30px 8px 11px;
+  color:rgba(239,243,255,.66);
   font-size:13px;
-  color:rgba(238,242,255,.58);
-  letter-spacing:.10em;
+  font-weight:700;
+  letter-spacing:.13em;
 }
-.glass-theme .campus-notes-page .notes-pages-heading::after{
-  content:'⌕';float:right;font-size:25px;line-height:.6;color:#c9bdff;letter-spacing:0;
-}
+.glass-theme .campus-notes-page .notes-pages-heading::after{content:'⌕';float:right;color:#d0c7ff;font-size:23px;line-height:.65}
 .glass-theme .campus-notes-page .notes-overview-link{
-  min-height:50px;padding:0 14px;margin-bottom:10px;border:1px solid rgba(184,167,255,.30);border-radius:15px;
-  background:linear-gradient(105deg,rgba(141,121,255,.30),rgba(103,83,204,.16));color:#ddd7ff;font-size:16px;font-weight:600;
+  min-height:50px;
+  margin-bottom:10px;
+  padding:0 13px;
+  border:1px solid rgba(190,174,255,.40);
+  border-radius:15px;
+  background:linear-gradient(105deg,rgba(125,96,238,.34),rgba(94,70,183,.18));
+  color:#f0edff;
+  font-size:16px;
+  font-weight:650;
   box-shadow:inset 0 1px 0 rgba(255,255,255,.10);
 }
-.glass-theme .campus-notes-page .notes-overview-link:hover{background:rgba(141,121,255,.34);border-color:rgba(196,184,255,.48);}
-.glass-theme .campus-notes-page .notes-overview-link.active{background:linear-gradient(105deg,rgba(145,124,255,.40),rgba(98,78,198,.25));color:#fff;}
-.glass-theme .campus-notes-page .notes-page-list{display:grid;gap:6px;}
-.glass-theme .campus-notes-page .notes-tree-topic{position:relative;}
+.glass-theme .campus-notes-page .notes-overview-link:hover{background:rgba(139,115,247,.30);border-color:rgba(201,189,255,.52)}
+.glass-theme .campus-notes-page .notes-overview-link.active{background:linear-gradient(105deg,rgba(128,99,240,.48),rgba(100,76,196,.26));border-color:rgba(198,185,255,.58);color:#fff}
+.glass-theme .campus-notes-page .notes-page-list{display:grid;gap:6px}
+.glass-theme .campus-notes-page .notes-tree-topic{position:relative}
 .glass-theme .campus-notes-page .notes-topic-row{
-  display:flex;align-items:center;min-height:52px;border:1px solid rgba(255,255,255,.10);border-radius:15px;
-  background:rgba(255,255,255,.035);box-shadow:inset 0 1px 0 rgba(255,255,255,.04);
+  display:flex;align-items:center;min-height:54px;border:1px solid rgba(255,255,255,.11);border-radius:15px;background:rgba(255,255,255,.035);box-shadow:inset 0 1px 0 rgba(255,255,255,.035)
 }
 .glass-theme .campus-notes-page .notes-topic-toggle{
-  min-width:0;flex:1;height:52px;padding:0 12px;border:0;background:transparent;color:rgba(245,247,255,.88);display:flex;align-items:center;gap:11px;text-align:left;cursor:pointer;font-size:16px;font-weight:550;
+  min-width:0;flex:1;height:54px;padding:0 10px;border:0;background:transparent;color:rgba(244,247,255,.90);display:flex;align-items:center;gap:10px;text-align:left;cursor:pointer;font-size:16px;font-weight:560
 }
-.glass-theme .campus-notes-page .notes-topic-toggle:hover{color:#fff;}
-.glass-theme .campus-notes-page .notes-topic-chevron{width:12px;color:rgba(238,242,255,.55);font-size:13px;}
-.glass-theme .campus-notes-page .notes-topic-toggle .notes-nav-icon{width:29px;height:29px;}
-.glass-theme .campus-notes-page .notes-topic-toggle small{margin-left:auto;color:rgba(238,242,255,.55);font-size:13px;}
-.glass-theme .campus-notes-page .notes-tree-topic.open>.notes-topic-row{
-  background:linear-gradient(105deg,rgba(141,121,255,.28),rgba(255,255,255,.045));border-color:rgba(181,166,255,.34);
-}
-.glass-theme .campus-notes-page .notes-tree-topic.open>.notes-topic-row .notes-topic-toggle{color:#fff;}
+.glass-theme .campus-notes-page .notes-topic-toggle:hover{color:#fff}
+.glass-theme .campus-notes-page .notes-topic-chevron{width:13px;color:rgba(238,242,255,.68);font-size:14px}
+.glass-theme .campus-notes-page .notes-topic-toggle .notes-nav-icon{width:30px;height:30px}
+.glass-theme .campus-notes-page .notes-topic-toggle small{margin-left:auto;color:rgba(239,243,255,.58);font-size:13px;font-weight:700}
+.glass-theme .campus-notes-page .notes-tree-topic.open>.notes-topic-row{background:rgba(255,255,255,.045);border-color:rgba(181,165,255,.26)}
 .glass-theme .campus-notes-page .notes-tree-page{
-  margin:5px 0 0 34px;padding-left:16px;border-left:1px solid rgba(184,167,255,.20);border-radius:0;
+  display:flex;align-items:center;margin:5px 0 0 34px;padding-left:16px;border-left:1px solid rgba(190,174,255,.22);border-radius:0
 }
 .glass-theme .campus-notes-page .notes-tree-page .notes-page-link{
-  min-height:48px;padding:0 12px;border:1px solid transparent;border-radius:14px;background:rgba(255,255,255,.025);color:rgba(239,243,255,.72);font-size:15px;gap:12px;
+  min-width:0;min-height:48px;flex:1;padding:0 10px 0 11px;border:1px solid rgba(255,255,255,.06);border-radius:14px;background:rgba(255,255,255,.022);color:rgba(240,243,255,.75);display:flex;align-items:center;gap:11px;font-size:15px
 }
-.glass-theme .campus-notes-page .notes-tree-page .notes-page-link:hover{background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.10);color:#fff;}
+.glass-theme .campus-notes-page .notes-tree-page .notes-page-link:hover{background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.12);color:#fff}
 .glass-theme .campus-notes-page .notes-tree-page.active .notes-page-link,
 .glass-theme .campus-notes-page .notes-tree-page .notes-page-link.active{
-  background:linear-gradient(105deg,rgba(145,124,255,.38),rgba(102,81,208,.22));border-color:rgba(181,166,255,.48);color:#fff;
-  box-shadow:0 7px 18px rgba(55,37,142,.20),inset 0 1px 0 rgba(255,255,255,.12);
+  background:linear-gradient(105deg,rgba(127,98,240,.54),rgba(98,74,193,.28));
+  border-color:rgba(192,177,255,.55);
+  color:#fff;
+  box-shadow:0 8px 20px rgba(54,35,143,.20),inset 0 1px 0 rgba(255,255,255,.11)
 }
-.glass-theme .campus-notes-page .notes-tree-page .notes-nav-icon{width:30px;height:30px;}
-.glass-theme .campus-notes-page .notes-tree-page .notes-item-menu{flex:0 0 34px;}
-.glass-theme .campus-notes-page .notes-add#notesNewTopic,
-.glass-theme .campus-notes-page .notes-add#notesNewPage{
-  margin-top:5px;min-height:50px;text-align:left;font-size:16px;
-}
-.glass-theme .campus-notes-page .notes-storage-card{
-  margin:30px 7px 0;padding:20px 18px;border-radius:17px;border:1px solid rgba(255,255,255,.17);
-  background:linear-gradient(145deg,rgba(255,255,255,.10),rgba(255,255,255,.035));
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.10),0 16px 30px rgba(3,8,25,.16);
-  font-size:13px;line-height:1.55;color:rgba(239,243,255,.72);
-}
-.glass-theme .campus-notes-page .notes-storage-card strong{font-size:16px;color:#fff;}
-.glass-theme .campus-notes-page .notes-storage-card p{margin:10px 0 0;color:rgba(239,243,255,.70);}
+.glass-theme .campus-notes-page .notes-tree-page .notes-nav-icon{width:30px;height:30px;flex:0 0 30px}
+.glass-theme .campus-notes-page .notes-tree-page .notes-item-menu{flex:0 0 32px}
 
-/* v89 — Files: same visual language as the reference */
+/* --- Storage card --- */
+.glass-theme .campus-notes-page .notes-storage-card{
+  margin:30px 6px 0;
+  padding:19px 18px;
+  border:1px solid rgba(255,255,255,.17);
+  border-radius:18px;
+  background:linear-gradient(145deg,rgba(255,255,255,.095),rgba(255,255,255,.035));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.09),0 16px 32px rgba(3,8,25,.16);
+  color:rgba(239,243,255,.72);
+  font-size:12px;
+  line-height:1.55;
+}
+.glass-theme .campus-notes-page .notes-storage-card strong{display:block;color:#fff;font-size:15px}
+.glass-theme .campus-notes-page .notes-storage-card p{margin:8px 0 0;color:rgba(239,243,255,.68)}
+
+/* --- Main Notes workspace: contained, readable, still glass --- */
+.glass-theme .campus-notes-page .notes-editor-shell{
+  min-width:0;min-height:0;flex:1;
+  overflow:hidden;
+  border:1px solid rgba(255,255,255,.16);
+  border-radius:24px;
+  background:linear-gradient(145deg,rgba(17,28,63,.78),rgba(9,19,46,.70));
+  box-shadow:0 22px 55px rgba(3,8,25,.20),inset 0 1px 0 rgba(255,255,255,.07);
+}
+.glass-theme .campus-notes-page .subject-workspace{
+  height:100%;
+  box-sizing:border-box;
+  overflow:auto;
+  padding:30px 32px 36px;
+  border:0!important;
+  border-radius:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+}
+.glass-theme .campus-notes-page .subject-workspace-top{padding-bottom:20px;border-bottom:1px solid rgba(255,255,255,.11)}
+.glass-theme .campus-notes-page .subject-workspace-top h2{margin:6px 0 7px;color:#fff;font-size:30px;letter-spacing:-.035em}
+.glass-theme .campus-notes-page .subject-workspace-top p{color:rgba(235,240,255,.66);font-size:12px}
+.glass-theme .campus-notes-page .subject-workspace-actions{gap:8px}
+.glass-theme .campus-notes-page .subject-workspace-actions .secondary-button,
+.glass-theme .campus-notes-page .subject-workspace-actions .primary-button{min-height:40px;border-radius:11px}
+.glass-theme .campus-notes-page .subject-workspace-tabs{padding-top:9px;background:transparent;border-bottom:1px solid rgba(255,255,255,.11);gap:3px}
+.glass-theme .campus-notes-page .subject-workspace-tabs button{min-height:42px;padding:0 15px;border:1px solid transparent;border-radius:10px 10px 0 0;background:transparent;color:rgba(239,243,255,.62);font-size:12px}
+.glass-theme .campus-notes-page .subject-workspace-tabs button:hover{background:rgba(255,255,255,.055);color:#fff}
+.glass-theme .campus-notes-page .subject-workspace-tabs button.selected{background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.12);border-bottom-color:rgba(151,128,255,.95);color:#fff;box-shadow:inset 0 1px 0 rgba(255,255,255,.08)}
+.glass-theme .campus-notes-page .subject-section-intro{padding:24px 0 14px}
+.glass-theme .campus-notes-page .subject-section-intro h3{color:#fff;font-size:21px}
+.glass-theme .campus-notes-page .subject-section-intro p{color:rgba(235,240,255,.58)}
+.glass-theme .campus-notes-page .subject-panel-kicker{color:#cfc5ff;letter-spacing:.14em}
+.glass-theme .campus-notes-page .subject-notes-grid{gap:14px}
+.glass-theme .campus-notes-page .subject-notes-grid>*{
+  min-height:115px!important;
+  padding:17px!important;
+  border-radius:17px!important;
+  border:1px solid rgba(255,255,255,.13)!important;
+  background:linear-gradient(145deg,rgba(255,255,255,.085),rgba(255,255,255,.035))!important;
+  color:#fff!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 12px 28px rgba(3,8,25,.13)!important;
+}
+
+/* Files inside the subject workspace: use the same contained glass language. */
+.glass-theme .campus-notes-page .subject-files-panel{padding:0}
 .glass-theme .campus-notes-page .files-toolbar{
-  padding:18px 20px;border-radius:18px;background:linear-gradient(145deg,rgba(255,255,255,.095),rgba(255,255,255,.035));
-  border:1px solid rgba(255,255,255,.16);box-shadow:inset 0 1px 0 rgba(255,255,255,.10),0 14px 30px rgba(3,8,25,.14);
+  display:flex;align-items:center;justify-content:space-between;gap:18px;
+  padding:18px 20px;
+  border:1px solid rgba(255,255,255,.13);
+  border-radius:17px;
+  background:rgba(255,255,255,.055);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.08);
 }
-.glass-theme .campus-notes-page .files-toolbar h3{font-size:21px;color:#fff;}
-.glass-theme .campus-notes-page .files-toolbar p{color:rgba(239,243,255,.66);}
-.glass-theme .campus-notes-page .files-toolbar-actions .secondary-button,
-.glass-theme .campus-notes-page .files-toolbar-actions .primary-button{border-radius:12px;min-height:40px;}
-.glass-theme .campus-notes-page .files-grid{grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;margin-top:16px;}
+.glass-theme .campus-notes-page .files-toolbar h3{margin:3px 0 4px;color:#fff;font-size:21px}
+.glass-theme .campus-notes-page .files-toolbar p{color:rgba(239,243,255,.62)}
+.glass-theme .campus-notes-page .files-grid{grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;margin-top:15px}
 .glass-theme .campus-notes-page .file-card{
-  min-height:190px;padding:17px;border-radius:18px;background:linear-gradient(145deg,rgba(28,41,83,.78),rgba(11,23,54,.68));
-  border:1px solid rgba(255,255,255,.15);box-shadow:inset 0 1px 0 rgba(255,255,255,.09),0 14px 30px rgba(3,8,25,.17);
+  min-height:178px;padding:16px;border-radius:17px;
+  border:1px solid rgba(255,255,255,.13);
+  background:linear-gradient(145deg,rgba(28,42,83,.76),rgba(11,23,53,.68));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 12px 28px rgba(3,8,25,.15)
 }
-.glass-theme .campus-notes-page .file-card:hover{background:linear-gradient(145deg,rgba(43,55,99,.82),rgba(15,28,62,.75));border-color:rgba(183,168,255,.42);}
-.glass-theme .campus-notes-page .file-card-icon{width:50px;height:54px;border-radius:14px;background:linear-gradient(145deg,rgba(150,130,255,.25),rgba(118,93,225,.10));border-color:rgba(201,190,255,.22);}
-.glass-theme .campus-notes-page .file-card-body strong{font-size:14px;}
-.glass-theme .campus-notes-page .file-card-meta{font-size:11px;}
-.glass-theme .campus-notes-page .file-card-actions{margin-top:18px;padding-top:12px;}
-.glass-theme .campus-notes-page .file-card-actions button{min-height:34px;border-radius:10px;}
+.glass-theme .campus-notes-page .file-card:hover{border-color:rgba(184,169,255,.42);background:linear-gradient(145deg,rgba(40,53,96,.80),rgba(14,28,61,.74))}
+.glass-theme .campus-notes-page .file-card-body strong{color:#fff}
+.glass-theme .campus-notes-page .file-card-meta{color:rgba(235,240,255,.56)}
+.glass-theme .campus-notes-page .file-card-actions{border-top-color:rgba(255,255,255,.10)}
+.glass-theme .campus-notes-page .file-card-actions button{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.11);color:#f4f5ff}
+
+/* The editor itself remains a document surface; only its surrounding chrome is glass. */
+.glass-theme .campus-notes-page #noteEditorView{background:transparent;color:#20243a}
+.glass-theme .campus-notes-page .notes-page-header,
+.glass-theme .campus-notes-page .editor-tabs,
+.glass-theme .campus-notes-page .editor-ribbon,
+.glass-theme .campus-notes-page .statusbar{background:rgba(14,25,56,.68);border-color:rgba(255,255,255,.10)}
+.glass-theme .campus-notes-page .notes-page-header input{color:#fff}
+.glass-theme .campus-notes-page .notes-page-header span{color:rgba(235,240,255,.55)}
+.glass-theme .campus-notes-page .editor-tabs button{color:rgba(239,243,255,.62)}
+.glass-theme .campus-notes-page .editor-tabs button.selected{background:rgba(255,255,255,.07);color:#fff;border-color:rgba(255,255,255,.12)}
+.glass-theme .campus-notes-page .editor-canvas-wrap{background:rgba(5,14,35,.28)}
+
+@media(max-width:1100px){
+  .glass-theme .campus-notes-page .notes-workspace{padding-left:12px;padding-right:12px}
+  .glass-theme .campus-notes-page .notes-sidebar{width:285px;min-width:285px}
+  .glass-theme .campus-notes-page .subject-workspace{padding-left:24px;padding-right:24px}
+}
+@media(max-width:900px){
+  .glass-theme .campus-notes-page .notes-workspace{gap:10px}
+  .glass-theme .campus-notes-page .notes-sidebar{width:255px;min-width:255px;padding-left:12px;padding-right:12px}
+  .glass-theme .campus-notes-page .notes-subject{font-size:14px}
+  .glass-theme .campus-notes-page .subject-workspace-top h2{font-size:26px}
+}
+@media(max-width:700px){
+  .glass-theme .campus-notes-page .notes-workspace{padding:0;display:block}
+  .glass-theme .campus-notes-page .notes-sidebar{display:none!important}
+  .glass-theme .campus-notes-page .notes-editor-shell{border:0;border-radius:0}
+}
+
+/* Light mode keeps the same geometry while switching surface semantics. */
+html[data-campushub-theme="light"] .glass-theme .campus-notes-page .notes-sidebar{
+  background:linear-gradient(160deg,rgba(247,249,255,.94),rgba(235,239,250,.91));
+  border-color:rgba(36,48,78,.13);color:#1e2944;box-shadow:0 22px 55px rgba(28,39,68,.12)
+}
+html[data-campushub-theme="light"] .glass-theme .campus-notes-page .notes-sidebar-title,
+html[data-campushub-theme="light"] .glass-theme .campus-notes-page .notes-pages-heading{color:#69728a}
+html[data-campushub-theme="light"] .glass-theme .campus-notes-page .notes-subject{color:#33405f;border-color:rgba(36,48,78,.10);background:rgba(255,255,255,.46)}
+html[data-campushub-theme="light"] .glass-theme .campus-notes-page .notes-subject.active{color:#fff;background:linear-gradient(105deg,#8064eb,#6950c7);border-color:rgba(90,67,190,.45)}
+html[data-campushub-theme="light"] .glass-theme .campus-notes-page .notes-overview-link{color:#4f46a6}
+html[data-campushub-theme="light"] .glass-theme .campus-notes-page .notes-topic-row{background:rgba(255,255,255,.48);border-color:rgba(36,48,78,.10)}
+html[data-campushub-theme="light"] .glass-theme .campus-notes-page .notes-topic-toggle{color:#33405f}
+html[data-campushub-theme="light"] .glass-theme .campus-notes-page .notes-tree-page .notes-page-link{color:#566078;background:rgba(255,255,255,.32)}
+html[data-campushub-theme="light"] .glass-theme .campus-notes-page .notes-tree-page.active .notes-page-link{color:#fff;background:linear-gradient(105deg,#8064eb,#6950c7)}
+html[data-campushub-theme="light"] .glass-theme .campus-notes-page .notes-storage-card{background:rgba(255,255,255,.58);border-color:rgba(36,48,78,.12);color:#69728a}
+html[data-campushub-theme="light"] .glass-theme .campus-notes-page .notes-storage-card strong{color:#24304d}
+html[data-campushub-theme="light"] .glass-theme .campus-notes-page .notes-editor-shell{background:rgba(248,250,255,.82);border-color:rgba(36,48,78,.12);box-shadow:0 22px 55px rgba(28,39,68,.10)}
+html[data-campushub-theme="light"] .glass-theme .campus-notes-page .subject-workspace-top h2,
+html[data-campushub-theme="light"] .glass-theme .campus-notes-page .subject-section-intro h3{color:#1f2944}
+html[data-campushub-theme="light"] .glass-theme .campus-notes-page .subject-workspace-top p,
+html[data-campushub-theme="light"] .glass-theme .campus-notes-page .subject-section-intro p{color:#69728a}
+html[data-campushub-theme="light"] .glass-theme .campus-notes-page .subject-workspace-tabs{border-color:rgba(36,48,78,.10)}
+html[data-campushub-theme="light"] .glass-theme .campus-notes-page .subject-workspace-tabs button{color:#69728a}
+html[data-campushub-theme="light"] .glass-theme .campus-notes-page .subject-workspace-tabs button.selected{color:#5149a5;background:rgba(92,76,196,.08);border-color:rgba(92,76,196,.12)}
+html[data-campushub-theme="light"] .glass-theme .campus-notes-page .subject-notes-grid>*{background:rgba(255,255,255,.66)!important;border-color:rgba(36,48,78,.10)!important;color:#25304a!important}
+html[data-campushub-theme="light"] .glass-theme .campus-notes-page .files-toolbar{background:rgba(255,255,255,.60);border-color:rgba(36,48,78,.10)}
+html[data-campushub-theme="light"] .glass-theme .campus-notes-page .files-toolbar h3{color:#25304a}
+html[data-campushub-theme="light"] .glass-theme .campus-notes-page .files-toolbar p{color:#69728a}
