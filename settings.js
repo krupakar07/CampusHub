@@ -24,9 +24,26 @@
     $('prefSettingsView').value=prefs.view||'week';
     $('prefSettingsReminder').value=String(prefs.reminderMinutes??0);
     $('prefSettingsTravel').value=String(prefs.travelBuffer??0);
+    $('prefSettingsTheme').value=prefs.theme==='light'?'light':'glass';
+    $('prefSettingsContrast').value=['soft','normal','high'].includes(prefs.contrast)?prefs.contrast:'normal';
+    $('prefSettingsReduceMotion').checked=prefs.reduceMotion===true;
+    applyUiPrefs({theme:$('prefSettingsTheme').value,contrast:$('prefSettingsContrast').value,reduceMotion:$('prefSettingsReduceMotion').checked});
     $('settingsAccountName').textContent=name;
     $('settingsAccountEmail').textContent=u.email||'';
     $('settingsAccountAvatar').textContent=(name[0]||'S').toUpperCase();
+  }
+
+  function applyUiPrefs(p={}){
+    const theme=p.theme==='light'?'light':'glass';
+    const contrast=['soft','normal','high'].includes(p.contrast)?p.contrast:'normal';
+    const reduceMotion=p.reduceMotion===true;
+    const root=document.documentElement;
+    root.dataset.campushubTheme=theme;
+    root.dataset.campushubContrast=contrast;
+    if(reduceMotion)root.dataset.campushubReduceMotion='true';else delete root.dataset.campushubReduceMotion;
+    try{localStorage.setItem('campushub-ui-prefs',JSON.stringify({theme,contrast,reduceMotion}));}catch(_){ }
+    const meta=document.querySelector('meta[name="theme-color"]');
+    if(meta)meta.setAttribute('content',theme==='light'?'#f7f8fc':'#15264b');
   }
 
   function showTab(tab){
@@ -49,7 +66,8 @@
 
   async function savePreferences(){
     const u=user(), c=client(); if(!u||!c)return;
-    const prefs={view:$('prefSettingsView').value,travelBuffer:Number($('prefSettingsTravel').value),reminderMinutes:Number($('prefSettingsReminder').value),updatedAt:Date.now()};
+    const prefs={view:$('prefSettingsView').value,travelBuffer:Number($('prefSettingsTravel').value),reminderMinutes:Number($('prefSettingsReminder').value),theme:$('prefSettingsTheme').value,contrast:$('prefSettingsContrast').value,reduceMotion:$('prefSettingsReduceMotion').checked,updatedAt:Date.now()};
+    applyUiPrefs(prefs);
     localStorage.setItem(`campushub-calendar-prefs:${u.id}`,JSON.stringify(prefs));
     const {data,error}=await c.auth.updateUser({data:{...(u.user_metadata||{}),calendar_preferences:prefs}});
     if(error){notify(error.message||'Could not save preferences.');return;}
@@ -127,6 +145,6 @@
     fill();
   }
   function activate(){bind();fill();showTab(activeTab);}
-  window.CampusHubSettings={activate,backup:fullBackup,restore};
+  window.CampusHubSettings={activate,backup:fullBackup,restore,applyUiPrefs};
   if(document.readyState!=='loading')setTimeout(bind,0);else document.addEventListener('DOMContentLoaded',bind);
 })();
