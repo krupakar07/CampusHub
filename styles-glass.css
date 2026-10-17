@@ -964,3 +964,48 @@ body.glass-theme #campusPhotoBackground{
     box-shadow:0 8px 24px rgba(10,20,55,.10),inset 0 1px 0 rgba(255,255,255,.20)!important;
   }
 }
+
+/* CampusHub v81 — restore visible login layer above the photo background. */
+.glass-theme .auth-shell{
+  position:relative!important;
+  z-index:2!important;
+  min-height:100vh!important;
+  background:transparent!important;
+  isolation:isolate!important;
+}
+.glass-theme .auth-card{
+  position:relative!important;
+  z-index:3!important;
+  width:min(420px,calc(100% - 32px))!important;
+  background:rgba(20,31,65,.58)!important;
+  color:#fff!important;
+  border:1px solid rgba(255,255,255,.28)!important;
+  box-shadow:0 24px 70px rgba(5,12,35,.28),inset 0 1px 0 rgba(255,255,255,.18)!important;
+  backdrop-filter:blur(12px) saturate(115%)!important;
+  -webkit-backdrop-filter:blur(12px) saturate(115%)!important;
+}
+.glass-theme .auth-card .brand,
+.glass-theme .auth-card .auth-heading,
+.glass-theme .auth-card .auth-footnote,
+.glass-theme .auth-card .auth-message{color:#fff!important}
+.glass-theme .auth-heading h1{color:#fff!important}
+.glass-theme .auth-heading p{color:rgba(240,244,255,.72)!important}
+.glass-theme .auth-tabs{background:rgba(255,255,255,.10)!important}
+.glass-theme .auth-tabs button{color:rgba(240,244,255,.70)!important}
+.glass-theme .auth-tabs button.selected{background:rgba(255,255,255,.18)!important;color:#fff!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.16)!important}
+.glass-theme .auth-form label{color:rgba(245,247,255,.88)!important}
+.glass-theme .auth-form label small{color:rgba(235,240,255,.58)!important}
+.glass-theme .auth-form input,
+.glass-theme .auth-form select{
+  background:rgba(255,255,255,.10)!important;
+  border-color:rgba(255,255,255,.22)!important;
+  color:#fff!important;
+}
+.glass-theme .auth-form input::placeholder{color:rgba(235,240,255,.48)!important}
+.glass-theme .auth-form select option{background:#24345f;color:#fff}
+.glass-theme .auth-footnote{border-top-color:rgba(255,255,255,.14)!important;color:rgba(235,240,255,.62)!important}
+.glass-theme .auth-notice{background:rgba(255,248,225,.12)!important;border-color:rgba(255,230,160,.28)!important;color:#fff!important}
+.glass-theme .auth-brand .brand-mark{box-shadow:0 9px 24px rgba(109,92,255,.32)!important}
+@media(max-width:480px){
+  .glass-theme .auth-card{width:min(420px,calc(100% - 24px))!important}
+}
