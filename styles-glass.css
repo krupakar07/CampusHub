@@ -436,9 +436,9 @@ html[data-campushub-reduce-motion="true"] *::after{
   }
 }
 
-/* v86 — secondary-page glass redesign to match the CampusHub showcase.
-   Calendar, Exams and subject Files now use the same translucent dark surfaces
-   as the dashboard instead of falling back to the base white cards. */
+/* v87 — true glass pass for secondary pages.
+   Keep the photograph visible, reduce visual mass, and make content cards
+   translucent rather than pale/opaque. */
 
 .glass-theme .calendar-panel{
   background:rgba(10,20,48,.68);
@@ -566,4 +566,77 @@ html[data-campushub-reduce-motion="true"] *::after{
 @media(max-width:600px){
   .glass-theme .exam-summary{grid-template-columns:1fr 1fr;}
   .glass-theme .files-grid{grid-template-columns:1fr;}
+}
+
+
+/* v87 — calendar visual optimization */
+.glass-theme .topbar{
+  margin:8px 28px 0 0;
+  border:1px solid rgba(255,255,255,.18);
+  border-radius:0 0 20px 20px;
+  background:rgba(20,31,68,.54);
+  box-shadow:0 14px 34px rgba(3,8,25,.16),inset 0 1px 0 rgba(255,255,255,.14);
+}
+.glass-theme .calendar-content{padding:30px 38px 22px;}
+.glass-theme .calendar-title-row{margin-bottom:18px;}
+.glass-theme .calendar-title-row h1{font-size:29px;}
+.glass-theme .calendar-panel{
+  background:linear-gradient(145deg,rgba(11,21,49,.58),rgba(17,28,60,.48));
+  border:1px solid rgba(255,255,255,.22);
+  border-radius:18px;
+  box-shadow:0 18px 42px rgba(3,8,25,.18),inset 0 1px 0 rgba(255,255,255,.13);
+}
+.glass-theme .calendar-toolbar{
+  min-height:54px;
+  padding:0 14px;
+  background:rgba(10,20,47,.48);
+  border-bottom:1px solid rgba(255,255,255,.13);
+}
+.glass-theme .calendar-nav>button:not(.today-control),
+.glass-theme .today-control,
+.glass-theme .calendar-filter,
+.glass-theme .calendar-search,
+.glass-theme .view-switch{
+  background:rgba(255,255,255,.065);
+  border-color:rgba(255,255,255,.16);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.08);
+}
+.glass-theme .calendar-grid{min-height:0;background:rgba(6,14,36,.12);}
+.glass-theme .week-grid{grid-template-rows:44px 480px;}
+.glass-theme .time-rail{grid-template-rows:repeat(12,40px);}
+.glass-theme .week-column,.glass-theme .day-column{min-height:480px;background:repeating-linear-gradient(to bottom,transparent 0,transparent 39px,rgba(255,255,255,.105) 39px,rgba(255,255,255,.105) 40px);}
+.glass-theme .calendar-corner,.glass-theme .calendar-day-head{border-color:rgba(255,255,255,.12);}
+.glass-theme .calendar-day-head{padding:7px 2px;color:rgba(235,240,255,.56);background:rgba(255,255,255,.018);}
+.glass-theme .calendar-day-head b{font-size:10px;margin-top:4px;}
+.glass-theme .time-label{color:rgba(235,240,255,.42);top:-5px;}
+.glass-theme .week-column.is-today{background-color:rgba(129,117,242,.055);}
+.glass-theme .calendar-event{
+  left:5px;right:5px;
+  padding:7px 8px;
+  border:1px solid color-mix(in srgb,var(--event-color,#8175f2) 42%,rgba(255,255,255,.22));
+  border-left:3px solid var(--event-color,#8175f2);
+  border-radius:9px;
+  background:color-mix(in srgb,var(--event-color,#8175f2) 24%,rgba(12,23,52,.88));
+  color:#fff;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.13),0 7px 18px rgba(3,8,25,.14);
+}
+.glass-theme .calendar-event b{font-size:8.5px;color:#fff;}
+.glass-theme .calendar-event span{font-size:7.5px;color:rgba(255,255,255,.70);}
+.glass-theme .calendar-legend{padding:11px 3px 2px;color:rgba(240,244,255,.62);}
+
+/* Light theme keeps the same structure but uses the original event category tints. */
+html[data-campushub-theme="light"] .glass-theme .calendar-event{
+  background:var(--event-soft,#f0efff);
+  border-color:color-mix(in srgb,var(--event-color,#7770e9) 35%,rgba(36,48,78,.12));
+  border-left-color:var(--event-color,#7770e9);
+  color:#25304a;
+  box-shadow:0 7px 18px rgba(28,39,68,.08);
+}
+html[data-campushub-theme="light"] .glass-theme .calendar-event b{color:#25304a;}
+html[data-campushub-theme="light"] .glass-theme .calendar-event span{color:#68728a;}
+
+@media(max-width:760px){
+  .glass-theme .topbar{margin:0;border-radius:0;}
+  .glass-theme .calendar-content{padding:25px 16px 17px;}
+  .glass-theme .week-grid{grid-template-rows:42px 480px;}
 }
