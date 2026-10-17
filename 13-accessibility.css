@@ -1,0 +1,9 @@
+/* Accessibility controls. Focus belongs to actual interactive controls only. */
+.glass-theme button:focus-visible,
+.glass-theme a:focus-visible,
+.glass-theme input:focus-visible,
+.glass-theme select:focus-visible,
+.glass-theme textarea:focus-visible,
+.glass-theme [contenteditable='true']:focus-visible {
+  outline:2px solid var(--ds-accent-strong);outline-offset:2px;
+}

@@ -1,0 +1,3 @@
+/* Calendar-specific ownership. Shared calendar primitives remain in 05-pages. */
+body.glass-theme .calendar-panel,body.glass-theme .calendar-grid{contain:layout paint}
+body.glass-theme .calendar-grid{overscroll-behavior:contain}
