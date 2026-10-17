@@ -1129,7 +1129,7 @@
       if(tagMap[key] && document.activeElement?.closest('#editor')){e.preventDefault();applyTag(tagMap[key]);return;}
       if(key==='k'&&document.activeElement?.closest('#editor')){e.preventDefault();const url=prompt('Enter URL:','https://');if(url)exec('createLink',url);}
     });
-    window.addEventListener('resize',closeMenus); window.addEventListener('scroll',closeMenus,true);
+    window.addEventListener('resize',closeMenus); window.addEventListener('scroll',function(){if(document.querySelector('.ribbon-color-menu:not([hidden]),.ribbon-tag-menu:not([hidden]),.table-picker:not([hidden]),.symbol-menu:not([hidden])'))closeMenus()},{capture:true,passive:true});
     window.addEventListener('campushub-auth', e => { if (e.detail?.user) hydrateCloudNotes(); });
     window.addEventListener('campus-cloud-live-edit', e => {
       if (e.detail?.namespace !== 'notes' || !window.CampusHubAuth?.user) return;

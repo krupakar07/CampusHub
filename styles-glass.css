@@ -454,3 +454,21 @@ html[data-campushub-reduce-motion="true"] *::after{
 #campusPhotoBackground{transform:translateZ(0);will-change:transform;contain:strict}
 /* hover shadow transitions on big cards force repaints of large areas; keep them cheap */
 .glass-theme .panel,.glass-theme .stat-card{transition:transform .18s ease,border-color .18s ease}
+
+/* v87 — remaining scroll jitter fixes */
+/* 1. no hover repaints while scrolling (class toggled by perf.js) */
+html.is-scrolling body *{pointer-events:none!important}
+/* 2. big soft shadows on ~70 translucent cards are expensive to blend; use a crisp
+      border + 1px highlight instead (the glass look is carried by the tint + border) */
+.glass-theme .panel,.glass-theme .stat-card,.glass-theme .dashboard-hero,
+.glass-theme .weather-card,.glass-theme .next-class-card,.glass-theme .weather-day,
+.glass-theme .week-day,.glass-theme .dashboard-next7,.glass-theme .file-card,
+.glass-theme .assignment-card,.glass-theme .exam-card,.glass-theme .subject-card,
+.glass-theme .topic-card,.glass-theme .quick-note-card,.glass-theme .settings-card,
+.glass-theme .semester-card,.glass-theme .quick-actions-card,
+.glass-theme .sidebar,.glass-theme .topbar{
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.14)!important;
+}
+.glass-theme .panel:hover,.glass-theme .stat-card:hover,.glass-theme .file-card:hover{transform:none!important}
+/* 3. fixed chrome gets its own compositor layer so scrolling cards never repaint it */
+.glass-theme .sidebar,.glass-theme .topbar{transform:translateZ(0)}
