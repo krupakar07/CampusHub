@@ -462,10 +462,12 @@
   }
 
   function closeMenus() {
-    document.querySelectorAll('.ribbon-color-menu,.ribbon-tag-menu,.table-picker,.symbol-menu').forEach(m => m.hidden = true);
+    document.querySelectorAll('.ribbon-color-menu,.ribbon-tag-menu,.table-picker,.symbol-menu').forEach(m => { m.hidden = true; m.style.display = 'none'; });
   }
 
+  let menuOpenedAt = 0;
   function positionMenu(menu, anchor, width = 220) {
+    menuOpenedAt = performance.now();
     const rect = anchor.getBoundingClientRect();
     menu.hidden = false;
     menu.style.display = 'block';
@@ -674,7 +676,7 @@
     if(range.collapsed){ insertHtml(`<span class="tag-chip tagged-text ${escapeHtml(def[3])}" data-tag="${escapeHtml(tagId)}" title="Click to remove tag">${escapeHtml(def[2])} ${escapeHtml(def[1])}</span>&nbsp;`); return; }
     const fragment=range.extractContents();
     const wrapper=document.createElement('span');
-    wrapper.className=`tagged-text ${def[3]||''}`.trim(); wrapper.dataset.tag=tagId; wrapper.title='Click to remove tag'; wrapper.appendChild(fragment); range.insertNode(wrapper);
+    wrapper.className=`tagged-text ${def[3]||''}`.trim(); wrapper.dataset.tag=tagId; wrapper.dataset.icon=def[2]; wrapper.title='Click to remove tag'; wrapper.appendChild(fragment); range.insertNode(wrapper);
     const newRange=document.createRange(); newRange.selectNodeContents(wrapper); sel.removeAllRanges(); sel.addRange(newRange); captureSelection(); scheduleSave(); updateWordCount();
   }
 
@@ -1129,7 +1131,13 @@
       if(tagMap[key] && document.activeElement?.closest('#editor')){e.preventDefault();applyTag(tagMap[key]);return;}
       if(key==='k'&&document.activeElement?.closest('#editor')){e.preventDefault();const url=prompt('Enter URL:','https://');if(url)exec('createLink',url);}
     });
-    window.addEventListener('resize',closeMenus); window.addEventListener('scroll',closeMenus,true);
+    window.addEventListener('resize',()=>{ if(performance.now()-menuOpenedAt>400) closeMenus(); });
+    window.addEventListener('scroll',e=>{
+      // ignore the scroll events caused by opening a menu, and scrolling inside a menu itself
+      if(performance.now()-menuOpenedAt<500) return;
+      if(e.target?.closest?.('.ribbon-tag-menu,.ribbon-color-menu,.table-picker,.symbol-menu')) return;
+      closeMenus();
+    },{capture:true,passive:true});
     window.addEventListener('campushub-auth', e => { if (e.detail?.user) hydrateCloudNotes(); });
     window.addEventListener('campus-cloud-live-edit', e => {
       if (e.detail?.namespace !== 'notes' || !window.CampusHubAuth?.user) return;

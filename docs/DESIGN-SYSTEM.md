@@ -10,3 +10,9 @@ Persistent surfaces avoid expensive full-page blur. Transient overlays may use l
 - Light is the default theme; **Dark** is an option in Settings → Preferences → Appearance. Theme attributes are `data-campushub-theme`, `data-campushub-contrast` and `data-campushub-reduce-motion` (earlier CSS used camelCase names that never matched).
 - `css/14-light-glass.css` is the last stylesheet and only applies to the light theme: floating frosted sidebar and top bar, white glass cards, violet active states, readable type scale (nothing under 11px).
 - `css/12-responsive.css`: the tablet margin now stops at 761px, which fixes the squeezed layout on phones.
+
+## v96 — Notes editor fixes
+
+- Restored the `#campusTableDialog` markup in `index.html` (lost in the folder refactor) so **Insert → Table** opens the size picker.
+- Ribbon menus (Tags, colours, symbols) now really close (`closeMenus` also sets `display:none`), and a menu no longer closes itself from the scroll event fired while it opens.
+- Every tag now has a visible style plus its icon (`data-icon`), so To Do, Important, Question, etc. are clearly applied.
