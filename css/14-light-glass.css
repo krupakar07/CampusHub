@@ -212,3 +212,25 @@ html:not([data-campushub-theme='dark']) body.glass-theme{
     & .mobile-bottom-nav{left:12px;right:12px;bottom:calc(10px + env(safe-area-inset-bottom));border-radius:26px}
   }
 }
+
+/* ==========================================================================
+   Mobile drawer fix (v97)
+   Bug: the dim backdrop (z-index 70) was drawn ABOVE the drawer (z-index 20), so every tap
+   on Settings / Calendar / Sign out hit the backdrop and just closed the menu. The drawer was
+   also see-through and its lower part sat under the bottom navigation.
+   ========================================================================== */
+@media(max-width:760px){
+  html body.glass-theme.glass-theme.glass-theme .sidebar{
+    z-index:90!important;                       /* above backdrop (70) and bottom nav (45) */
+    top:10px!important;bottom:10px!important;left:10px!important;
+    width:min(300px,86vw)!important;
+    overflow-y:auto!important;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;
+    background:rgba(250,251,255,.985)!important;   /* solid enough that page content never shows through */
+    padding-bottom:calc(18px + env(safe-area-inset-bottom))!important;
+  }
+  html[data-campushub-theme='dark'] body.glass-theme.glass-theme.glass-theme .sidebar{background:rgba(14,22,52,.985)!important}
+  html body.glass-theme .mobile-drawer-backdrop{z-index:80;background:rgba(20,24,40,.42)}
+  /* drawer open: nothing from the page may sit on top of it */
+  html body.glass-theme:has(.sidebar.open) .mobile-bottom-nav{visibility:hidden}
+  html body.glass-theme .sidebar .nav-item{min-height:46px}
+}

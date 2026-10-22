@@ -16,3 +16,8 @@ Persistent surfaces avoid expensive full-page blur. Transient overlays may use l
 - Restored the `#campusTableDialog` markup in `index.html` (lost in the folder refactor) so **Insert → Table** opens the size picker.
 - Ribbon menus (Tags, colours, symbols) now really close (`closeMenus` also sets `display:none`), and a menu no longer closes itself from the scroll event fired while it opens.
 - Every tag now has a visible style plus its icon (`data-icon`), so To Do, Important, Question, etc. are clearly applied.
+
+## v97 — Mobile drawer fix
+
+- The mobile menu backdrop (z-index 70) was drawn above the drawer (z-index 20), so taps on Settings, Calendar and Sign out hit the backdrop and only closed the menu. The drawer now sits at z-index 90, has a solid background, scrolls if the screen is short, and hides the bottom navigation while open.
+- `js/core/app.js` loads scripts with a relative path (`js/`) instead of `/js/`, so the app also works from a sub-folder or GitHub Pages.

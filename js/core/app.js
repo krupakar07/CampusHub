@@ -3,7 +3,7 @@
 (() => {
   'use strict';
   window.CampusHub ||= {};
-  const root='/js/';
+  const root='js/';
   const load = (src) => new Promise((resolve,reject)=>{
     const s=document.createElement('script'); s.src=root+src; s.async=false;
     s.onload=resolve; s.onerror=()=>reject(new Error(`CampusHub failed to load ${src}`));
@@ -16,7 +16,7 @@
     for(const src of services) await load(src);
     for(const src of ui) await load(src);
     for(const src of features) await load(src);
-    window.CampusHub.emit('app:ready',{version:'93'});
+    window.CampusHub.emit('app:ready',{version:'97'});
   };
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',boot,{once:true}); else boot();
 })();
